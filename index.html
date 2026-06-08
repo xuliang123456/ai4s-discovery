@@ -1,0 +1,1441 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>书生国智科探挑战赛 · Intern Discovery Challenge</title>
+<link rel="preconnect" href="https://fonts.loli.net">
+<link rel="preconnect" href="https://gstatic.loli.net" crossorigin>
+<link href="https://fonts.loli.net/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   DiscoveryOS v2.3 · 原语层（§1.1）· 整段复制，禁止推导
+   ═══════════════════════════════════════════════════════════════════ */
+:root {
+  /* ── 文字色阶 ─────────────────── */
+  --ink: #1a2332;
+  --ink-soft: #3a4556;
+  --ink-mute: #7a8394;
+  --ink-faint: #a8afbb;
+
+  /* ── 表面色阶（Surface）──────── */
+  --paper: #fdfcf8;
+  --paper-warm: #f7f4ec;
+  --paper-cool: #fafaf7;
+
+  /* ── 分隔线（Rule）────────────── */
+  --rule: #e8e4d9;
+  --rule-soft: #efece3;
+
+  /* ── 主色（朱砂蓝 · 7 阶 · H≈214°）──────── */
+  --vermilion-1: #f4f7fb;
+  --vermilion-2: #dde7f4;
+  --vermilion-3: #b8ceea;
+  --vermilion-4: #88addd;
+  --vermilion-5: #3f7dcf;
+  --vermilion-6: #1554a8;
+  --vermilion-7: #0c3c80;
+  --vermilion:      var(--vermilion-6);
+  --vermilion-soft: var(--vermilion-5);
+  --vermilion-bg:   var(--vermilion-2);
+  --vermilion-deep: var(--vermilion-7);
+
+  /* ── 语义色 ────────── */
+  --success: #6b7a3a;
+  --success-soft: #a4ad7e;
+  --success-bg: #f1f3e8;
+  --success-deep: #4d5826;
+  --warning: #a8864b;
+  --warning-soft: #cba87b;
+  --warning-bg: #f8f1e3;
+  --warning-deep: #7a5e2c;
+  --error: #c03030;
+  --error-soft: #df7878;
+  --error-bg: #fdeaea;
+  --error-deep: #9a2020;
+
+  /* ── 录制专用红 ─── */
+  --rec-red: #e74c3c;
+
+  /* ── AI 置信度色阶 ─────────────── */
+  --ai-trust-high: var(--success);
+  --ai-trust-mid:  var(--warning);
+  --ai-trust-low:  var(--ink-mute);
+  --ai-tint:       #f5f8fc;
+  --ai-tint-rule:  #d8e4f3;
+
+  /* ── 辅助色 · 4 色相 × 5 阶（§1.1.5）── */
+  --aux-mint-1: #e4f0ec; --aux-mint-2: #9bd5be; --aux-mint-3: #40bf95; --aux-mint-4: #259675; --aux-mint-5: #125c47;
+  --aux-cyan-1: #e4f0f0; --aux-cyan-2: #9bd0d5; --aux-cyan-3: #40b5bf; --aux-cyan-4: #258e96; --aux-cyan-5: #12575c;
+  --aux-violet-1: #ece4f0; --aux-violet-2: #be9bd5; --aux-violet-3: #8c40bf; --aux-violet-4: #6d2596; --aux-violet-5: #42125c;
+  --aux-magenta-1: #f0e4e9; --aux-magenta-2: #d59bb8; --aux-magenta-3: #bf4082; --aux-magenta-4: #962566; --aux-magenta-5: #5c123f;
+
+  /* ── 字体栈 ──────── */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Noto Sans SC', sans-serif;
+  --font-serif: 'Cormorant Garamond', 'Noto Serif SC', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* ── z-index 阶梯 ─── */
+  --z-base: 0; --z-sticky: 50; --z-overlay: 100; --z-modal: 200; --z-toast: 300;
+
+  /* ── 时序 token ── */
+  --t-fast: .12s; --t-base: .15s; --t-mid: .22s; --t-slow: .35s;
+  --ease:     cubic-bezier(.2, 0, 0, 1);
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+
+  /* ── 阴影阶梯 ── */
+  --shadow-overlay: 0 8px 24px rgba(0,0,0,.08);
+  --shadow-modal:   0 20px 60px rgba(0,0,0,.12);
+  --shadow-focus:   0 0 0 2px rgba(26,35,50,.12), 0 1px 4px rgba(26,35,50,.08);
+
+  /* ── 断点 ── */
+  --bp-sm: 640px; --bp-md: 960px; --bp-lg: 1280px; --bp-xl: 1600px;
+}
+html { color-scheme: light dark; }
+
+/* ── Cool Paper · 冷纸主题（§1.1.4）── */
+[data-theme="cool"] {
+  --ink: #1a2332; --ink-soft: #3a4a60; --ink-mute: #6e7a8d; --ink-faint: #a3acba;
+  --paper: #fbfcfd; --paper-warm: #eef2f8; --paper-cool: #f5f7fa;
+  --rule: #dde3ec; --rule-soft: #e7ebf2;
+  --ai-tint: #f0f5fc; --ai-tint-rule: #cfdcf0;
+  --shadow-overlay: 0 8px 24px rgba(20,30,50,.08);
+  --shadow-modal:   0 20px 60px rgba(20,30,50,.12);
+  --shadow-focus:   0 0 0 2px rgba(20,30,50,.14), 0 1px 4px rgba(20,30,50,.08);
+}
+
+/* ── Dark · 暖夜主题（§1.1.2）── */
+[data-theme="dark"] {
+  --ink: #ebe6dc; --ink-soft: #b8b1a3; --ink-mute: #8a8478; --ink-faint: #5a554c;
+  --paper: #1a1815; --paper-warm: #252320; --paper-cool: #1f1d1a;
+  --rule: #3a3631; --rule-soft: #2c2924;
+  --vermilion-1: #1a2538; --vermilion-2: #25344e; --vermilion-3: #2f4a72; --vermilion-4: #3f6498;
+  --vermilion-5: #5b88c2; --vermilion-6: #7aa5db; --vermilion-7: #a0c2e8;
+  --vermilion: var(--vermilion-6); --vermilion-soft: var(--vermilion-5);
+  --vermilion-bg: var(--vermilion-2); --vermilion-deep: var(--vermilion-7);
+  --success: #a4b870; --success-soft: #859554; --success-bg: #232a1a; --success-deep: #c0d490;
+  --warning: #d4ad6a; --warning-soft: #b89253; --warning-bg: #2c2618; --warning-deep: #e8c688;
+  --error: #e57878; --error-soft: #c25858; --error-bg: #2e1a1a; --error-deep: #f29595;
+  --rec-red: #ec5f50;
+  --ai-tint: #1a2230; --ai-tint-rule: #2a3a52;
+  --shadow-overlay: 0 8px 24px rgba(0,0,0,.4);
+  --shadow-modal:   0 20px 60px rgba(0,0,0,.55);
+  --shadow-focus:   0 0 0 2px rgba(235,230,220,.18), 0 1px 4px rgba(0,0,0,.4);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]):not([data-theme="cool"]) {
+    --ink: #ebe6dc; --ink-soft: #b8b1a3; --ink-mute: #8a8478; --ink-faint: #5a554c;
+    --paper: #1a1815; --paper-warm: #252320; --paper-cool: #1f1d1a;
+    --rule: #3a3631; --rule-soft: #2c2924;
+    --vermilion-1: #1a2538; --vermilion-2: #25344e; --vermilion-3: #2f4a72; --vermilion-4: #3f6498;
+    --vermilion-5: #5b88c2; --vermilion-6: #7aa5db; --vermilion-7: #a0c2e8;
+    --success: #a4b870; --success-bg: #232a1a;
+    --warning: #d4ad6a; --warning-bg: #2c2618;
+    --error: #e57878; --error-bg: #2e1a1a;
+    --rec-red: #ec5f50; --ai-tint: #1a2230; --ai-tint-rule: #2a3a52;
+    --shadow-overlay: 0 8px 24px rgba(0,0,0,.4);
+    --shadow-modal:   0 20px 60px rgba(0,0,0,.55);
+    --shadow-focus:   0 0 0 2px rgba(235,230,220,.18), 0 1px 4px rgba(0,0,0,.4);
+  }
+}
+
+/* ═══════════════ §1.12 Reset / Base ═══════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--paper);
+  font-size: 14px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background var(--t-mid) var(--ease), color var(--t-mid) var(--ease);
+}
+
+/* ═══════════════ §5.1 滚动条 ═══════════════ */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 2px; }
+html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
+
+/* ═══════════════ §2 排版系统 ═══════════════ */
+.logo-mark { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 22px; font-weight: 500; color: var(--ink); letter-spacing: -0.02em; }
+.logo-mark em { color: var(--vermilion); font-style: normal; font-weight: 600; }
+
+.label { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-faint); }
+.label--strong { color: var(--ink-mute); }
+
+.section-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-faint); padding-bottom: 8px; border-bottom: 1px solid var(--rule-soft); margin-bottom: 12px; }
+
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--vermilion); display: inline-flex; align-items: center; gap: 12px; }
+.eyebrow::before, .eyebrow::after { content: ""; width: 24px; height: 1px; background: var(--vermilion); }
+.eyebrow--center::before, .eyebrow--center::after { width: 32px; }
+
+.title-l { font-family: 'Noto Serif SC', serif; font-size: 20px; font-weight: 600; letter-spacing: 0.02em; }
+.title-m { font-family: 'Noto Serif SC', serif; font-size: 16px; font-weight: 600; letter-spacing: 0.02em; }
+.title-s { font-family: 'Noto Serif SC', serif; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; }
+
+.hero-title { font-family: var(--font-serif); font-size: 42px; font-weight: 400; letter-spacing: -0.02em; line-height: 1.2; }
+.hero-title em { font-style: italic; color: var(--vermilion); }
+
+.section-hero { font-family: 'Noto Serif SC', serif; font-size: 28px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.3; }
+
+.prose { max-width: 720px; font-size: 14px; line-height: 1.75; color: var(--ink); }
+.prose h2 { font: 600 20px/1.4 'Noto Serif SC', serif; margin: 32px 0 12px; letter-spacing: .02em; }
+.prose h3 { font: 600 16px/1.4 'Noto Serif SC', serif; margin: 24px 0 8px; letter-spacing: .02em; }
+.prose p { margin: 0 0 16px; }
+.prose strong { color: var(--ink); font-weight: 600; }
+.prose em { font-style: italic; color: var(--ink-soft); }
+.prose a { color: var(--vermilion); text-decoration: underline; text-underline-offset: 2px; }
+.prose ul, .prose ol { margin: 0 0 16px; padding-left: 22px; }
+.prose li { margin: 0 0 6px; }
+
+/* ═══════════════ §3.1 按钮系统 ═══════════════ */
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; font-size: 13px; font-weight: 500; letter-spacing: 0.03em; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper); color: var(--ink-soft); cursor: pointer; transition: background var(--t-base) var(--ease), color var(--t-base) var(--ease), border-color var(--t-base) var(--ease); font-family: inherit; text-decoration: none; }
+.btn:hover { background: var(--paper-warm); }
+.btn:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.btn[disabled] { opacity: .5; cursor: not-allowed; }
+.btn-primary { background: var(--vermilion); color: #fff; border-color: var(--vermilion); }
+.btn-primary:hover { background: var(--vermilion-deep); border-color: var(--vermilion-deep); }
+.btn-ghost { border-color: transparent; background: transparent; }
+.btn-ghost:hover { border-color: var(--rule); background: var(--paper-warm); }
+.btn-danger { background: var(--paper); color: var(--error); border-color: var(--error); }
+.btn-danger:hover { background: var(--paper); color: var(--error-deep); border-color: var(--error-deep); }
+.btn-lg { padding: 10px 22px; font-size: 14px; }
+[data-theme="dark"] .btn-primary { color: var(--ink); }
+
+/* ═══════════════ §3.2 顶栏 ═══════════════ */
+.topbar { height: 56px; padding: 0 24px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; background: var(--paper); position: sticky; top: 0; z-index: var(--z-sticky); }
+.topbar-nav { display: flex; align-items: center; gap: 4px; }
+.nav-link { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-mute); padding: 8px 12px; border-radius: 2px; cursor: pointer; text-decoration: none; transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease); white-space: nowrap; }
+.nav-link:hover { background: var(--paper-warm); color: var(--ink-soft); }
+.nav-link.active { color: var(--vermilion); }
+.topbar-actions { display: flex; align-items: center; gap: 8px; }
+
+/* ═══════════════ §3.3 容器层级 ═══════════════ */
+.card { background: var(--paper-cool); border: 1px solid var(--rule); border-radius: 2px; padding: 14px 16px; transition: background var(--t-base) var(--ease); }
+[data-theme="dark"] .card, [data-theme="cool"] .card { background: var(--paper-warm); }
+.card:hover { background: var(--paper-warm); }
+.card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
+.card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
+
+/* ═══════════════ §3.4 / §3.5 输入控件 ═══════════════ */
+.input { width: 100%; padding: 10px 14px; font-family: inherit; font-size: 14px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 2px; transition: border-color var(--t-base) var(--ease); }
+.input:focus-visible { outline: none; border-color: var(--vermilion); box-shadow: var(--shadow-focus); }
+.input::placeholder { color: var(--ink-faint); font-style: normal; }
+.input--error { border-color: var(--error); }
+select.input { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237a8394' stroke-width='1.8'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+.field { margin-bottom: 16px; }
+.field-label { display: block; font-size: 13px; font-weight: 500; color: var(--ink-soft); margin-bottom: 6px; }
+.field-label .req { color: var(--vermilion); margin-left: 2px; }
+.field-help { font-size: 12px; color: var(--ink-mute); margin-top: 4px; }
+.field-error { font-size: 12px; color: var(--error); margin-top: 4px; }
+
+/* Checkbox · 2px 方形 */
+.checkbox { width: 14px; height: 14px; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper); display: inline-grid; place-items: center; cursor: pointer; transition: background var(--t-base) var(--ease); flex-shrink: 0; }
+.checkbox[aria-checked="true"] { background: var(--vermilion); border-color: var(--vermilion); }
+.checkbox[aria-checked="true"]::after { content: ''; width: 5px; height: 9px; border-right: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: translateY(-1px) rotate(45deg); }
+
+/* ═══════════════ §3.6 徽章系统 ═══════════════ */
+.pill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .04em; padding: 2px 8px; border-radius: 2px; background: var(--paper-warm); color: var(--ink-mute); }
+.pill-primary { background: var(--vermilion-bg); color: var(--vermilion); }
+.pill-success { background: var(--success-bg); color: var(--success); }
+.pill-warning { background: var(--warning-bg); color: var(--warning); }
+.pill-error   { background: var(--error-bg);   color: var(--error); }
+
+/* ═══════════════ §3.7 表格 ═══════════════ */
+.table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.table th { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-faint); text-align: left; padding: 8px 10px; background: var(--paper-cool); border-bottom: 1px solid var(--rule); }
+.table td { padding: 8px 10px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); }
+.table td:first-child { color: var(--ink); font-weight: 500; }
+.table tr:hover td { background: var(--paper-warm); }
+
+/* ═══════════════ §3.14 引述 ═══════════════ */
+.quote { padding: 10px 14px; background: var(--paper-cool); border-left: 2px solid var(--ink-faint); border-radius: 0 2px 2px 0; }
+.quote-text { font-size: 13px; color: var(--ink-soft); font-style: italic; line-height: 1.6; }
+.quote-who { font-size: 11px; color: var(--ink-faint); margin-top: 4px; }
+
+/* ═══════════════ §3.15 文件上传 ═══════════════ */
+.dropzone { padding: 32px 20px; background: var(--paper-cool); border: 1px dashed var(--rule); border-radius: 2px; text-align: center; transition: background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); cursor: pointer; }
+.dropzone:hover, .dropzone--active { background: var(--vermilion-bg); border-color: var(--vermilion-soft); border-style: dashed; }
+.dropzone-hint { font-size: 13px; color: var(--ink-mute); margin-top: 8px; }
+
+/* ═══════════════ §3.11 Tabs ═══════════════ */
+.tabs { display: inline-flex; gap: 0; border-bottom: 1px solid var(--rule); }
+.tab { padding: 10px 14px; font-size: 13px; font-weight: 500; color: var(--ink-mute); border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease); background: none; border-top: none; border-left: none; border-right: none; font-family: inherit; }
+.tab:hover { color: var(--ink-soft); }
+.tab[aria-selected="true"] { color: var(--vermilion); border-bottom-color: var(--vermilion); }
+
+/* ═══════════════ §4.3 置信度 / §4.4 引用 ═══════════════ */
+.trust { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 1px 6px; border-radius: 2px; }
+.trust::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
+.trust--high { background: var(--success-bg); color: var(--success); }
+.trust--high::before { background: var(--success); }
+.cite { font-family: var(--font-mono); font-size: 11px; font-weight: 500; padding: 0 4px; margin: 0 1px; background: var(--vermilion-bg); color: var(--vermilion); border-radius: 2px; cursor: pointer; text-decoration: none; transition: background var(--t-fast) var(--ease); }
+.cite:hover { background: var(--vermilion-soft); color: #fff; }
+
+/* ═══════════════ §6 交互 / A11y ═══════════════ */
+:where(button, a, [role="button"], input, select, textarea, .checkbox):focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 2px; }
+
+@keyframes slideUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.appear { animation: slideUp var(--t-mid) var(--ease) both; }
+.appear-2 { animation: slideUp var(--t-mid) var(--ease) .06s both; }
+.appear-3 { animation: slideUp var(--t-mid) var(--ease) .12s both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ═══════════════ 主题切换按钮（§1.1.3）═══════════════ */
+.theme-toggle { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; }
+.theme-toggle svg { display: none; }
+[data-theme="light"] .theme-toggle .icon-sun,
+[data-theme="cool"] .theme-toggle .icon-snow,
+[data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+/* ═══════════════ 布局工具 ═══════════════ */
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+.wrap-narrow { max-width: 820px; margin: 0 auto; padding: 0 24px; }
+.section { padding: 56px 0; }
+.section + .section { border-top: 1px solid var(--rule-soft); }
+.page { min-height: 60vh; }
+.page[hidden] { display: none; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 960px) { .grid-3 { grid-template-columns: 1fr 1fr; } .grid-4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .grid-3, .grid-2, .grid-4 { grid-template-columns: 1fr; } .hero-title { font-size: 32px; } .section-hero { font-size: 22px; } }
+
+/* 协议页锚点目录 */
+.toc-link { font-size: 13px; color: var(--ink-mute); text-decoration: none; padding: 6px 10px; border-left: 2px solid transparent; border-radius: 0 2px 2px 0; transition: color var(--t-base) var(--ease), border-color var(--t-base) var(--ease), background var(--t-base) var(--ease); }
+.toc-link:hover { color: var(--vermilion); background: var(--paper-warm); border-left-color: var(--vermilion-soft); }
+@media (max-width: 860px) { .protocol-toc { position: static !important; } .protocol-grid { grid-template-columns: 1fr !important; gap: 24px !important; } }
+
+.section-head { margin-bottom: 32px; }
+.section-head .eyebrow { margin-bottom: 14px; }
+.section-desc { font-size: 14px; color: var(--ink-soft); max-width: 560px; line-height: 1.7; margin-top: 10px; }
+
+.meta-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.divider { height: 1px; background: var(--rule-soft); border: none; margin: 0; }
+.icon { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; flex-shrink: 0; }
+.icon-sm { width: 14px; height: 14px; }
+.icon-lg { width: 20px; height: 20px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
+<header class="topbar">
+  <div style="display:flex; align-items:center; gap:32px;">
+    <a class="logo-mark" href="#/" style="text-decoration:none;">Intern <em>Discovery</em></a>
+    <nav class="topbar-nav" id="mainNav">
+      <a class="nav-link" href="#/" data-nav="home">赛事简介</a>
+      <a class="nav-link" href="#/#tracks" data-nav="tracks">赛道介绍</a>
+      <a class="nav-link" href="#/#schedule" data-nav="schedule">赛程安排</a>
+      <a class="nav-link" href="#/#awards" data-nav="awards">激励</a>
+      <a class="nav-link" href="#/#faq" data-nav="faq">常见问题</a>
+      <a class="nav-link" href="#/manage" data-nav="manage">参赛管理</a>
+    </nav>
+  </div>
+  <div class="topbar-actions">
+    <button class="btn btn-ghost theme-toggle" id="themeBtn" title="切换主题" aria-label="切换主题">
+      <svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="icon icon-snow" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19M12 4l-2 2m2-2l2 2M12 20l-2-2m2 2l2-2M4 12l2-2m-2 2l2 2M20 12l-2-2m2 2l-2 2"/></svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>
+    </button>
+    <a class="btn btn-ghost" href="#/manage">登录 / 注册</a>
+    <a class="btn btn-primary" href="#/apply">立即报名</a>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE · 首页 (/)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" data-route="home">
+
+  <!-- ───────── HERO ───────── -->
+  <section style="position:relative; overflow:hidden; border-bottom:1px solid var(--rule-soft);">
+    <!-- 极轻的暖纸纹理装饰，非 WebGL，仅 CSS 渐变 + 网格 -->
+    <div aria-hidden="true" style="position:absolute; inset:0; background:
+      radial-gradient(ellipse 60% 50% at 75% 30%, var(--vermilion-1), transparent 70%),
+      linear-gradient(transparent 0 0);
+      opacity:.7;"></div>
+    <div aria-hidden="true" style="position:absolute; inset:0; background-image:
+      linear-gradient(var(--rule-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
+      background-size: 56px 56px; opacity:.35; mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, #000, transparent 75%);"></div>
+    <div class="wrap" style="position:relative; padding:80px 24px 72px;">
+      <div class="eyebrow appear" style="margin-bottom:24px;">AI for Science · 书生国智科探挑战赛</div>
+      <h1 class="hero-title appear-2" style="max-width:840px;">让 <em>AI 智能体</em> 像科学家一样<br>自主探索、提出并验证假说</h1>
+      <p class="appear-3" style="font-size:16px; color:var(--ink-soft); max-width:620px; line-height:1.75; margin-top:20px;">
+        Intern·Agent 使 AI 获得类似人类科学家的自主探索能力，开展分析问题、查阅文献、调研反思与实验，实现「想法生成 — 方案设计 — 代码实现 — 实验验证」全流程闭环。
+      </p>
+      <div class="meta-row appear-3" style="margin-top:32px; gap:12px;">
+        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
+        <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
+        <a class="btn btn-ghost btn-lg" href="#/manage">立即体验科研助手</a>
+      </div>
+
+      <!-- 关键数据条 -->
+      <div class="appear-3" style="margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--rule); border-radius:2px; background:var(--paper-cool); max-width:840px;">
+        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
+          <div class="label" style="margin-bottom:8px;">赛事奖金池</div>
+          <div style="font-family:var(--font-serif); font-size:28px; color:var(--vermilion); line-height:1;">总奖金<br><span style="font-size:42px; font-weight:600;">高达</span></div>
+        </div>
+        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
+          <div class="label" style="margin-bottom:8px;">参赛赛道</div>
+          <div style="font-family:var(--font-serif); font-size:42px; font-weight:600; line-height:1; color:var(--ink);">6 <span style="font-size:16px; color:var(--ink-mute); font-family:var(--font-sans);">大赛道</span></div>
+          <div style="font-size:12px; color:var(--ink-mute); margin-top:6px;">物质 · 生命 · 地球 · 算力</div>
+        </div>
+        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
+          <div class="label" style="margin-bottom:8px;">报名时间</div>
+          <div class="title-m" style="line-height:1.4;">即日起</div>
+          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 2026.2.28</div>
+        </div>
+        <div style="padding:20px 22px;">
+          <div class="label" style="margin-bottom:8px;">组队要求</div>
+          <div class="title-m" style="line-height:1.4;">至多 5 人</div>
+          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">鼓励多赛道参赛</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 平台能力 ───────── -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Platform · 科学发现平台</div>
+        <h2 class="section-hero" style="margin-top:14px;">三件套，支撑从想法到验证的科研闭环</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card-emphasis">
+          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">Intern-S1</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">最先进的开源多模态推理模型</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">在具备强大通用任务能力的同时，于广泛的科学任务中达到最先进性能，可与最先进的闭源商业模型相媲美。</p>
+        </div>
+        <div class="card-emphasis">
+          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">Intern·Agent</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">类人科学家的自主探索能力</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">自动化科研流程，生成实验构想、代码并调优；分析问题、查阅文献、调研反思，开展实验验证。</p>
+        </div>
+        <div class="card-emphasis">
+          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">科研助手</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">科研问答与深度思考</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">辅助解决学术难题，生成学术报告；科研智慧提炼，将科研数据与 AI Skills / Agent 深度结合。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 赛道介绍 ───────── -->
+  <section class="section" id="tracks">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Competition Track · 赛道介绍</div>
+        <h2 class="section-hero" style="margin-top:14px;">六大赛道，覆盖科学与算力前沿</h2>
+        <p class="section-desc">每个赛道配套官方数据集、开发平台与国产算力支持。同一参赛选手可参加多个赛道，鼓励多赛道参赛。</p>
+      </div>
+
+      <div class="grid-3" id="trackGrid"><!-- 赛道卡片由 JS 注入，保证学科辅助色映射一致 --></div>
+    </div>
+  </section>
+
+  <!-- ───────── 赛程安排 ───────── -->
+  <section class="section" id="schedule">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Schedule · 赛程安排</div>
+        <h2 class="section-hero" style="margin-top:14px;">从报名到名次公布，五个阶段</h2>
+      </div>
+      <div id="timeline"><!-- 时间线由 JS 注入 --></div>
+    </div>
+  </section>
+
+  <!-- ───────── 奖金池 ───────── -->
+  <section class="section" id="awards">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Awards · 赛事奖金池</div>
+        <h2 class="section-hero" style="margin-top:14px;">奖金、人气与总冠军</h2>
+      </div>
+      <div class="grid-3" style="gap:12px;">
+        <div class="card">
+          <div class="meta-row" style="justify-content:space-between;">
+            <span class="title-m">一等奖</span><span class="pill pill-warning">每赛道 1 名</span>
+          </div>
+          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">各赛道最高荣誉，奖金 + 优先录用 + 社区高端交流资格。</p>
+        </div>
+        <div class="card">
+          <div class="meta-row" style="justify-content:space-between;">
+            <span class="title-m">二等奖</span><span class="pill">每赛道 4 名</span>
+          </div>
+          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">实力强劲队伍，获奖金与组织单位深度参与机会。</p>
+        </div>
+        <div class="card">
+          <div class="meta-row" style="justify-content:space-between;">
+            <span class="title-m">三等奖</span><span class="pill">每赛道若干</span>
+          </div>
+          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">入围决赛即获认可，作品发布在科学发现平台。</p>
+        </div>
+        <div class="card-emphasis" style="grid-column:span 1;">
+          <div class="meta-row" style="justify-content:space-between;">
+            <span class="title-m">最佳人气奖</span><span class="pill pill-primary">社区投票</span>
+          </div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">成果上传至 SCP 广场，由浦江科学社区投票产生。</p>
+        </div>
+        <div class="card-emphasis" style="grid-column:span 2;">
+          <div class="meta-row" style="justify-content:space-between;">
+            <span class="title-m">黑客松总冠军</span><span class="pill pill-primary">全场最高</span>
+          </div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">跨赛道角逐，授予本届书生国智科探挑战赛的最高荣誉，将受邀深度参与组织单位重大任务攻关。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── 更多激励 ───────── -->
+  <section class="section" id="more-incentives">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Incentives · 更多激励</div>
+        <h2 class="section-hero" style="margin-top:14px;">不止奖金</h2>
+      </div>
+      <div class="grid-2" style="gap:14px;">
+        <div class="card-info">
+          <div class="meta-row" style="margin-bottom:10px;">
+            <span class="label label--strong">壁仞科技 · 开发者专属资源包</span>
+          </div>
+          <h3 class="title-m" style="margin-bottom:6px;">立即领取 API Key</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">限量 1000 份，先到先得，赛事开赛后即可领取。可调用 stepfun3.5 与 minimax2.5 进行 AI 辅助开发。</p>
+          <a class="btn" href="#/manage" style="margin-top:14px;">立即领取 API Key</a>
+        </div>
+        <div class="card-info">
+          <div class="meta-row" style="margin-bottom:10px;">
+            <span class="label label--strong">国产算力 · 创新计算</span>
+          </div>
+          <h3 class="title-m" style="margin-bottom:6px;">立即领取开发环境</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">限量 500 份，先到先得，赛事开赛后即可领取。国产 GPU 云端开发环境，探索创新计算与应用。</p>
+          <a class="btn" href="#/manage" style="margin-top:14px;">立即领取开发环境</a>
+        </div>
+      </div>
+      <div class="grid-3" style="gap:12px; margin-top:14px;">
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">优先录用机会</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得组织单位的实习、全职、双聘等资格。</p></div>
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">重大任务攻关</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得深度参与组织单位重大任务攻关的机会。</p></div>
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">浦江科学社区</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">受邀参与浦江科学社区各类高端交流活动。</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────── FAQ ───────── -->
+  <section class="section" id="faq">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <div class="eyebrow">FAQ · 常见问题</div>
+        <h2 class="section-hero" style="margin-top:14px;">关于参赛，你可能想问</h2>
+      </div>
+      <div id="faqList"><!-- FAQ 由 JS 注入 --></div>
+    </div>
+  </section>
+
+  <!-- ───────── 主办单位 ───────── -->
+  <section class="section" id="orgs">
+    <div class="wrap">
+      <div class="section-head" style="text-align:center;">
+        <div class="eyebrow eyebrow--center" style="justify-content:center;">Organizers · 组织单位</div>
+      </div>
+      <div class="grid-2" style="max-width:880px; margin:0 auto; gap:14px;">
+        <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">主办单位</div><div class="title-s" style="color:var(--ink);">上海人工智能实验室</div></div>
+        <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">承办单位</div><div class="title-s" style="color:var(--ink);">Intern Science · 科学发现平台</div></div>
+        <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">协办单位</div><div class="title-s" style="color:var(--ink);">壁仞科技 · 浦江科学社区</div></div>
+        <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">支持单位</div><div class="title-s" style="color:var(--ink);">国产算力创新联盟</div></div>
+      </div>
+      <p style="text-align:center; font-size:12px; color:var(--ink-faint); margin-top:24px; font-style:italic;">本届赛事算力由壁仞科技提供支持，开放周期 7.1 – 7.15，敬请期待。</p>
+    </div>
+  </section>
+
+  <!-- ───────── 报名 CTA ───────── -->
+  <section style="border-top:1px solid var(--rule); background:var(--paper-warm);">
+    <div class="wrap" style="padding:56px 24px; text-align:center;">
+      <h2 class="section-hero" style="margin-bottom:12px;">准备好让 AI 成为你的科研伙伴了吗？</h2>
+      <p style="font-size:14px; color:var(--ink-soft); margin-bottom:24px;">报名前请了解并同意免责协议和法律条款。团队至多 5 名成员，鼓励多赛道参赛。</p>
+      <div class="meta-row" style="justify-content:center; gap:12px;">
+        <a class="btn btn-primary btn-lg" href="#/apply">提交报名</a>
+        <a class="btn btn-lg" href="#/protocol">阅读服务协议</a>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /home -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE · 赛事报名 (/apply)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" data-route="apply" hidden>
+  <div class="wrap-narrow" style="padding:48px 24px 64px;">
+
+    <!-- 面包屑 + 标题 -->
+    <div class="meta-row" style="margin-bottom:8px;">
+      <a href="#/" class="label" style="text-decoration:none; color:var(--ink-mute);">首页</a>
+      <span class="label" style="color:var(--ink-faint);">/</span>
+      <span class="label">赛事报名</span>
+    </div>
+    <div class="eyebrow" style="margin-bottom:16px;">Join Competition · 赛事报名</div>
+    <h1 class="section-hero" style="margin-bottom:8px;">提交参赛报名</h1>
+    <p style="font-size:14px; color:var(--ink-soft); line-height:1.7; max-width:640px;">团队至多 5 名成员，鼓励多赛道参赛。备注：标 <span style="color:var(--vermilion);">*</span> 为必填项。</p>
+
+    <!-- 报名前提示 -->
+    <div class="card-info" style="margin:24px 0 32px; display:flex; gap:12px; align-items:flex-start;">
+      <svg class="icon" viewBox="0 0 24 24" style="color:var(--vermilion); margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">报名前请了解并同意<a href="#/protocol" style="color:var(--vermilion);">免责协议和法律条款</a>。提交的作品必须是 AI 智能体，需包含对产出 Proposal 的 AI scientist 实现方案的描述。</p>
+    </div>
+
+    <form id="applyForm" onsubmit="return false;">
+
+      <!-- 选择赛道 -->
+      <div style="margin-bottom:32px;">
+        <div class="section-label">选择赛道 *</div>
+        <div class="grid-2" style="gap:10px;" id="trackSelect"><!-- 赛道单选由 JS 注入 --></div>
+        <p class="field-help" style="margin-top:8px;">可在报名后于「参赛管理」中加入更多赛道。</p>
+      </div>
+
+      <!-- 团队信息 -->
+      <div style="margin-bottom:32px;">
+        <div class="section-label">团队信息</div>
+        <div class="field">
+          <label class="field-label">团队名称 <span class="req">*</span></label>
+          <input class="input" placeholder="请填写团队名称" maxlength="30">
+          <p class="field-help">支持中文、英文、数字、空格、-、_，3–30 字符。</p>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">所属机构 / 高校 <span class="req">*</span></label>
+            <input class="input" placeholder="请填写单位信息">
+          </div>
+          <div class="field">
+            <label class="field-label">参赛赛道</label>
+            <input class="input" value="赛道三 · 厄尔尼诺-南方涛动 (ENSO) 预测" readonly style="color:var(--ink-mute);">
+          </div>
+        </div>
+      </div>
+
+      <!-- 队长信息 -->
+      <div style="margin-bottom:32px;">
+        <div class="section-label">队长信息</div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="field-label">姓名 <span class="req">*</span></label>
+            <input class="input" placeholder="请填写真实姓名">
+            <p class="field-help">仅支持中文、英文，2–30 字符。</p>
+          </div>
+          <div class="field">
+            <label class="field-label">职业 <span class="req">*</span></label>
+            <input class="input" placeholder="请填写职业信息">
+          </div>
+          <div class="field">
+            <label class="field-label">证件类型 <span class="req">*</span></label>
+            <select class="input"><option>身份证</option><option>护照</option></select>
+          </div>
+          <div class="field">
+            <label class="field-label">证件号码 <span class="req">*</span></label>
+            <input class="input" placeholder="请输入身份证 / 护照号码">
+            <p class="field-help">身份证 18 位 / 护照 7–15 位。</p>
+          </div>
+          <div class="field">
+            <label class="field-label">手机号码 <span class="req">*</span></label>
+            <input class="input" placeholder="请填入联系的手机号">
+          </div>
+          <div class="field">
+            <label class="field-label">电子邮箱 <span class="req">*</span></label>
+            <input class="input" placeholder="请填写邮箱（机构或高校邮箱）">
+          </div>
+        </div>
+      </div>
+
+      <!-- 队员信息 -->
+      <div style="margin-bottom:32px;">
+        <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--rule-soft);">
+          <span class="section-label" style="border:none; margin:0; padding:0;">队员信息</span>
+          <span class="label" style="text-transform:none; letter-spacing:.04em;">团队至多 5 名成员</span>
+        </div>
+        <div id="memberList"></div>
+        <button class="btn btn-ghost" id="addMember" type="button" style="margin-top:8px;">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> 添加队员
+        </button>
+      </div>
+
+      <!-- 指导教师 -->
+      <div style="margin-bottom:32px;">
+        <div class="section-label">指导教师 / 专家 <span style="color:var(--ink-faint); font-weight:400;">（如适用）</span></div>
+        <div class="grid-2">
+          <div class="field"><label class="field-label">姓名</label><input class="input" placeholder="Advisor / Expert"></div>
+          <div class="field"><label class="field-label">所属机构</label><input class="input" placeholder="所属机构 / 高校"></div>
+        </div>
+      </div>
+
+      <!-- 协议 -->
+      <div class="card-emphasis" style="margin-bottom:28px; display:flex; gap:10px; align-items:flex-start; cursor:pointer;" id="agreeBox">
+        <span class="checkbox" role="checkbox" aria-checked="false" id="agreeChk" tabindex="0"></span>
+        <span style="font-size:13px; color:var(--ink-soft); line-height:1.6;">我已阅读并同意<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">服务协议</a>、<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">免责协议和法律条款</a>及<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">个人信息保护政策</a>。</span>
+      </div>
+
+      <!-- 操作 -->
+      <div class="meta-row" style="gap:12px;">
+        <button class="btn btn-primary btn-lg" type="submit" id="submitApply">提交报名</button>
+        <a class="btn btn-lg" href="#/">取消</a>
+        <span class="field-help" id="applyHint" style="margin:0;"></span>
+      </div>
+    </form>
+  </div>
+</div><!-- /apply -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE · 参赛管理 (/manage)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" data-route="manage" hidden>
+  <div class="wrap" style="padding:48px 24px 64px;">
+
+    <!-- 面包屑 + 标题 -->
+    <div class="meta-row" style="margin-bottom:8px;">
+      <a href="#/" class="label" style="text-decoration:none; color:var(--ink-mute);">首页</a>
+      <span class="label" style="color:var(--ink-faint);">/</span>
+      <span class="label">参赛管理</span>
+    </div>
+
+    <!-- 队伍概览头 -->
+    <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:8px;">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px;">My Workspace · 参赛管理</div>
+        <h1 class="section-hero" style="margin-bottom:6px;">归一 · ENSO 预测队</h1>
+        <div class="meta-row" style="gap:10px;">
+          <span class="pill pill-success">报名已通过</span>
+          <span class="label" style="text-transform:none; letter-spacing:.04em;">队伍编号 IDC-2026-A031 · 上海人工智能实验室</span>
+        </div>
+      </div>
+      <div class="meta-row" style="gap:8px;">
+        <a class="btn" href="#/apply"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> 编辑报名</a>
+        <button class="btn btn-danger" id="cancelReg" type="button"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg> 取消报名</button>
+      </div>
+    </div>
+
+    <!-- 关键数据条 -->
+    <div class="grid-4" style="gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); border-radius:2px; overflow:hidden; margin:28px 0 32px;">
+      <div style="background:var(--paper); padding:16px 18px;">
+        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">当前阶段</div>
+        <div class="title-l" style="color:var(--vermilion);">报名及初赛</div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">截止 2026.2.28</div>
+      </div>
+      <div style="background:var(--paper); padding:16px 18px;">
+        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">A 榜最高分</div>
+        <div class="title-l">0.7421</div>
+        <div style="font-size:12px; color:var(--success); margin-top:4px;">↑ 较上次 +0.018</div>
+      </div>
+      <div style="background:var(--paper); padding:16px 18px;">
+        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">提交次数</div>
+        <div class="title-l">7 <span style="font-size:13px; color:var(--ink-faint); font-weight:400;">/ 日限 5</span></div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">今日剩余 3 次</div>
+      </div>
+      <div style="background:var(--paper); padding:16px 18px;">
+        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">团队规模</div>
+        <div class="title-l">4 <span style="font-size:13px; color:var(--ink-faint); font-weight:400;">/ 5 人</span></div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">含队长 1 人</div>
+      </div>
+    </div>
+
+    <!-- Tab 导航 -->
+    <div class="tabs" id="manageTabs" style="margin-bottom:28px; flex-wrap:wrap;">
+      <button class="tab" data-tab="overview" aria-selected="true">概览</button>
+      <button class="tab" data-tab="team" aria-selected="false">队伍成员</button>
+      <button class="tab" data-tab="submit" aria-selected="false">作品提交</button>
+      <button class="tab" data-tab="resource" aria-selected="false">算力 & API</button>
+    </div>
+
+    <!-- Tab 面板由 JS 注入 -->
+    <div id="manageBody"></div>
+
+  </div>
+</div><!-- /manage -->
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE · 服务协议 (/protocol)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" data-route="protocol" hidden>
+  <div class="wrap protocol-grid" style="padding:48px 24px 64px; display:grid; grid-template-columns:200px 1fr; gap:48px; align-items:start;">
+
+    <!-- 左侧锚点目录 -->
+    <aside class="protocol-toc" style="position:sticky; top:80px;">
+      <div class="label" style="margin-bottom:14px;">目录 · Contents</div>
+      <nav style="display:flex; flex-direction:column; gap:2px;" id="protocolNav">
+        <a href="#/protocol#p-service" class="toc-link">服务协议</a>
+        <a href="#/protocol#p-disclaimer" class="toc-link">免责声明</a>
+        <a href="#/protocol#p-legal" class="toc-link">法律条款</a>
+        <a href="#/protocol#p-privacy" class="toc-link">个人信息保护政策</a>
+        <a href="#/protocol#p-ip" class="toc-link">知识产权与作品归属</a>
+      </nav>
+      <div class="divider" style="margin:20px 0;"></div>
+      <a href="#/apply" class="btn btn-primary" style="width:100%; justify-content:center;">同意并报名</a>
+    </aside>
+
+    <!-- 右侧正文 -->
+    <div>
+      <div class="meta-row" style="margin-bottom:8px;">
+        <a href="#/" class="label" style="text-decoration:none; color:var(--ink-mute);">首页</a>
+        <span class="label" style="color:var(--ink-faint);">/</span>
+        <span class="label">服务协议</span>
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">Terms & Policies · 协议与条款</div>
+      <h1 class="section-hero" style="margin-bottom:8px;">服务协议 · 免责协议 · 法律条款</h1>
+      <p style="font-size:13px; color:var(--ink-mute); line-height:1.7; margin-bottom:8px;">生效日期：2026 年 1 月 1 日 · 最近更新：2026 年 1 月 1 日 · 主办方：书生国智科探挑战赛组委会</p>
+
+      <div class="card-info" style="margin:24px 0 32px; display:flex; gap:12px; align-items:flex-start;">
+        <svg class="icon" viewBox="0 0 24 24" style="color:var(--vermilion); margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">本页内容为参赛规则与法律条款的示意性整理，提交报名即视为您已阅读、理解并同意以下全部条款。最终解释权归组委会所有。</p>
+      </div>
+
+      <article class="prose">
+        <h2 id="p-service">一、服务协议</h2>
+        <p>本协议是您（以下称"参赛者"或"用户"）与书生国智科探挑战赛组委会（以下称"组委会"或"我们"）之间，就参与"书生国智科探挑战赛 / Intern Discovery Challenge"（以下称"本赛事"）及使用科学发现平台相关服务所订立的协议。</p>
+        <h3>1.1 报名资格</h3>
+        <ul>
+          <li>参赛者应为具有完全民事行为能力的自然人，或依法成立的高校、科研机构团队。</li>
+          <li>团队人数为 1–5 人，须指定一名队长作为唯一对接人。</li>
+          <li>组委会工作人员、评审专家及其直系亲属不得参赛。</li>
+        </ul>
+        <h3>1.2 账户与信息</h3>
+        <p>参赛者须保证报名时提交的团队名称、所属机构、成员身份信息、联系方式等真实、准确、完整。因信息不实导致的资格取消、奖项追回等后果由参赛者自行承担。</p>
+        <h3>1.3 提交与评测</h3>
+        <p>参赛者通过平台提交作品（含模型、智能体、Proposal、复现材料等）。A 榜每日提交次数上限为 5 次，B 榜评测在初评截止后统一进行。提交结果以平台记录为准。</p>
+
+        <h2 id="p-disclaimer">二、免责声明</h2>
+        <p>在适用法律允许的最大范围内，组委会及合作方对以下情形不承担责任：</p>
+        <ul>
+          <li>因不可抗力（含但不限于网络故障、算力平台维护、自然灾害、政策调整等）导致赛事延期、暂停或终止；</li>
+          <li>因参赛者自身网络、设备、操作不当造成的提交失败或数据丢失；</li>
+          <li>参赛者上传内容侵犯第三方知识产权、商业秘密或其他合法权益所引发的纠纷；</li>
+          <li>参赛者之间或参赛者与第三方之间的争议。</li>
+        </ul>
+        <p><strong>风险提示：</strong>本赛事涉及国产 GPU 开发环境、第三方大模型 API（含 stepfun3.5、minimax2.5 等）调用，相关算力与接口可用性以服务方实际提供为准，组委会不对其连续性、准确性作出保证。</p>
+
+        <h2 id="p-legal">三、法律条款</h2>
+        <h3>3.1 适用法律与争议解决</h3>
+        <p>本协议的订立、效力、解释及争议解决均适用中华人民共和国法律（不含港澳台地区法律）。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均有权向组委会所在地有管辖权的人民法院提起诉讼。</p>
+        <h3>3.2 合规与诚信</h3>
+        <ul>
+          <li>严禁任何形式的作弊，包括但不限于测试集泄漏利用、多账号刷分、抄袭他人作品、伪造实验结果。</li>
+          <li>提交的作品必须是 AI 智能体，并须包含对产出 Proposal 的 AI scientist 实现方案的描述。</li>
+          <li>一经发现违规，组委会有权取消参赛资格、追回奖金奖项，并保留追究法律责任的权利。</li>
+        </ul>
+        <h3>3.3 协议变更</h3>
+        <p>组委会有权根据赛事进展对本协议及赛事规则进行调整，并通过大赛官网、Intern Science 小红书账号等渠道公示。变更后继续参赛即视为接受变更。</p>
+
+        <h2 id="p-privacy">四、个人信息保护政策</h2>
+        <p>我们高度重视参赛者个人信息保护，依据《中华人民共和国个人信息保护法》等法律法规处理您的个人信息。</p>
+        <h3>4.1 收集范围</h3>
+        <p>我们仅收集赛事必需的信息：姓名、职业、证件类型及号码、手机号、电子邮箱、所属机构及作品相关数据。证件号码仅用于身份核验与奖金发放，不作他用。</p>
+        <h3>4.2 使用与共享</h3>
+        <ul>
+          <li>用于报名审核、资格核验、赛事通知、奖金发放与获奖公示。</li>
+          <li>除法律要求或为发放奖金/算力资源所必需，我们不会向无关第三方提供您的个人信息。</li>
+          <li>作品成果在获您授权后可发布于科学发现平台（SCP）广场，用于社区投票与展示。</li>
+        </ul>
+        <h3>4.3 您的权利</h3>
+        <p>您有权查询、更正、删除您的个人信息，或撤回授权。如需行使上述权利，可通过大赛官网公示的联系方式与组委会联系。</p>
+
+        <h2 id="p-ip">五、知识产权与作品归属</h2>
+        <p>参赛作品的知识产权归参赛者所有。参赛者授予组委会一项免费、非独占、可转授权的许可，用于赛事评审、成果展示、学术交流与赛事宣传。组委会对赛事题目、数据集、平台及其衍生内容享有相应权利。未经许可，参赛者不得将赛题数据用于赛事以外的商业用途。</p>
+        <p style="color:var(--ink-mute); font-size:13px; margin-top:24px; padding-top:16px; border-top:1px solid var(--rule-soft);">本协议为示意文本，具体以组委会正式发布的赛事章程为准。© All Rights Reserved. 沪ICP备2021009351号-21</p>
+      </article>
+    </div>
+  </div>
+</div><!-- /protocol -->
+
+</main>
+
+<!-- ═══════════════════════ FOOTER ═══════════════════════ -->
+<footer style="border-top:1px solid var(--rule); background:var(--paper-cool); padding:40px 0 32px; margin-top:40px;">
+  <div class="wrap" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
+    <div style="max-width:300px;">
+      <div class="logo-mark" style="font-size:20px;">Intern <em>Discovery</em></div>
+      <p style="font-size:13px; color:var(--ink-mute); line-height:1.7; margin-top:12px;">书生国智科探挑战赛 · 以 AI 智能体驱动科学发现，覆盖物质 / 生命 / 地球科学与国产算力六大赛道。</p>
+      <div class="meta-row" style="margin-top:16px;">
+        <a class="pill pill-primary" href="#/" style="text-decoration:none;">加入浦江科学社区</a>
+        <a class="pill" href="#/" style="text-decoration:none;">社群交流</a>
+      </div>
+    </div>
+    <div style="display:flex; gap:48px; flex-wrap:wrap;">
+      <div>
+        <div class="label label--strong" style="margin-bottom:12px;">赛事</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+          <a href="#/" style="color:var(--ink-soft); text-decoration:none;">赛事简介</a>
+          <a href="#/#tracks" style="color:var(--ink-soft); text-decoration:none;">赛道介绍</a>
+          <a href="#/#schedule" style="color:var(--ink-soft); text-decoration:none;">赛程安排</a>
+          <a href="#/#faq" style="color:var(--ink-soft); text-decoration:none;">常见问题</a>
+        </div>
+      </div>
+      <div>
+        <div class="label label--strong" style="margin-bottom:12px;">参赛</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+          <a href="#/apply" style="color:var(--ink-soft); text-decoration:none;">赛事报名</a>
+          <a href="#/manage" style="color:var(--ink-soft); text-decoration:none;">参赛管理</a>
+          <a href="#/protocol" style="color:var(--ink-soft); text-decoration:none;">服务协议</a>
+          <a href="#/protocol" style="color:var(--ink-soft); text-decoration:none;">免责协议</a>
+        </div>
+      </div>
+      <div>
+        <div class="label label--strong" style="margin-bottom:12px;">联系我们</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--ink-mute);">
+          <span>Intern Science 小红书</span>
+          <span>欢迎联系小助手</span>
+          <span style="font-style:italic;">备注【赛道+单位+姓名】</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:32px; padding-top:20px; border-top:1px solid var(--rule-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+    <span class="label" style="text-transform:none; letter-spacing:.04em;">© All Rights Reserved. 沪ICP备2021009351号-21</span>
+    <span class="label" style="letter-spacing:.12em;">Powered by Intern Discovery Platform</span>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════ 内容数据（取自原站真实文案）═══════════════ */
+/* 六大赛道 · 用辅助色（§1.1.5）做学科区分，≤4 色相规约：这里 6 条复用 4 色相 + vermilion */
+const TRACKS = [
+  { no:'赛道一', tag:'物质科学', en:'Materials Science', aux:'cyan',
+    title:'国产GPU创新计算与应用探索',
+    desc:'面向国产 GPU 的创新计算与应用，探索算力底座上的科学计算新范式。',
+    metas:['国产算力开发环境', 'SSH 命令接入', 'A/B 榜测试集'] },
+  { no:'赛道二', tag:'模型与算子', en:'Model & Operator', aux:'violet',
+    title:'基于 Agent 的模型与算子开发',
+    desc:'Skill / Agent 开发赛道，需提交 AI 智能体作品，包含对产出模型方案的描述。',
+    metas:['Skill / Agent 开发', '提交作品须为智能体', '复现材料'] },
+  { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint',
+    title:'厄尔尼诺-南方涛动 (ENSO) 预测',
+    desc:'输入起始月状态，输出未来 12 个月的二维 SSTA 场。1980–2023 年全量验证，包含近 40 多年所有 ENSO 循环。',
+    metas:['1850–2014 训练集', '240~360 起始月', '二维 SSTA 场预测'] },
+  { no:'赛道四', tag:'物质科学', en:'Chemistry', aux:'cyan',
+    title:'偶联反应预测',
+    desc:'Suzuki 与 Buchwald–Hartwig 偶联反应数据集。B 榜迫使模型解决不对称性与多样性问题。',
+    metas:['Suzuki 数据集', 'Buchwald–Hartwig 数据集', '说明文档 A / B'] },
+  { no:'赛道五', tag:'生命科学', en:'Life Sciences', aux:'magenta',
+    title:'重大疾病靶点发现',
+    desc:'针对高潜力靶点验证科学假说，经细胞、类器官与动物实验逐级推进至重大疾病治疗靶点发现。',
+    metas:['Milestone 1A 细胞实验', 'Milestone 1B 类器官', 'Milestone 2 动物实验'] },
+  { no:'赛道六', tag:'自由赛道', en:'AI for Social Science', aux:'vermilion',
+    title:'科艺融合 · AI for Social Science',
+    desc:'自由赛道，科艺融合 × AI4SS，鼓励跨学科创意与社会科学方向的 AI 探索。',
+    metas:['科艺融合', 'AI4SS', '自由命题'] },
+];
+const AUX = {
+  mint:    { c1:'var(--aux-mint-1)',    c3:'var(--aux-mint-3)',    c4:'var(--aux-mint-4)' },
+  cyan:    { c1:'var(--aux-cyan-1)',    c3:'var(--aux-cyan-3)',    c4:'var(--aux-cyan-4)' },
+  violet:  { c1:'var(--aux-violet-1)',  c3:'var(--aux-violet-3)',  c4:'var(--aux-violet-4)' },
+  magenta: { c1:'var(--aux-magenta-1)', c3:'var(--aux-magenta-3)', c4:'var(--aux-magenta-4)' },
+  vermilion:{ c1:'var(--vermilion-1)',  c3:'var(--vermilion-5)',   c4:'var(--vermilion-6)' },
+};
+function renderTracks(){
+  const grid = document.getElementById('trackGrid');
+  if(!grid) return;
+  grid.innerHTML = TRACKS.map(t => {
+    const a = AUX[t.aux];
+    return `<a class="card" href="#/apply" style="text-decoration:none; display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden;">
+      <div style="height:3px; background:${a.c4};"></div>
+      <div style="padding:16px;">
+        <div class="meta-row" style="justify-content:space-between; margin-bottom:12px;">
+          <span class="label" style="color:${a.c4};">${t.no}</span>
+          <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
+        </div>
+        <div class="label" style="font-size:10px; letter-spacing:.16em; color:var(--ink-faint); margin-bottom:6px;">${t.en}</div>
+        <h3 class="title-m" style="margin-bottom:10px; line-height:1.4;">${t.title}</h3>
+        <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:14px; flex:1;">${t.desc}</p>
+        <div style="display:flex; flex-direction:column; gap:6px; padding-top:12px; border-top:1px solid var(--rule-soft);">
+          ${t.metas.map(m=>`<div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-mute);"><span style="width:5px; height:5px; border-radius:50%; background:${a.c3}; flex-shrink:0;"></span>${m}</div>`).join('')}
+        </div>
+      </div>
+    </a>`;
+  }).join('');
+}
+
+/* 赛程时间线 · 真实阶段 */
+const PHASES = [
+  { n:'01', t:'报名及初赛', d:'即日起 – 2026.2.28', desc:'完成报名并提交初赛作品。A 榜筛选出网络结构合理、能跑通二维场预测、且在「平均态」下表现稳定的模型。', state:'running' },
+  { n:'02', t:'Expert Review 专家评审', d:'初评 · 盲审', desc:'由 AI 与双学科专家对初评材料进行书面评审与打分，确定进入里程碑阶段的队伍名单。专家评审团对 AI Proposal 进行合规评估与筛选。', state:'' },
+  { n:'03', t:'复赛 · Milestone 实验', d:'里程碑验证', desc:'高级验证：针对最具潜力的靶点，验证 5–10 个科学假说；实验验证：针对高潜力靶点，验证 100 个科学假说。', state:'' },
+  { n:'04', t:'决赛 · 专家问辩', d:'Expert Q&A Defense', desc:'入围队伍进行专家问辩答辩，成果上传至 SCP 广场，开启社区投票。', state:'' },
+  { n:'05', t:'名次公布', d:'结果公布', desc:'名次将发布在大赛官网、Intern Science 小红书账号等渠道。公布结果并将模型与智能体发布在科学发现平台。', state:'' },
+];
+function renderTimeline(){
+  const wrap = document.getElementById('timeline');
+  if(!wrap) return;
+  wrap.innerHTML = PHASES.map((p,i)=>{
+    const running = p.state==='running';
+    return `<div style="display:grid; grid-template-columns:56px 1fr; gap:20px; ${i<PHASES.length-1?'padding-bottom:24px;':''}">
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <div style="width:40px; height:40px; border-radius:50%; display:grid; place-items:center; font-family:var(--font-mono); font-size:13px; font-weight:600;
+          ${running ? 'background:var(--vermilion); color:#fff; border:1px solid var(--vermilion);' : 'background:var(--paper); color:var(--ink-mute); border:1px solid var(--rule);'}">${p.n}</div>
+        ${i<PHASES.length-1 ? '<div style="width:1px; flex:1; background:var(--rule); margin-top:8px; min-height:32px;"></div>' : ''}
+      </div>
+      <div style="padding-bottom:4px;">
+        <div class="meta-row" style="gap:10px; margin-bottom:6px;">
+          <span class="title-m">${p.t}</span>
+          ${running ? '<span class="pill pill-primary">进行中</span>' : ''}
+          <span class="label" style="text-transform:none; letter-spacing:.04em;">${p.d}</span>
+        </div>
+        <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; max-width:680px;">${p.desc}</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* FAQ · 8 条真实问题 */
+const FAQS = [
+  { q:'参赛资格与组队要求？', a:'面向所有科研人员、学生与开发者开放。每支团队至多 5 名成员，需设队长 1 名，可选填指导教师 / 专家。' },
+  { q:'同一个参赛选手可以参加多个赛道吗？', a:'可以，鼓励多赛道参赛。同一参赛选手可同时报名多个赛道。' },
+  { q:'提交的作品必须是智能体吗？', a:'是的，要求提交的作品是 AI 智能体。提交材料需包含对产出 Proposal 的 AI scientist 实现方案的描述。' },
+  { q:'比赛是否收取报名费？湿实验费用需选手承担吗？', a:'不收取报名费，不需要参赛选手承担湿实验费用。' },
+  { q:'赛事方是否提供官方数据集、开发平台支持？如何申请？', a:'提供。各赛道配套官方数据集与开发平台，赛事开赛后可在「参赛管理」中领取壁仞 API Key 与国产 GPU 开发环境。' },
+  { q:'参赛作品知识产权如何划分？', a:'参赛作品知识产权归属遵循赛事服务协议与法律条款，详情见协议页。' },
+  { q:'获奖作品是否需要公开展示或者开源？', a:'获奖作品将公布结果并把模型与智能体发布在科学发现平台，成果上传至 SCP 广场参与社区投票。' },
+  { q:'如何获得帮助？', a:'欢迎联系小助手，请备注【赛道 + 单位 + 姓名】。将受邀加入浦江科学社区，参与各类高端交流活动。' },
+];
+function renderFaq(){
+  const wrap = document.getElementById('faqList');
+  if(!wrap) return;
+  wrap.innerHTML = FAQS.map((f,i)=>`
+    <div class="faq-item" style="border-bottom:1px solid var(--rule-soft);">
+      <button class="faq-q" aria-expanded="${i===0?'true':'false'}" style="width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 4px; background:none; border:none; cursor:pointer; text-align:left; font-family:inherit; transition:color var(--t-fast) var(--ease);">
+        <span class="title-s" style="color:var(--ink); font-size:14px;">${f.q}</span>
+        <svg class="icon faq-chevron" viewBox="0 0 24 24" style="transition:transform var(--t-base) var(--ease); ${i===0?'transform:rotate(180deg);':''} color:var(--ink-mute);"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-a" style="overflow:hidden; max-height:${i===0?'200px':'0'}; transition:max-height var(--t-mid) var(--ease);">
+        <p style="font-size:13px; color:var(--ink-soft); line-height:1.75; padding:0 4px 18px;">${f.a}</p>
+      </div>
+    </div>`).join('');
+  wrap.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const open = btn.getAttribute('aria-expanded')==='true';
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.querySelector('.faq-chevron').style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
+      const a = btn.nextElementSibling;
+      a.style.maxHeight = open ? '0' : '200px';
+    });
+  });
+}
+
+function renderHome(){ renderTracks(); renderTimeline(); renderFaq(); }
+
+/* ═══════════════ 报名表单页 (/apply) ═══════════════ */
+function renderApply(){
+  // 赛道单选（复用赛道数据 + 辅助色）
+  const ts = document.getElementById('trackSelect');
+  if(ts){
+    ts.innerHTML = TRACKS.map((t,i)=>{
+      const a = AUX[t.aux];
+      return `<label class="track-radio card" data-idx="${i}" style="cursor:pointer; display:flex; gap:12px; align-items:flex-start; padding:14px 16px; ${i===2?'border-left:3px solid var(--vermilion); background:var(--paper-warm);':''}">
+        <span class="radio-dot" style="width:14px; height:14px; border-radius:50%; border:1px solid ${i===2?'var(--vermilion)':'var(--rule)'}; ${i===2?'box-shadow:inset 0 0 0 4px var(--vermilion);':''} flex-shrink:0; margin-top:2px; transition:box-shadow var(--t-base) var(--ease), border-color var(--t-base) var(--ease);"></span>
+        <span>
+          <span style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+            <span class="label" style="color:${a.c4};">${t.no}</span>
+            <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
+          </span>
+          <span class="title-s" style="display:block; color:var(--ink); font-size:13px; line-height:1.4;">${t.title}</span>
+        </span>
+      </label>`;
+    }).join('');
+    ts.querySelectorAll('.track-radio').forEach(el=>{
+      el.addEventListener('click', ()=>{
+        ts.querySelectorAll('.track-radio').forEach(x=>{
+          x.style.borderLeft=''; x.style.background='';
+          const d=x.querySelector('.radio-dot'); d.style.boxShadow=''; d.style.borderColor='var(--rule)';
+        });
+        el.style.borderLeft='3px solid var(--vermilion)'; el.style.background='var(--paper-warm)';
+        const d=el.querySelector('.radio-dot'); d.style.boxShadow='inset 0 0 0 4px var(--vermilion)'; d.style.borderColor='var(--vermilion)';
+      });
+    });
+  }
+
+  // 队员行
+  const list = document.getElementById('memberList');
+  let memberCount = 0;
+  function memberRow(n){
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.style.cssText = 'margin-bottom:10px; padding:14px 16px;';
+    div.innerHTML = `
+      <div class="meta-row" style="justify-content:space-between; margin-bottom:12px;">
+        <span class="label label--strong">队员 ${n}</span>
+        <button class="btn btn-ghost" type="button" style="padding:4px 8px; color:var(--error);" title="删除成员">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+        </button>
+      </div>
+      <div class="grid-2" style="gap:10px;">
+        <input class="input" placeholder="姓名 *">
+        <input class="input" placeholder="职业 *">
+        <input class="input" placeholder="手机号码 *">
+        <input class="input" placeholder="电子邮箱 *">
+      </div>`;
+    div.querySelector('button').addEventListener('click', ()=>{ div.remove(); updateAddBtn(); });
+    return div;
+  }
+  const addBtn = document.getElementById('addMember');
+  function updateAddBtn(){
+    const rows = list.querySelectorAll('.card').length;
+    // 队长占 1 名，队员至多 4 名 → 团队至多 5
+    addBtn.disabled = rows >= 4;
+    addBtn.style.opacity = rows >= 4 ? '.5' : '1';
+  }
+  if(addBtn && !addBtn.dataset.bound){
+    addBtn.dataset.bound = '1';
+    addBtn.addEventListener('click', ()=>{
+      if(list.querySelectorAll('.card').length >= 4) return;
+      memberCount++;
+      list.appendChild(memberRow(list.querySelectorAll('.card').length + 1));
+      updateAddBtn();
+    });
+    // 默认放一个队员行
+    list.appendChild(memberRow(1));
+    updateAddBtn();
+  }
+
+  // 协议勾选
+  const box = document.getElementById('agreeBox');
+  const chk = document.getElementById('agreeChk');
+  function toggleAgree(){
+    const on = chk.getAttribute('aria-checked')==='true';
+    chk.setAttribute('aria-checked', String(!on));
+  }
+  if(box && !box.dataset.bound){
+    box.dataset.bound='1';
+    box.addEventListener('click', toggleAgree);
+    chk.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggleAgree(); }});
+  }
+
+  // 提交反馈（原型演示，无后端）
+  const submit = document.getElementById('submitApply');
+  if(submit && !submit.dataset.bound){
+    submit.dataset.bound='1';
+    submit.addEventListener('click', ()=>{
+      const hint = document.getElementById('applyHint');
+      if(chk.getAttribute('aria-checked')!=='true'){
+        hint.textContent='请先阅读并同意免责协议和法律条款';
+        hint.style.color='var(--error)';
+        return;
+      }
+      hint.textContent='报名成功！前往参赛管理查看 →';
+      hint.style.color='var(--success)';
+      setTimeout(()=>{ location.hash='#/manage'; }, 900);
+    });
+  }
+}
+
+/* ═══════════════ 参赛管理（/manage）═══════════════ */
+/* 演示数据 · 队伍成员 */
+const TEAM = [
+  { name:'林知遥', role:'队长', org:'上海人工智能实验室', email:'lin.zy@pjlab.org.cn', tag:'primary' },
+  { name:'沈砚青', role:'算法',  org:'复旦大学 · 大气科学系', email:'shen.yq@fudan.edu.cn', tag:'' },
+  { name:'周屿',   role:'工程',  org:'上海人工智能实验室', email:'zhou.yu@pjlab.org.cn', tag:'' },
+  { name:'陈牧',   role:'数据',  org:'同济大学 · 海洋学院',   email:'chen.mu@tongji.edu.cn', tag:'' },
+];
+/* 演示数据 · 提交记录 */
+const SUBMITS = [
+  { id:'#0007', file:'enso_v7_sa_ensemble.zip', size:'48.2 MB', when:'2026-02-14 22:10', board:'A 榜', score:'0.7421', state:'success', stateText:'评测完成' },
+  { id:'#0006', file:'enso_v6_unet_attn.zip',   size:'46.8 MB', when:'2026-02-12 16:34', board:'A 榜', score:'0.7239', state:'success', stateText:'评测完成' },
+  { id:'#0005', file:'enso_v5_baseline.zip',     size:'41.1 MB', when:'2026-02-09 09:02', board:'A 榜', score:'0.6810', state:'success', stateText:'评测完成' },
+];
+
+const manageTabRenderers = {
+  /* ── 概览 ── */
+  overview(){
+    return `
+    <div class="grid-2" style="gap:14px; align-items:start;">
+      <!-- 报名信息卡 -->
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="padding:14px 16px; border-bottom:1px solid var(--rule-soft); display:flex; justify-content:space-between; align-items:center;">
+          <span class="title-m">报名信息</span>
+          <span class="pill pill-success">已通过审核</span>
+        </div>
+        <div style="padding:4px 16px 8px;">
+          ${[
+            ['团队名称','归一 · ENSO 预测队'],
+            ['所属机构','上海人工智能实验室'],
+            ['参赛赛道','赛道三 · 厄尔尼诺-南方涛动 (ENSO) 预测'],
+            ['队长','林知遥 · 13×××××8821'],
+            ['报名时间','2026-01-09 14:22'],
+            ['指导专家','王立群 教授 · 复旦大学'],
+          ].map(([k,v])=>`<div style="display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--rule-soft);">
+            <span style="font-size:13px; color:var(--ink-faint); flex-shrink:0;">${k}</span>
+            <span style="font-size:13px; color:var(--ink); text-align:right;">${v}</span>
+          </div>`).join('')}
+        </div>
+        <div style="padding:12px 16px;"><a class="btn btn-ghost" href="#/apply" style="padding:4px 8px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> 修改报名信息</a></div>
+      </div>
+
+      <!-- 赛程进度 -->
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="padding:14px 16px; border-bottom:1px solid var(--rule-soft);"><span class="title-m">赛程进度</span></div>
+        <div style="padding:16px;">
+          ${PHASES.map((p,i)=>{
+            const done = i===0 ? false : false; // 仅第 1 阶段进行中
+            const running = p.state==='running';
+            const color = running ? 'var(--vermilion)' : 'var(--rule)';
+            return `<div style="display:grid; grid-template-columns:26px 1fr; gap:12px; ${i<PHASES.length-1?'padding-bottom:14px;':''}">
+              <div style="display:flex; flex-direction:column; align-items:center;">
+                <span style="width:14px; height:14px; border-radius:50%; border:2px solid ${color}; ${running?'background:var(--vermilion);':'background:var(--paper);'} flex-shrink:0; margin-top:2px;"></span>
+                ${i<PHASES.length-1 ? `<span style="width:2px; flex:1; background:var(--rule); margin-top:4px; min-height:18px;"></span>` : ''}
+              </div>
+              <div>
+                <div class="meta-row" style="gap:8px;">
+                  <span style="font-size:13px; font-weight:600; color:${running?'var(--ink)':'var(--ink-mute)'};">${p.t}</span>
+                  ${running ? '<span class="pill pill-primary">进行中</span>' : '<span class="pill">未开始</span>'}
+                </div>
+                <div style="font-size:12px; color:var(--ink-faint); margin-top:2px;">${p.d}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- 待办提醒 -->
+    <div class="card-emphasis" style="margin-top:14px; display:flex; gap:12px; align-items:flex-start;">
+      <svg class="icon" viewBox="0 0 24 24" style="color:var(--vermilion); margin-top:2px;"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+      <div>
+        <div class="title-s" style="margin-bottom:4px;">距初赛截止还有 14 天</div>
+        <p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">请在 2026.2.28 前完成最终作品提交，并确认已提交 AI 智能体作品及 Proposal 实现方案描述。今日还可提交 3 次。</p>
+      </div>
+    </div>`;
+  },
+
+  /* ── 队伍成员 ── */
+  team(){
+    return `
+    <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:14px;">
+      <span class="section-label" style="border:none; margin:0; padding:0;">队伍成员 · ${TEAM.length} / 5 人</span>
+      <button class="btn btn-ghost" type="button" style="padding:6px 10px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> 邀请成员</button>
+    </div>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table class="table">
+        <thead><tr><th>成员</th><th>角色</th><th>所属机构</th><th>联系邮箱</th><th style="text-align:right;">操作</th></tr></thead>
+        <tbody>
+          ${TEAM.map(m=>`<tr>
+            <td>${m.name}</td>
+            <td>${m.tag==='primary' ? '<span class="pill pill-primary">队长</span>' : `<span class="pill">${m.role}</span>`}</td>
+            <td>${m.org}</td>
+            <td style="font-family:var(--font-mono); font-size:11px; color:var(--ink-mute);">${m.email}</td>
+            <td style="text-align:right;">${m.tag==='primary'
+              ? '<span style="font-size:12px; color:var(--ink-faint);">—</span>'
+              : '<button class="btn btn-ghost" type="button" style="padding:3px 8px; font-size:12px; color:var(--error);">移除</button>'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <p class="field-help" style="margin-top:10px;">团队至多 5 名成员（含队长）。成员一经确认参与，将共享赛事提交与资源额度。</p>`;
+  },
+
+  /* ── 作品提交 ── */
+  submit(){
+    return `
+    <div class="grid-2" style="gap:14px; align-items:start; margin-bottom:14px;">
+      <!-- 初评材料 dropzone -->
+      <div>
+        <div class="section-label">初评材料</div>
+        <div class="dropzone" data-drop="materials">
+          <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-mute); width:26px; height:26px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+          <div style="font-size:13px; color:var(--ink-soft); margin-top:8px;">拖拽 <strong>Proposal / 复现材料</strong> 到此处，或<span style="color:var(--vermilion);">点击上传</span></div>
+          <div class="dropzone-hint">支持 PDF / Markdown / ZIP，单文件 ≤ 100 MB</div>
+        </div>
+      </div>
+      <!-- 作品上传 dropzone -->
+      <div>
+        <div class="section-label">智能体作品</div>
+        <div class="dropzone" data-drop="work">
+          <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-mute); width:26px; height:26px;"><path d="M20 6 9 17l-5-5"/></svg>
+          <div style="font-size:13px; color:var(--ink-soft); margin-top:8px;">上传 <strong>AI 智能体作品包</strong>（需含模型实现方案描述）</div>
+          <div class="dropzone-hint">.zip 打包，A 榜每日上限 5 次 · 今日剩余 3 次</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 提交记录 -->
+    <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin:24px 0 12px;">
+      <span class="section-label" style="border:none; margin:0; padding:0;">提交记录 · A 榜</span>
+      <span class="label" style="text-transform:none; letter-spacing:.04em;">最高分 0.7421</span>
+    </div>
+    <div class="card" style="padding:0; overflow:hidden;">
+      <table class="table">
+        <thead><tr><th>编号</th><th>文件</th><th>大小</th><th>提交时间</th><th>榜单</th><th>得分</th><th style="text-align:right;">状态</th></tr></thead>
+        <tbody>
+          ${SUBMITS.map(s=>`<tr>
+            <td style="font-family:var(--font-mono); font-size:11px;">${s.id}</td>
+            <td style="font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);">${s.file}</td>
+            <td>${s.size}</td>
+            <td style="font-size:11px; color:var(--ink-mute);">${s.when}</td>
+            <td>${s.board}</td>
+            <td style="font-family:var(--font-mono); font-weight:600; color:var(--ink);">${s.score}</td>
+            <td style="text-align:right;"><span class="pill pill-success">${s.stateText}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+    <p class="field-help" style="margin-top:10px;">提交的作品必须是 AI 智能体，需包含对产出 Proposal 的 AI scientist 实现方案的描述。B 榜将在初评截止后统一评测。</p>`;
+  },
+
+  /* ── 算力 & API ── */
+  resource(){
+    return `
+    <div class="grid-2" style="gap:14px; align-items:start;">
+      <!-- 壁仞 API Key -->
+      <div class="card-info" style="padding:0; overflow:hidden;">
+        <div style="padding:16px 18px; border-bottom:1px solid var(--rule-soft);">
+          <div class="meta-row" style="justify-content:space-between; margin-bottom:8px;">
+            <span class="label label--strong">壁仞科技 · 开发者资源包</span>
+            <span class="pill pill-success">已领取</span>
+          </div>
+          <h3 class="title-m" style="margin-bottom:4px;">API Key</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.6;">可调用 stepfun3.5 与 minimax2.5 进行 AI 辅助开发。限量 1000 份。</p>
+        </div>
+        <div style="padding:14px 18px;">
+          <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">您的密钥</div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <code style="flex:1; font-family:var(--font-mono); font-size:12px; background:var(--paper); border:1px solid var(--rule); border-radius:2px; padding:8px 10px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" id="apiKeyText">br-sk-2f9a••••••••••••••••••••••3e1c</code>
+            <button class="btn" type="button" id="copyKey" style="padding:8px 12px; flex-shrink:0;"><svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制</button>
+          </div>
+          <div class="meta-row" style="justify-content:space-between; margin-top:12px;">
+            <span style="font-size:12px; color:var(--ink-mute);">本月用量</span>
+            <span style="font-size:12px; color:var(--ink); font-family:var(--font-mono);">128,540 / 500,000 tokens</span>
+          </div>
+          <div style="height:6px; background:var(--paper); border:1px solid var(--rule-soft); border-radius:3px; margin-top:6px; overflow:hidden;"><div style="width:26%; height:100%; background:var(--vermilion);"></div></div>
+        </div>
+      </div>
+
+      <!-- 国产 GPU 开发环境 -->
+      <div class="card-info" style="padding:0; overflow:hidden;">
+        <div style="padding:16px 18px; border-bottom:1px solid var(--rule-soft);">
+          <div class="meta-row" style="justify-content:space-between; margin-bottom:8px;">
+            <span class="label label--strong">国产算力 · 创新计算</span>
+            <span class="pill pill-warning">待激活</span>
+          </div>
+          <h3 class="title-m" style="margin-bottom:4px;">国产 GPU 开发环境</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.6;">国产 GPU 云端开发环境，SSH 命令接入。限量 500 份。</p>
+        </div>
+        <div style="padding:14px 18px;">
+          <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">SSH 接入</div>
+          <code style="display:block; font-family:var(--font-mono); font-size:12px; background:var(--paper); border:1px solid var(--rule); border-radius:2px; padding:8px 10px; color:var(--ink-soft); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">ssh idc-2026-a031@gpu.intern-ai.org.cn -p 2222</code>
+          <button class="btn btn-primary" type="button" id="activateGpu" style="width:100%; justify-content:center; margin-top:12px;">激活开发环境</button>
+          <p class="field-help" style="margin-top:8px;">激活后将分配 1 张国产 GPU，配额 72 小时 / 周。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 资源说明 -->
+    <div class="card" style="margin-top:14px; padding:16px 18px;">
+      <div class="title-s" style="margin-bottom:8px;">资源使用须知</div>
+      <ul style="margin:0; padding-left:18px; font-size:13px; color:var(--ink-soft); line-height:1.8;">
+        <li>API Key 与开发环境均限赛事期间使用，不得转售或用于赛事以外用途。</li>
+        <li>算力配额按队伍分配，团队成员共享同一额度。</li>
+        <li>如需提升配额，可在赛事社区提交申请，由组委会评估后开放。</li>
+      </ul>
+    </div>`;
+  },
+};
+
+function renderManage(){
+  const tabsEl = document.getElementById('manageTabs');
+  const body = document.getElementById('manageBody');
+  if(!tabsEl || !body) return;
+
+  function paint(tab){
+    body.innerHTML = (manageTabRenderers[tab] || manageTabRenderers.overview)();
+    tabsEl.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === tab)));
+    wireBody();
+  }
+
+  // 面板内交互（复制、激活、dropzone、取消报名）
+  function wireBody(){
+    const copy = document.getElementById('copyKey');
+    if(copy) copy.addEventListener('click', ()=>{
+      const txt = document.getElementById('apiKeyText').textContent;
+      navigator.clipboard && navigator.clipboard.writeText(txt);
+      copy.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 已复制';
+      setTimeout(()=>{ copy.innerHTML = '<svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制'; }, 1600);
+    });
+    const gpu = document.getElementById('activateGpu');
+    if(gpu) gpu.addEventListener('click', ()=>{
+      gpu.textContent = '已发起激活，请稍候…'; gpu.setAttribute('disabled','');
+      setTimeout(()=>{ gpu.textContent = '✓ 开发环境已激活'; }, 1200);
+    });
+    body.querySelectorAll('.dropzone').forEach(dz=>{
+      dz.addEventListener('click', ()=>{
+        dz.classList.add('dropzone--active');
+        const hint = dz.querySelector('.dropzone-hint');
+        const orig = hint.textContent;
+        hint.textContent = '已选择文件 · 等待提交（演示）';
+        setTimeout(()=>{ dz.classList.remove('dropzone--active'); hint.textContent = orig; }, 1800);
+      });
+    });
+  }
+
+  // tab 点击
+  tabsEl.querySelectorAll('.tab').forEach(t=>{
+    t.onclick = ()=> paint(t.dataset.tab);
+  });
+  // 取消报名（topbar 区域按钮，绑一次）
+  const cancel = document.getElementById('cancelReg');
+  if(cancel && !cancel.dataset.bound){
+    cancel.dataset.bound = '1';
+    cancel.addEventListener('click', ()=>{
+      if(confirm('确认取消本次报名？取消后需重新提交报名信息。')){
+        cancel.textContent = '报名已取消';
+        cancel.setAttribute('disabled','');
+      }
+    });
+  }
+
+  // 默认渲染当前选中 tab（首次进入为 overview）
+  const active = tabsEl.querySelector('.tab[aria-selected="true"]');
+  paint(active ? active.dataset.tab : 'overview');
+}
+
+/* ═══════════════ 主题切换（§1.1.3 · 4 态）═══════════════ */
+const THEMES = ['light','cool','dark','system'];
+function setTheme(t){
+  if(t==='system') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('theme', t);
+}
+setTheme(localStorage.getItem('theme') || 'light');
+document.getElementById('themeBtn').addEventListener('click', ()=>{
+  const cur = localStorage.getItem('theme') || 'light';
+  const next = THEMES[(THEMES.indexOf(cur)+1) % THEMES.length];
+  setTheme(next);
+});
+
+/* ═══════════════ Hash 路由 ═══════════════ */
+function router(){
+  const hash = location.hash || '#/';
+  const [path, anchor] = hash.replace(/^#/, '').split('#');
+  const route = path === '/' || path === '' ? 'home'
+    : path === '/apply' ? 'apply'
+    : path === '/manage' ? 'manage'
+    : path === '/protocol' ? 'protocol' : 'home';
+  document.querySelectorAll('.page').forEach(p => p.hidden = (p.dataset.route !== route));
+  // 懒加载各页面交互
+  if(route==='apply') renderApply();
+  if(route==='manage') renderManage();
+  // nav active
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const navMap = { home:'home', apply:'home', manage:'manage', protocol:'home' };
+  const activeNav = document.querySelector(`.nav-link[data-nav="${navMap[route]}"]`);
+  if(activeNav) activeNav.classList.add('active');
+  // scroll to anchor or top
+  setTimeout(()=>{
+    if(anchor){ const el = document.getElementById(anchor); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
+    else window.scrollTo({top:0, behavior:'instant'});
+  }, 30);
+}
+window.addEventListener('hashchange', router);
+window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); router(); });
+</script>
+</body>
+</html>
