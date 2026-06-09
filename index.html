@@ -233,6 +233,33 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .media-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 18px 44px -30px rgba(40,30,20,.5); }
 .media-figure .mf-img { height: 320px; background-size: cover; background-position: center; }
 @media (max-width: 880px){ .media-cols { grid-template-columns: 1fr; gap: 24px; } .media-figure .mf-img { height: 220px; } }
+/* 全屏动效 Hero */
+.hero-full { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-soft); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: flex; align-items: center; }
+#heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero-veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 66% 92% at 24% 46%, var(--paper) 6%, rgba(0,0,0,0) 62%); }
+.hero-content { position: relative; z-index: 2; }
+.hero-mega { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: clamp(46px, 7.6vw, 88px); line-height: 1.04; letter-spacing: .01em; color: var(--ink); }
+.hero-mega em { color: var(--vermilion); font-style: normal; }
+.hero-en { font-family: var(--font-mono); font-size: clamp(12px,1.4vw,15px); letter-spacing: .34em; text-transform: uppercase; color: var(--ink-faint); margin-top: 16px; }
+.hero-sub { font-size: 16px; color: var(--ink-soft); max-width: 540px; line-height: 1.8; margin-top: 22px; }
+.hero-scroll { margin-top: 38px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; color: var(--ink-faint); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
+.hero-scroll::before { content: ''; width: 26px; height: 1px; background: var(--ink-faint); }
+.stats-band { border-bottom: 1px solid var(--rule); background: var(--paper-cool); }
+.stats-band .wrap { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 24px; }
+.stats-cell { padding: 18px 22px; border-right: 1px solid var(--rule-soft); }
+.stats-cell:last-child { border-right: none; }
+.stats-cell:first-child { padding-left: 0; }
+@media (max-width: 760px){ .stats-band .wrap { grid-template-columns: 1fr 1fr; } .stats-cell:nth-child(2){ border-right:none; } .hero-mega{ font-size: clamp(40px,12vw,62px); } }
+/* 赛道卡 hover 操作浮层 */
+.tc-actions { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; background: rgba(22,16,12,.5); transition: opacity .25s var(--ease); }
+.track-card:hover .tc-actions { opacity: 1; }
+.tc-actions .btn { padding: 8px 18px; }
+/* 赛道详情页 */
+.td-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-soft); }
+.td-hero-img { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: .22; }
+.td-hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, var(--paper) 0%, rgba(0,0,0,0) 40%, var(--paper) 100%); }
+.td-section { padding: 40px 0; border-top: 1px solid var(--rule-soft); }
+.td-section:first-of-type { border-top: none; }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -368,6 +395,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     <a class="nav-link" href="#/manage" data-nav="manage">参赛管理</a>
   </nav>
   <div class="topbar-actions" style="justify-self:end;">
+    <button class="btn btn-ghost" id="langBtn" title="中 / English（即将上线）" type="button" style="padding:7px 10px; font-family:var(--font-mono); font-size:12px; letter-spacing:.08em;">EN</button>
     <button class="btn btn-ghost theme-toggle" id="themeBtn" title="切换主题" aria-label="切换主题">
       <svg class="icon icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       <svg class="icon icon-snow" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20M5 5l14 14M19 5L5 19M12 4l-2 2m2-2l2 2M12 20l-2-2m2 2l2-2M4 12l2-2m-2 2l2 2M20 12l-2-2m2 2l-2 2"/></svg>
@@ -384,61 +412,48 @@ section[id], .section[id] { scroll-margin-top: 116px; }
      ═══════════════════════════════════════════════════════════════ -->
 <div class="page" data-route="home">
 
-  <!-- ───────── HERO ───────── -->
-  <section style="position:relative; overflow:hidden; border-bottom:1px solid var(--rule-soft);">
-    <!-- 极轻的暖纸纹理装饰，非 WebGL，仅 CSS 渐变 + 网格 -->
-    <div aria-hidden="true" style="position:absolute; inset:0; background:
-      radial-gradient(ellipse 60% 50% at 75% 30%, var(--vermilion-1), transparent 70%),
-      linear-gradient(transparent 0 0);
-      opacity:.7;"></div>
-    <div aria-hidden="true" style="position:absolute; inset:0; background-image:
-      linear-gradient(var(--rule-soft) 1px, transparent 1px),
-      linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
-      background-size: 56px 56px; opacity:.35; mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, #000, transparent 75%);"></div>
-    <div class="wrap" style="position:relative; padding:72px 24px 64px;">
-      <div class="hero-cols">
-        <div>
-          <div class="eyebrow appear" style="margin-bottom:24px;">AI for Science · 书生国智科探挑战赛</div>
-          <h1 class="hero-title appear-2">让 <em>AI 智能体</em> 像科学家一样<br>自主探索、提出并验证假说</h1>
-          <p class="appear-3" style="font-size:16px; color:var(--ink-soft); max-width:560px; line-height:1.75; margin-top:20px;">
-            Intern·Agent 使 AI 获得类似人类科学家的自主探索能力，开展分析问题、查阅文献、调研反思与实验，实现「想法生成 — 方案设计 — 代码实现 — 实验验证」全流程闭环。
-          </p>
-          <div class="meta-row appear-3" style="margin-top:32px; gap:12px;">
-            <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
-            <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
-            <a class="btn btn-ghost btn-lg" href="#/manage">立即体验科研助手</a>
-          </div>
-        </div>
-        <div class="hero-figure appear-3">
-          <div class="hf-img" style="background-image:url('https://xuliang123456.github.io/ai4s-discovery/assets/hero.jpg');"></div>
-          <div class="hf-cap">仙女座星系 M31 · 图：NASA / JPL-Caltech</div>
-        </div>
+  <!-- ───────── HERO · 全屏动效 ───────── -->
+  <section class="hero-full">
+    <canvas id="heroCanvas" aria-hidden="true"></canvas>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="wrap hero-content">
+      <div class="eyebrow appear" style="margin-bottom:22px;">AI for Science · 上海人工智能实验室 × 壁仞科技</div>
+      <h1 class="hero-mega appear-2">书生国智<br><em>科探</em>挑战赛</h1>
+      <div class="hero-en appear-3">Intern Discovery Challenge</div>
+      <p class="hero-sub appear-3">国芯 · 国模 · 国云 · 国智，四位一体。让 AI 智能体像科学家一样自主探索、提出并验证假说。</p>
+      <div class="meta-row appear-3" style="margin-top:30px; gap:12px;">
+        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
+        <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
       </div>
-
-      <!-- 关键数据条 -->
-      <div class="appear-3" style="margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--rule); border-radius:2px; background:var(--paper-cool); max-width:840px;">
-        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
-          <div class="label" style="margin-bottom:8px;">赛事奖金池</div>
-          <div style="font-family:var(--font-serif); font-size:13px; color:var(--ink-mute); line-height:1.3;">总奖金高达<br><span style="font-size:42px; font-weight:600; color:var(--vermilion);">60<span style="font-size:18px;">万元</span></span></div>
-        </div>
-        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
-          <div class="label" style="margin-bottom:8px;">参赛赛道</div>
-          <div style="font-family:var(--font-serif); font-size:42px; font-weight:600; line-height:1; color:var(--ink);">6 <span style="font-size:16px; color:var(--ink-mute); font-family:var(--font-sans);">大赛道</span></div>
-          <div style="font-size:12px; color:var(--ink-mute); margin-top:6px;">物质 · 生命 · 地球 · 算力</div>
-        </div>
-        <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
-          <div class="label" style="margin-bottom:8px;">报名时间</div>
-          <div class="title-m" style="line-height:1.4;">即日起</div>
-          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 7月15日</div>
-        </div>
-        <div style="padding:20px 22px;">
-          <div class="label" style="margin-bottom:8px;">组队要求</div>
-          <div class="title-m" style="line-height:1.4;">至多 5 人</div>
-          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">鼓励多赛道参赛</div>
-        </div>
-      </div>
+      <div class="hero-scroll appear-3">向下滚动了解赛事</div>
     </div>
   </section>
+
+  <!-- ───────── 关键数据条 ───────── -->
+  <div class="stats-band">
+    <div class="wrap">
+      <div class="stats-cell">
+        <div class="label" style="margin-bottom:6px;">赛事奖金池</div>
+        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--vermilion); line-height:1;">60<span style="font-size:15px; color:var(--ink-mute); font-family:var(--font-sans);"> 万元</span></div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">总奖金高达</div>
+      </div>
+      <div class="stats-cell">
+        <div class="label" style="margin-bottom:6px;">参赛赛道</div>
+        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">6 <span style="font-size:14px; color:var(--ink-mute); font-family:var(--font-sans);">大赛道</span></div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">生命 · 物质 · 地球 · 量子 · 算子 · 自由</div>
+      </div>
+      <div class="stats-cell">
+        <div class="label" style="margin-bottom:6px;">报名时间</div>
+        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">即日起</div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 7 月 15 日截止</div>
+      </div>
+      <div class="stats-cell">
+        <div class="label" style="margin-bottom:6px;">组队要求</div>
+        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">≤ 5 <span style="font-size:14px; color:var(--ink-mute); font-family:var(--font-sans);">人</span></div>
+        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">队长 1 名 + 队员至多 4 名</div>
+      </div>
+    </div>
+  </div>
 
   <!-- ───────── 板块导航 · 首屏下方，滚动置顶悬浮 ───────── -->
   <nav class="section-nav" id="sectionNav" aria-label="页面板块导航">
@@ -910,6 +925,13 @@ section[id], .section[id] { scroll-margin-top: 116px; }
   </div>
 </div><!-- /protocol -->
 
+<!-- ═══════════════════════════════════════════════════════════════
+     PAGE · 赛道详情 (/track/:idx)
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" data-route="track" hidden>
+  <div id="trackDetail"></div>
+</div><!-- /track -->
+
 </main>
 
 <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
@@ -917,7 +939,8 @@ section[id], .section[id] { scroll-margin-top: 116px; }
   <div class="wrap" style="display:flex; flex-wrap:wrap; gap:40px; justify-content:space-between;">
     <div style="max-width:300px;">
       <div class="logo-mark" style="font-size:20px;">Intern <em>Discovery</em></div>
-      <p style="font-size:13px; color:var(--ink-mute); line-height:1.7; margin-top:12px;">书生国智科探挑战赛 · 以 AI 智能体驱动科学发现，覆盖物质 / 生命 / 地球科学与国产算力六大赛道。</p>
+      <p style="font-size:13px; color:var(--ink-mute); line-height:1.7; margin-top:12px;">书生国智科探挑战赛 · 以 AI 智能体驱动科学发现，覆盖生命 / 物质 / 地球 / 量子 / 算子与自由六大赛道。</p>
+      <p style="font-size:12px; color:var(--ink-faint); line-height:1.7; margin-top:10px;">主办：上海人工智能实验室　·　联合主办：壁仞科技</p>
       <div class="meta-row" style="margin-top:16px;">
         <a class="pill pill-primary" href="#/" style="text-decoration:none;">加入浦江科学社区</a>
         <a class="pill" href="#/" style="text-decoration:none;">社群交流</a>
@@ -938,16 +961,23 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
           <a href="#/apply" style="color:var(--ink-soft); text-decoration:none;">赛事报名</a>
           <a href="#/manage" style="color:var(--ink-soft); text-decoration:none;">参赛管理</a>
-          <a href="#/protocol" style="color:var(--ink-soft); text-decoration:none;">服务协议</a>
-          <a href="#/protocol" style="color:var(--ink-soft); text-decoration:none;">免责协议</a>
+          <a href="#/#more-incentives" style="color:var(--ink-soft); text-decoration:none;">相关资源</a>
+        </div>
+      </div>
+      <div>
+        <div class="label label--strong" style="margin-bottom:12px;">法律</div>
+        <div style="display:flex; flex-direction:column; gap:8px; font-size:13px;">
+          <a href="#/protocol#p-legal" style="color:var(--ink-soft); text-decoration:none;">法律协议</a>
+          <a href="#/protocol#p-privacy" style="color:var(--ink-soft); text-decoration:none;">隐私协议</a>
+          <a href="#/protocol#p-privacy" style="color:var(--ink-soft); text-decoration:none;">个人信息保护政策</a>
         </div>
       </div>
       <div>
         <div class="label label--strong" style="margin-bottom:12px;">联系我们</div>
         <div style="display:flex; flex-direction:column; gap:8px; font-size:13px; color:var(--ink-mute);">
-          <span>Intern Science 小红书</span>
-          <span>欢迎联系小助手</span>
-          <span style="font-style:italic;">备注【赛道+单位+姓名】</span>
+          <a href="mailto:interndiscovery@pjlab.org.cn" style="color:var(--vermilion); text-decoration:none;">interndiscovery@pjlab.org.cn</a>
+          <span>Intern Science · 小红书</span>
+          <span style="font-style:italic;">入群备注【赛道+单位+姓名】</span>
         </div>
       </div>
     </div>
@@ -998,9 +1028,9 @@ const AUX = {
 function renderTracks(){
   const grid = document.getElementById('trackGrid');
   if(!grid) return;
-  grid.innerHTML = TRACKS.map(t => {
+  grid.innerHTML = TRACKS.map((t,i) => {
     const a = AUX[t.aux];
-    return `<a class="card track-card" href="#/apply" style="text-decoration:none; display:flex; flex-direction:column; gap:0;">
+    return `<div class="card track-card" style="display:flex; flex-direction:column; gap:0;">
       <div class="tc-figure">
         <div class="tc-img" style="background-image:url('${IMG}${t.img}');"></div>
         <div class="tc-scrim"></div>
@@ -1009,17 +1039,182 @@ function renderTracks(){
           <span class="label" style="color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.4);">${t.no}</span>
           <span class="pill" style="background:rgba(255,255,255,.94); color:${a.c4};">${t.tag}</span>
         </div>
+        <div class="tc-actions">
+          <a class="btn btn-primary" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
+          <a class="btn" href="#/track/${i}" style="background:#fff; border-color:#fff;">详情</a>
+        </div>
       </div>
-      <div style="padding:16px; display:flex; flex-direction:column; flex:1;">
+      <a href="#/track/${i}" style="text-decoration:none; padding:16px; display:flex; flex-direction:column; flex:1;">
         <div class="label" style="font-size:10px; letter-spacing:.16em; color:var(--ink-faint); margin-bottom:6px;">${t.en}</div>
-        <h3 class="title-m" style="margin-bottom:10px; line-height:1.4;">${t.title}</h3>
+        <h3 class="title-m" style="margin-bottom:10px; line-height:1.4; color:var(--ink);">${t.title}</h3>
         <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:14px; flex:1;">${t.desc}</p>
         <div style="display:flex; flex-direction:column; gap:6px; padding-top:12px; border-top:1px solid var(--rule-soft);">
           ${t.metas.map(m=>`<div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-mute);"><span style="width:5px; height:5px; border-radius:50%; background:${a.c3}; flex-shrink:0;"></span>${m}</div>`).join('')}
         </div>
-      </div>
-    </a>`;
+      </a>
+    </div>`;
   }).join('');
+}
+
+/* ═══════════════ 赛道详情页（/track/:idx · PRD §6–§12）═══════════════ */
+function _cards3(items){ return `<div class="grid-3" style="gap:12px;">`+items.map(it=>`<div class="card"><h3 class="title-s" style="margin-bottom:8px; color:var(--ink);">${it.h}</h3><p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">${it.p}</p></div>`).join('')+`</div>`; }
+function _dataset(items){ return `<div class="grid-2" style="gap:12px;">`+items.map(it=>`<div class="card"><div class="meta-row" style="justify-content:space-between; margin-bottom:8px;"><span class="title-s" style="color:var(--ink);">${it.h}</span><button class="btn" style="padding:5px 12px; font-size:12px;" type="button">下载</button></div><p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">${it.p}</p></div>`).join('')+`</div>`; }
+function _steps(items){ return items.map((s,i)=>`<div style="display:grid; grid-template-columns:130px 1fr; gap:16px; padding:14px 0; ${i<items.length-1?'border-bottom:1px solid var(--rule-soft);':''}"><div><div class="title-s" style="color:var(--ink);">${s.t}</div><div style="font-size:12px; color:var(--ink-faint); margin-top:4px;">${s.d||''}</div></div><p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">${s.desc}</p></div>`).join(''); }
+function _scores(rows){ return `<table class="table"><thead><tr><th>评测维度</th><th style="text-align:right;">权重</th></tr></thead><tbody>`+rows.map(r=>`<tr><td>${r[0]}</td><td style="text-align:right; font-family:var(--font-mono); color:var(--ink);">${r[1]}</td></tr>`).join('')+`</tbody></table>`; }
+
+const TRACK_DETAIL = [
+  /* 0 生命科学 · 重大疾病靶点发现 */
+  { lead:'在人类对抗重大疾病的征途上，创新药物靶点的发现始终是至关重要却又充满挑战的第一步。本赛题旨在汇聚全球顶尖 AI 研发力量，通过通用型 AI Agent 进行「群体智慧」式协作攻关，以前所未有的速度直接产出高价值的科学发现——全新的重大疾病治疗靶点。',
+    sections:[
+      { eyebrow:'Submission · 提交材料', title:'报名及作品提交 · 2026.7.15 起', html:
+        _cards3([
+          {h:'*Proposal（必须）',p:'独立 PDF。肝癌新靶点假说，需含靶点信息（Gene symbol / Uniprot ID）、推理逻辑与支持证据、新颖性与临床意义论证、验证方案及具体药物（抗体提供氨基酸序列 / 小分子提供 SMILES 与 PubChem ID）。'},
+          {h:'*Method（必须）',p:'独立 PDF。需包含对产出 Proposal 的 AI scientist 实现方案的描述。'},
+          {h:'*复现材料（必须）',p:'从中任选一种：源码仓库（GitHub）、容器镜像（Docker）、可调用的 API（附文档）、可公开访问的 Web 应用（URL 与使用说明）。'},
+        ]) + `<p class="field-help" style="margin-top:10px;">其他材料（如适用）：运行日志、数据许可声明。标 * 为必须项。</p>` },
+      { eyebrow:'Schedule · 赛程安排', title:'里程碑验证路径', html:
+        _steps([
+          {t:'初赛',d:'Expert Review',desc:'专家评审团对 AI Proposal 进行合规评估与筛选。'},
+          {t:'复赛',d:'Milestone 实验',desc:'1A 细胞实验：针对高潜力靶点验证 100 个科学假说；1B 类器官实验：针对最具创新性靶点验证 20–30 个假说（1A/1B 可二选一或同时）；Milestone 2 动物实验：针对最具潜力靶点验证 5–10 个假说。'},
+          {t:'决赛',d:'专家问辩',desc:'线下问辩，按初赛成绩 70% + 答辩成绩 30% 加权排名。'},
+          {t:'成果展示',d:'名次公布',desc:'名次发布在大赛官网与 Intern Science 渠道，模型与智能体发布在科学发现平台。'},
+        ]) },
+    ] },
+  /* 1 物质科学 · 偶联反应 */
+  { lead:'自动化高通量实验极大提高了化学反应条件优化的效率，但反应条件组合空间巨大、实验预算有限仍是核心瓶颈。本赛题聚焦「如何在极少真实实验的条件下加速化学反应条件优化」，鼓励选手用大模型、机器学习与化学知识设计高效优化策略。',
+    sections:[
+      { eyebrow:'Dataset · 数据集', title:'两个真实高通量实验数据集', html:
+        _dataset([
+          {h:'Suzuki 偶联反应数据集',p:'在给定底物与电性匹配的前提下，优化配体、碱、溶剂等条件以最大化产率。变量以类别为主（数十种组合），高产率条件极少。'},
+          {h:'Buchwald–Hartwig 数据集',p:'固定部分底物与配体族群，优化碱、溶剂等条件变量。空间结构相对规整，对「局部精细搜索」敏感。'},
+        ]) + `<p class="field-help" style="margin-top:10px;">每个数据集划分为：公开子集（约 1% 标注，用于预训练 / 先验建模）与评测数据集（仅提供变量描述，由评测平台在算法查询时返回真实结果）。另有第三个数据集作为内部评测集。</p>` },
+      { eyebrow:'Schedule · 赛程安排', title:'从干实验到湿实验', html:
+        _steps([
+          {t:'报名及作品提交',d:'2026.7.15 起',desc:'提交《AI 技术方案书和干实验报告》，含整体框架、先验知识利用方式、模型与优化策略、实验设置与结果分析。'},
+          {t:'初赛',d:'Expert Review · 盲审',desc:'由 AI 与化学双学科专家对初评材料书面评审与打分，确定进入里程碑阶段的队伍。'},
+          {t:'复赛',d:'实验评审',desc:'选择最具竞争力的 1–3 支队伍，通过算法驱动高通量实验设备完成化学反应条件优化，依据初始轮最大值、最终最大值与收敛速度综合评分。'},
+          {t:'决赛 / 成果展示',d:'专家评审',desc:'线下问辩，按初赛 70% + 答辩 30% 加权排名；可根据结果决定是否开启商业化转化阶段。'},
+        ]) },
+    ] },
+  /* 2 地球科学 · ENSO */
+  { lead:'厄尔尼诺-南方涛动（ENSO）是全球气候年际变率最强的信号。本赛题旨在打破传统线性统计与低维指数的桎梏，要求参赛的通用智能体或预测模型直接挑战二维海温异常场的精细化预报与机制解读。',
+    sections:[
+      { eyebrow:'Dataset · 数据集', title:'训练集与 A / B 榜测试集', html:
+        _dataset([
+          {h:'训练集',p:'1850–2014 年的多模式或再分析数据作为训练集。'},
+          {h:'A 榜测试集',p:'从 1850–2024 年中随机抽取 240~360 个非连续起始月。'},
+          {h:'B 榜测试集',p:'1980–2023 年全量验证，包含近 40 多年所有 ENSO 循环，迫使模型解决不对称性与多样性问题。'},
+        ]) },
+      { eyebrow:'Submission · 提交要求', title:'预测结果文件 + Method', html:
+        `<div class="card-emphasis"><p style="font-size:13px; color:var(--ink-soft); line-height:1.8;"><strong style="color:var(--ink);">预测任务：</strong>输入起始月状态，输出未来 12 个月的二维 SSTA 场。<br><strong style="color:var(--ink);">文件格式：</strong>NetCDF (.nc) 或 HDF5，符合地球科学通用标准。<br><strong style="color:var(--ink);">数据维度：</strong>(Sample_ID, Lead_Time, Latitude, Longitude)，覆盖热带太平洋，Lead_Time 预测未来 1–24 个月。<br><strong style="color:var(--vermilion);">*Method：</strong>一份独立 PDF，需包含对产出模型方案的描述。</p></div>` },
+      { eyebrow:'Schedule · 赛程安排', title:'赛程安排', html:
+        _steps([
+          {t:'报名及初赛',d:'A 榜 · 2026.7.15 起',desc:'筛选出网络结构合理、能跑通二维场预测、且在「平均态」下表现稳定的模型。'},
+          {t:'B 榜',d:'进阶评测',desc:'迫使模型解决不对称性与多样性问题，提交预测结果文件与 Method。'},
+          {t:'决赛',d:'专家问辩',desc:'线下问辩（方法、结果、复现、模型权重），按初赛 70% + 答辩 30% 加权排名。'},
+          {t:'成果展示',d:'名次公布',desc:'公布结果并将模型与智能体发布在科学发现平台。'},
+        ]) },
+    ] },
+  /* 3 飞翔杯 · 量子计算 */
+  { lead:'飞翔杯·量子计算赛道面向量子计算基础模拟、算法、开发框架与行业应用，共 2 道赛题，可任选其一或多题参与。作品要求可运行、可验证、闭环完整，并需结合 Agent / Skills。',
+    sections:[
+      { eyebrow:'Powered by · 壁仞科技支持', title:'上海人工智能实验室 × 壁仞科技', html:
+        _cards3([
+          {h:'平台支持',p:'BIREN GPU、国产算力开发环境、API 访问能力。'},
+          {h:'资源支持',p:'API Key、国产算力开发环境、学习中心·开发者课程。'},
+          {h:'开发范式',p:'鼓励以 AI Agent / Skills 辅助开发，构建可运行、具创新价值的成果。'},
+        ]) },
+      { eyebrow:'Problem 01', title:'量子计算模拟与算法演示平台', html:
+        `<p style="font-size:13px; color:var(--ink-soft); line-height:1.8; margin-bottom:12px;">可选方向：量子线路实验室、轻量量子模拟器、框架适配工具、算法演示样例库、可视化分析工具。</p><p class="field-help">基础要求：至少提供 1 个量子线路或算法示例，提供正确性验证，明确 GPU 参与环节，集成 Agent / Skills。</p>` },
+      { eyebrow:'Problem 02', title:'量子应用与跨界探索', html:
+        `<p style="font-size:13px; color:var(--ink-soft); line-height:1.8; margin-bottom:12px;">可选方向：智慧物流 / 城市配送、金融科技 / 资产配置、工程仿真 / 方程求解、科学计算 / 材料模拟、AI 应用 / 数据分析。</p><p class="field-help">推荐工具：UnitaryLab、Qiskit、PennyLane、Cirq。</p>` },
+      { eyebrow:'Resources · 开发者资源包', title:'限量发放 · 先到先得', html:
+        _cards3([
+          {h:'壁仞科技 API Key',p:'限量 1000 份 · 剩余 412 / 1000。'},
+          {h:'国产算力开发环境',p:'限量 500 份 · 剩余 327 / 500。'},
+          {h:'学习中心·开发者课程',p:'进入学习，掌握 BIREN GPU 与国产算力开发。'},
+        ]) },
+    ] },
+  /* 4 飞翔杯 · 模型与算子 */
+  { lead:'高性能科学计算算子是 AI for Science 落地的核心基础设施。本赛道聚焦 AI4S 关键算子与科学计算模型的工程实现，依托壁仞 BR106 国产 GPU，鼓励采用 AI Agent 辅助开发范式，推动 AI 科学计算能力在国产硬件上的真实落地。',
+    sections:[
+      { eyebrow:'Rules · 赛道规则', title:'1 道必选题 + 3 选 1 进阶题', html:
+        `<p style="font-size:13px; color:var(--ink-soft); line-height:1.8;">必须完成 1 道必选题，并在 3 道进阶题中任选 1 道；必须使用 Agent 辅助开发，并提交至少 5 段、覆盖至少 3 类任务场景的 Agent 交互日志。开发环境：壁仞 BIREN GPU · br_pytorch · Python + C++/SUPA。</p>` },
+      { eyebrow:'Required · 必选题', title:'Spectral Convolution 核心算子', html:
+        `<div class="grid-2" style="gap:16px; align-items:start;"><div class="card-emphasis"><p style="font-size:13px; color:var(--ink-soft); line-height:1.8;">实现 2D Spectral Convolution 前向计算。输入 [B, C_in, H, W] → 输出 [B, C_out, H, W]，支持 modes 截断，首选壁仞 BIREN GPU，与 PyTorch 参考实现对齐，相对误差 ≤ 1e-4。<br><span class="field-help">加分项：Backward、3D Spectral Convolution、性能优化、多分辨率性能对比、Agent 开发过程记录。</span></p></div><div>${_scores([['正确性','35%'],['性能','25%'],['代码质量','10%'],['Agent 开发','15%'],['扩展能力','15%']])}</div></div>` },
+      { eyebrow:'Advanced · 进阶题（三选一）', title:'PINN / GNN / FNO', html:
+        _cards3([
+          {h:'PINN · 二维稳态热传导',p:'不少于 4 层 MLP、每层 ≥ 64 神经元，构造 PDE 残差与边界条件损失，相对 L2 误差 ≤ 1%。'},
+          {h:'GNN · 分子性质预测',p:'MPNN 或 SchNet，使用 QM9 至少预测 1 个分子性质并报告 MAE。'},
+          {h:'FNO · 二维涡度方程',p:'至少 4 层 Fourier Layer，使用 Navier-Stokes 2D 数据集训练并报告相对 L2 误差。'},
+        ]) },
+      { eyebrow:'Resources · 开发者资源包', title:'上海人工智能实验室 × 壁仞科技', html:
+        _cards3([
+          {h:'壁仞科技 API Key',p:'限量 1000 份 · 剩余 412 / 1000。'},
+          {h:'国产算力开发环境',p:'限量 500 份 · 剩余 327 / 500。'},
+          {h:'学习中心·开发者课程',p:'BIREN GPU、br_pytorch、SUPA 开发课程。'},
+        ]) },
+    ] },
+  /* 5 自由赛道 · 科研智慧提炼 */
+  { lead:'本赛道聚焦「科艺融合 × AI4SS」，不限定单一学科，鼓励提炼科研流程、研究方法、知识表达与跨学科创新成果，支持文字、系统、Agent、工具、作品等多种形式。',
+    sections:[
+      { eyebrow:'Topics · 参考赛题', title:'三大方向', html:
+        _cards3([
+          {h:'科研能力提炼方向',p:'将各领域沉淀的方法论与研究能力提炼为标准化 Skills / Agent。'},
+          {h:'数字人文方向',p:'面向人文、社科、教育、传媒等领域的数字化研究与知识表达。'},
+          {h:'艺术科技方向',p:'科艺融合，探索 AI 在艺术创作与科技表达交叉处的可能。'},
+        ]) + `<p class="field-help" style="margin-top:10px;">每个方向包含：方向说明、核心任务、主要输出方向。</p>` },
+      { eyebrow:'Requirements · 统一要求', title:'参赛与评审', html:
+        _cards3([
+          {h:'参赛形式 / 作品要求',p:'支持文字、系统、Agent、工具、作品等多种形式，鼓励可复用、可传播。'},
+          {h:'评审机制',p:'结合作品创新性、完成度与可传播性综合评定。'},
+          {h:'加分项',p:'跨学科创新、真实场景落地、面向社会与产业现场的应用。'},
+        ]) },
+    ] },
+];
+
+function renderTrackDetail(idx){
+  const root = document.getElementById('trackDetail');
+  if(!root) return;
+  idx = Math.max(0, Math.min(TRACKS.length-1, idx|0));
+  const t = TRACKS[idx], a = AUX[t.aux], d = TRACK_DETAIL[idx] || {sections:[]};
+  root.innerHTML = `
+    <section class="td-hero">
+      <div class="td-hero-img" style="background-image:url('${IMG}${t.img}');"></div>
+      <div class="td-hero-veil"></div>
+      <div class="wrap" style="position:relative; padding:46px 24px 40px;">
+        <div class="meta-row" style="margin-bottom:16px;">
+          <a href="#/" class="label" style="text-decoration:none; color:var(--ink-mute);">首页</a>
+          <span class="label" style="color:var(--ink-faint);">/</span>
+          <a href="#/#tracks" class="label" style="text-decoration:none; color:var(--ink-mute);">赛道介绍</a>
+          <span class="label" style="color:var(--ink-faint);">/</span>
+          <span class="label">${t.no}</span>
+        </div>
+        <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag} · ${t.en}</span>
+        <h1 class="section-hero" style="font-size:clamp(28px,4.4vw,42px); margin:14px 0 12px;">${t.title}</h1>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.85; max-width:700px;">${d.lead || t.desc}</p>
+        <div class="meta-row" style="gap:12px; margin-top:26px;">
+          <a class="btn btn-primary btn-lg" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${idx}),60)">立即报名 · 带入本赛道</a>
+          <a class="btn btn-lg" href="#/#tracks">返回赛道列表</a>
+        </div>
+      </div>
+    </section>
+    <div class="wrap" style="padding:8px 24px 48px;">
+      ${d.sections.map(s=>`<section class="td-section">
+        ${s.eyebrow?`<div class="eyebrow" style="margin-bottom:14px;">${s.eyebrow}</div>`:''}
+        ${s.title?`<h2 class="title-l" style="margin-bottom:18px;">${s.title}</h2>`:''}
+        ${s.html}
+      </section>`).join('')}
+      <section class="td-section">
+        <div class="eyebrow" style="margin-bottom:14px;">Community · 社群交流</div>
+        <h2 class="title-l" style="margin-bottom:18px;">加入「${t.tag}」赛道社群</h2>
+        <div class="card-info" style="display:flex; gap:18px; align-items:center; max-width:540px;">
+          <div style="width:92px; height:92px; flex:none; border:1px solid var(--rule); border-radius:2px; background:
+            repeating-linear-gradient(45deg, var(--ink) 0 3px, transparent 3px 7px); opacity:.5;"></div>
+          <div><div class="title-s" style="margin-bottom:6px; color:var(--ink);">扫码加入赛道交流群</div><p style="font-size:13px; color:var(--ink-mute); line-height:1.65;">报名后请备注【${t.tag} + 单位 + 姓名】，获取赛题答疑、数据集与资源领取通知。</p></div>
+        </div>
+      </section>
+    </div>`;
 }
 
 /* 赛程时间线 · 真实阶段 */
@@ -1181,6 +1376,8 @@ function renderApply(){
     el.addEventListener('click', ()=>{ selectedTrack = +el.dataset.idx; paintTrack(); });
   });
   paintTrack();
+  // 供赛道卡/详情页「报名」带入赛道
+  window.__selectApplyTrack = (i)=>{ if(i>=0 && i<TRACKS.length){ selectedTrack = i; paintTrack(); } };
 
   /* ── 队长字段校验 ── */
   bindValidation(form);
@@ -1599,23 +1796,30 @@ document.getElementById('themeBtn').addEventListener('click', ()=>{
   const cur = localStorage.getItem('theme') || 'light';
   const next = THEMES[(THEMES.indexOf(cur)+1) % THEMES.length];
   setTheme(next);
+  if(window.__recolorHero) window.__recolorHero();
 });
+(function(){ const lb=document.getElementById('langBtn'); if(lb) lb.addEventListener('click', ()=>{ lb.textContent = lb.textContent==='EN' ? '中' : 'EN'; }); })();
 
 /* ═══════════════ Hash 路由 ═══════════════ */
 function router(){
   const hash = location.hash || '#/';
   const [path, anchor] = hash.replace(/^#/, '').split('#');
+  const trackM = path.match(/^\/track\/(\d+)/);
   const route = path === '/' || path === '' ? 'home'
     : path === '/apply' ? 'apply'
     : path === '/manage' ? 'manage'
-    : path === '/protocol' ? 'protocol' : 'home';
+    : path === '/protocol' ? 'protocol'
+    : trackM ? 'track' : 'home';
   document.querySelectorAll('.page').forEach(p => p.hidden = (p.dataset.route !== route));
   // 懒加载各页面交互
   if(route==='apply') renderApply();
   if(route==='manage') renderManage();
+  if(route==='track') renderTrackDetail(parseInt(trackM[1], 10));
+  // hero 动效仅在首页运行
+  if(route==='home') window.__heroStart && window.__heroStart(); else window.__heroStop && window.__heroStop();
   // nav active
   document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-  const navMap = { home:'home', apply:'apply', manage:'manage', protocol:'' };
+  const navMap = { home:'home', apply:'apply', manage:'manage', protocol:'', track:'home' };
   const activeNav = document.querySelector(`.nav-link[data-nav="${navMap[route]}"]`);
   if(activeNav) activeNav.classList.add('active');
   // scroll to anchor or top
@@ -1625,6 +1829,62 @@ function router(){
   }, 30);
 }
 window.addEventListener('hashchange', router);
+
+/* ═══════════════ 全屏 Hero 粒子星座动效（Canvas · 鼠标可交互 · 主题自适应）═══════════════ */
+function initHeroCanvas(){
+  const cv = document.getElementById('heroCanvas'); if(!cv) return;
+  const ctx = cv.getContext('2d');
+  let W=0, H=0, DPR=1, parts=[], nodes=[], raf=null, mouse={x:-9999,y:-9999};
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let COL = {};
+  function recolor(){ COL = { ink:css('--ink')||'#2a2320', verm:css('--vermilion')||'#c5402b',
+    aux:[css('--aux-magenta-4'),css('--aux-cyan-4'),css('--aux-mint-4'),css('--aux-violet-4'),css('--aux-cyan-4'),css('--vermilion')] }; }
+  window.__recolorHero = recolor;
+  function build(){
+    const n = Math.round(Math.min(96, Math.max(34, W*H/15000)));
+    parts = Array.from({length:n}, ()=>({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28, r:Math.random()*1.7+.7 }));
+    const cx=W*0.72, cy=H*0.46, R=Math.min(W,H)*0.30;
+    nodes = COL.aux.map((c,i)=>({ c, ang:i/6*Math.PI*2, R, spd:.0010+i*0.00007, size:3+(i%2)*1.2 }));
+    nodes._cx=cx; nodes._cy=cy;
+  }
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    if(!W||!H) return;
+    cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+    build();
+  }
+  function frame(){
+    if(!W||!H){ resize(); raf=requestAnimationFrame(frame); return; }
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<parts.length;i++){
+      const p=parts[i]; p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+      for(let j=i+1;j<parts.length;j++){
+        const q=parts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.hypot(dx,dy);
+        if(d<116){ ctx.globalAlpha=(1-d/116)*0.13; ctx.strokeStyle=COL.ink; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+      }
+      const mdx=p.x-mouse.x, mdy=p.y-mouse.y, md=Math.hypot(mdx,mdy);
+      if(md<160){ ctx.globalAlpha=(1-md/160)*0.55; ctx.strokeStyle=COL.verm; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); p.x-=mdx/md*0.5; p.y-=mdy/md*0.5; }
+    }
+    ctx.globalAlpha=.5; ctx.fillStyle=COL.ink;
+    parts.forEach(p=>{ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832); ctx.fill(); });
+    const cx=nodes._cx, cy=nodes._cy;
+    nodes.forEach(nd=>{ nd.ang+=nd.spd*16; const x=cx+Math.cos(nd.ang)*nd.R, y=cy+Math.sin(nd.ang)*nd.R*0.72;
+      ctx.globalAlpha=.16; ctx.fillStyle=nd.c; ctx.beginPath(); ctx.arc(x,y,nd.size*4.5,0,6.2832); ctx.fill();
+      ctx.globalAlpha=.92; ctx.beginPath(); ctx.arc(x,y,nd.size,0,6.2832); ctx.fill();
+    });
+    ctx.globalAlpha=1;
+    raf=requestAnimationFrame(frame);
+  }
+  const sec = cv.closest('.hero-full');
+  if(sec){ sec.addEventListener('mousemove', e=>{ const r=cv.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
+    sec.addEventListener('mouseleave', ()=>{ mouse.x=mouse.y=-9999; }); }
+  window.addEventListener('resize', resize);
+  recolor(); resize();
+  window.__heroStart = ()=>{ if(!raf){ if(!W) resize(); frame(); } };
+  window.__heroStop  = ()=>{ if(raf){ cancelAnimationFrame(raf); raf=null; } };
+}
 
 /* ═══════════════ 板块导航 · 滚动高亮（scrollspy）═══════════════ */
 function initSectionSpy(){
@@ -1643,7 +1903,7 @@ function initSectionSpy(){
   sections.forEach(s => obs.observe(s));
   setActive(links[0].dataset.sec);
 }
-window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initSectionSpy(); router(); });
+window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas(); initSectionSpy(); router(); });
 </script>
 </body>
 </html>
