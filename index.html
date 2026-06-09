@@ -298,6 +298,27 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-ico { width: 22px; height: 22px; flex: none; display: inline-grid; place-items: center; border-radius: 5px; background: var(--vermilion-bg); color: var(--vermilion); }
 .td-ico svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .td-prose ul li::marker { color: var(--vermilion); }
+/* 详情页 · 模块化版式 */
+.td-modules { max-width: 880px; margin: 0 auto; }
+.td-mod { padding: 30px 0 8px; border-top: 1px solid var(--rule); }
+.td-mod:first-child { border-top: none; padding-top: 2px; }
+.td-mod-head { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; }
+.td-mod-ico { width: 32px; height: 32px; border-radius: 8px; flex: none; display: grid; place-items: center; }
+.td-mod-ico svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.td-mod-eyebrow { font-family: var(--font-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 3px; }
+.td-mod-title { font: 600 21px/1.3 'Noto Serif SC', serif; color: var(--ink); }
+/* 数据集卡片 */
+.td-ds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 6px 0 14px; }
+.td-ds { border: 1px solid var(--rule); border-radius: 6px; padding: 15px 16px; background: var(--paper-cool); display: flex; flex-direction: column; }
+.td-ds-name { display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--ink); font-size: 14px; margin-bottom: 9px; }
+.td-ds-name svg { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; }
+.td-ds-body { font-size: 13px; color: var(--ink-soft); line-height: 1.7; flex: 1; }
+.td-ds-body p { margin: 0 0 6px; } .td-ds-body p:last-child { margin: 0; }
+.td-ds-dl { align-self: flex-start; margin-top: 13px; padding: 5px 14px; font-size: 12px; }
+/* 评测标准 · 权重条 */
+.td-bar { height: 6px; border-radius: 3px; background: var(--rule-soft); overflow: hidden; margin-top: 5px; max-width: 120px; }
+.td-bar > i { display: block; height: 100%; border-radius: 3px; }
+@media (max-width: 680px){ .td-ds-grid { grid-template-columns: 1fr; } }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -1229,7 +1250,120 @@ function renderTrackDetail(idx){
   idx = Math.max(0, Math.min(TRACKS.length-1, idx|0));
   const t = TRACKS[idx], a = AUX[t.aux];
   const tpl = document.getElementById('td-' + TRACK_SLUGS[idx]);
-  const body = tpl ? tpl.innerHTML : '<p style="color:var(--ink-mute);">内容加载中…</p>';
+
+  const ICO = {
+    info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/>',
+    data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+    cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/>',
+    target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
+    pkg:'<path d="M21 8 12 3 3 8l9 5 9-5ZM3 8v8l9 5 9-5V8M12 13v8"/>',
+    check:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+    award:'<circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/>',
+    chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/>',
+    dot:'<circle cx="12" cy="12" r="4"/>'
+  };
+  const pick = txt => /简介|背景/.test(txt)?'info' : /数据集|数据/.test(txt)?'data'
+    : /赛程|时间|安排|节点/.test(txt)?'cal' : /资源|领取/.test(txt)?'pkg'
+    : /评测|标准|评分|排名/.test(txt)?'award' : /要求|规范|统一|提交/.test(txt)?'check'
+    : /特色|范式|驱动/.test(txt)?'zap' : /赛题|必选|进阶|题|算子|实现|模型/.test(txt)?'target'
+    : /社群|交流/.test(txt)?'chat' : 'dot';
+  const svg = k => '<svg viewBox="0 0 24 24" aria-hidden="true">'+ICO[k]+'</svg>';
+
+  // 1) 解析模板为「以 h2 切分」的段
+  const tmp = document.createElement('div'); tmp.innerHTML = tpl ? tpl.innerHTML : '';
+  const segs = []; let cur = null;
+  [...tmp.childNodes].forEach(n=>{
+    if(n.nodeType===1 && n.tagName==='H2'){ cur={title:(n.textContent||'').trim(), nodes:[]}; segs.push(cur); }
+    else if(cur){ cur.nodes.push(n); }
+  });
+  const segHasTable = s => s.nodes.some(n=> n.nodeType===1 && (n.matches&&n.matches('table,.td-table-wrap') || (n.querySelector&&n.querySelector('table.td-table'))));
+
+  // 2) 合并赛程：把「赛程安排」后连续的含表阶段合并成一张表
+  function scheduleTable(phases){
+    let labels=null; const rows=[];
+    phases.forEach(p=>{
+      const w=document.createElement('div'); p.nodes.forEach(n=>w.appendChild(n.cloneNode(true)));
+      const tb=w.querySelector('table.td-table'); if(!tb) return;
+      const ths=[...tb.querySelectorAll('thead th')].map(th=>th.textContent.trim());
+      if(!labels) labels=ths;
+      [...tb.querySelectorAll('tbody tr')].forEach(tr=>rows.push([p.title, ...[...tr.children].map(td=>td.innerHTML)]));
+    });
+    if(!labels) return '';
+    const header=['赛程阶段',...labels];
+    return '<div class="td-table-wrap"><table class="td-table"><thead><tr>'+header.map(h=>'<th>'+h+'</th>').join('')+
+      '</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+  }
+  // 3) 评测标准 → 表格（含权重条）
+  function evalTransform(d){
+    const kids=[...d.children], runs=[]; let i=0;
+    while(i<kids.length){
+      const run=[];
+      while(i<kids.length && kids[i].tagName==='P'){
+        const m=(kids[i].textContent||'').match(/^\s*(\S.{0,13}?)\s*(\d{1,3})%(.*)$/);
+        if(!m) break; run.push({el:kids[i], dim:m[1].trim(), pct:+m[2], desc:m[3].trim()}); i++;
+      }
+      if(run.length>=2) runs.push(run); else i++;
+    }
+    runs.forEach(run=>{
+      const wrap=document.createElement('div'); wrap.className='td-table-wrap';
+      wrap.innerHTML='<table class="td-table"><thead><tr><th>评测维度</th><th>权重</th><th>说明</th></tr></thead><tbody>'+
+        run.map(r=>'<td-row><td>'+r.dim+'</td><td>'+r.pct+'%<div class="td-bar"><i style="width:'+r.pct+'%;background:'+a.c4+'"></i></div></td><td>'+(r.desc||'—')+'</td></td-row>').join('').replace(/td-row/g,'tr')+'</tbody></table></div>';
+      d.insertBefore(wrap, run[0].el); run.forEach(r=>r.el.remove());
+    });
+  }
+  // 4) 数据集 → 卡片
+  function datasetTransform(d){
+    const kids=[...d.children];
+    const isTitle = el => el.tagName==='P' && /(数据集|训练集|测试集|[AB]\s*榜)/.test(el.textContent) && (el.textContent||'').trim().length<48 && !/^\s*(任务|特点|本赛题|每个|公开|评测|说明|预测|文件|数据维度)/.test(el.textContent);
+    const isNote = el => /^\s*(每个|公开|评测)/.test(el.textContent) || /数据集将划分/.test(el.textContent);
+    let i=0; const groups=[];
+    while(i<kids.length){
+      if(isTitle(kids[i])){
+        const g={titleEl:kids[i], body:[]}; let j=i+1;
+        while(j<kids.length && !isTitle(kids[j]) && kids[j].tagName!=='H3' && !isNote(kids[j])){ g.body.push(kids[j]); j++; }
+        groups.push(g); i=j;
+      } else i++;
+    }
+    if(!groups.length) return;
+    const grid=document.createElement('div'); grid.className='td-ds-grid';
+    const dbi='<svg viewBox="0 0 24 24" style="color:'+a.c4+'"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg>';
+    groups.forEach(g=>{
+      const card=document.createElement('div'); card.className='td-ds';
+      card.innerHTML='<div class="td-ds-name">'+dbi+'<span>'+g.titleEl.innerHTML+'</span></div><div class="td-ds-body">'+g.body.map(b=>b.outerHTML).join('')+'</div><button class="btn td-ds-dl" type="button"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg> 下载</button>';
+      grid.appendChild(card);
+    });
+    d.insertBefore(grid, groups[0].titleEl);
+    groups.forEach(g=>{ g.titleEl.remove(); g.body.forEach(b=>b.remove()); });
+  }
+
+  // 5) 组装模块
+  const modules=[];
+  for(let i=0;i<segs.length;i++){
+    const s=segs[i];
+    if(/赛程/.test(s.title)){
+      const phases=[]; let j=i+1;
+      while(j<segs.length && segHasTable(segs[j])){ phases.push(segs[j]); j++; }
+      if(phases.length){ s.scheduleHTML=scheduleTable(phases); i=j-1; }
+    }
+    modules.push(s);
+  }
+  const modHTML = modules.map((s,i)=>{
+    let bodyHTML;
+    if(s.scheduleHTML){ bodyHTML=s.scheduleHTML; }
+    else {
+      const d=document.createElement('div'); s.nodes.forEach(n=>d.appendChild(n.cloneNode(true)));
+      evalTransform(d);
+      if(/数据集|数据/.test(s.title)) datasetTransform(d);
+      bodyHTML=d.innerHTML;
+    }
+    const k=pick(s.title);
+    return '<section class="td-mod"><div class="td-mod-head">'+
+      '<span class="td-mod-ico" style="background:'+a.c1+'; color:'+a.c4+'">'+svg(k)+'</span>'+
+      '<div><div class="td-mod-eyebrow">'+String(i+1).padStart(2,'0')+' · '+t.en+'</div><div class="td-mod-title">'+s.title+'</div></div>'+
+      '</div><div class="td-prose">'+bodyHTML+'</div></section>';
+  }).join('');
+
   root.innerHTML = `
     <section class="td-hero">
       <div class="td-hero-img" style="background-image:url('${IMG}${t.img}');"></div>
@@ -1251,45 +1385,18 @@ function renderTrackDetail(idx){
         </div>
       </div>
     </section>
-    <div class="wrap" style="padding:36px 24px 40px;">
-      <article class="td-prose">${body}</article>
-    </div>
-    <div class="wrap" style="padding:0 24px 56px;">
-      <section class="td-section">
-        <div class="eyebrow" style="margin-bottom:14px;">Community · 社群交流</div>
-        <h2 class="title-l" style="margin-bottom:18px;">加入「${t.tag}」赛道社群</h2>
-        <div class="card-info" style="display:flex; gap:18px; align-items:center; max-width:540px;">
-          <div style="width:92px; height:92px; flex:none; border:1px solid var(--rule); border-radius:2px; background:
-            repeating-linear-gradient(45deg, var(--ink) 0 3px, transparent 3px 7px); opacity:.5;"></div>
-          <div><div class="title-s" style="margin-bottom:6px; color:var(--ink);">扫码加入赛道交流群</div><p style="font-size:13px; color:var(--ink-mute); line-height:1.65;">报名后请备注【${t.tag} + 单位 + 姓名】，获取赛题答疑、数据集与资源领取通知。</p></div>
-        </div>
-      </section>
+    <div class="wrap" style="padding:30px 24px 36px;">
+      <div class="td-modules">${modHTML}
+        <section class="td-mod">
+          <div class="td-mod-head"><span class="td-mod-ico" style="background:${a.c1}; color:${a.c4}">${svg('chat')}</span>
+            <div><div class="td-mod-eyebrow">${String(modules.length+1).padStart(2,'0')} · COMMUNITY</div><div class="td-mod-title">社群交流</div></div></div>
+          <div class="card-info" style="display:flex; gap:18px; align-items:center; max-width:540px;">
+            <div style="width:88px; height:88px; flex:none; border:1px solid var(--rule); border-radius:4px; background:repeating-linear-gradient(45deg, var(--ink) 0 3px, transparent 3px 7px); opacity:.5;"></div>
+            <div><div class="title-s" style="margin-bottom:6px; color:var(--ink);">扫码加入「${t.tag}」赛道交流群</div><p style="font-size:13px; color:var(--ink-mute); line-height:1.65;">报名后请备注【${t.tag} + 单位 + 姓名】，获取赛题答疑、数据集与资源领取通知。</p></div>
+          </div>
+        </section>
+      </div>
     </div>`;
-  // 区块标题图标（按关键词）— 增加视觉符号，弱化单调
-  const ICO = {
-    info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/>',
-    data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
-    cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/>',
-    target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
-    pkg:'<path d="M21 8 12 3 3 8l9 5 9-5ZM3 8v8l9 5 9-5V8M12 13v8"/>',
-    check:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
-    zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
-    award:'<circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/>',
-    chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/>',
-    dot:'<circle cx="12" cy="12" r="4"/>'
-  };
-  const pick = txt => /简介|背景/.test(txt)?'info' : /数据集|数据/.test(txt)?'data'
-    : /赛程|时间|安排|节点/.test(txt)?'cal' : /赛题|必选|进阶|题|实现/.test(txt)?'target'
-    : /资源|领取/.test(txt)?'pkg' : /要求|规范|统一|提交/.test(txt)?'check'
-    : /特色|范式|驱动/.test(txt)?'zap' : /评测|标准|奖|排名/.test(txt)?'award'
-    : /社群|交流/.test(txt)?'chat' : 'dot';
-  root.querySelectorAll('.td-prose > h2').forEach(h=>{
-    const k = pick(h.textContent||'');
-    const ico = document.createElement('span');
-    ico.className = 'td-ico';
-    ico.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">'+ICO[k]+'</svg>';
-    h.insertBefore(ico, h.firstChild);
-  });
 }
 
 /* 赛程时间线 · 真实阶段 */
