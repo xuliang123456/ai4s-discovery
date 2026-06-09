@@ -234,10 +234,10 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .media-figure .mf-img { height: 320px; background-size: cover; background-position: center; }
 @media (max-width: 880px){ .media-cols { grid-template-columns: 1fr; gap: 24px; } .media-figure .mf-img { height: 220px; } }
 /* 全屏动效 Hero */
-.hero-full { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-soft); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: flex; align-items: center; }
+.hero-full { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-soft); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; }
 #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .hero-veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 66% 92% at 24% 46%, var(--paper) 6%, rgba(0,0,0,0) 62%); }
-.hero-content { position: relative; z-index: 2; text-align: left; }
+.hero-content { position: relative; z-index: 2; width: 100%; text-align: left; }
 .hero-mega { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: clamp(46px, 7.6vw, 88px); line-height: 1.04; letter-spacing: .01em; color: var(--ink); }
 .hero-mega em { color: var(--vermilion); font-style: normal; }
 .hero-en { font-family: var(--font-mono); font-size: clamp(12px,1.4vw,15px); letter-spacing: .34em; text-transform: uppercase; color: var(--ink-faint); margin-top: 16px; }
