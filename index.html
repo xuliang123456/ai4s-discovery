@@ -320,6 +320,19 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-bar { height: 6px; border-radius: 3px; background: var(--rule-soft); overflow: hidden; margin-top: 5px; max-width: 120px; }
 .td-bar > i { display: block; height: 100%; border-radius: 3px; }
 @media (max-width: 680px){ .td-ds-grid { grid-template-columns: 1fr; } }
+/* 详情页 · 赛题 Tab */
+.td-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--rule); margin-bottom: 22px; flex-wrap: wrap; }
+.td-tab { padding: 9px 18px; font-size: 13.5px; font-weight: 500; color: var(--ink-mute); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; font-family: inherit; transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease); white-space: nowrap; }
+.td-tab:hover { color: var(--ink-soft); }
+.td-tab.on { color: var(--vermilion); border-bottom-color: var(--vermilion); }
+.td-tabpanel { display: none; } .td-tabpanel.on { display: block; }
+/* 资源包 · 首页同款卡片样式（一套可复用）*/
+.res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.res-grid.one { grid-template-columns: 1fr; max-width: 560px; }
+.res-card { display: flex; flex-direction: column; }
+.res-meter { height: 6px; border-radius: 3px; background: var(--paper); border: 1px solid var(--rule-soft); overflow: hidden; margin: 10px 0 4px; }
+.res-meter > i { display: block; height: 100%; background: var(--vermilion); }
+@media (max-width: 680px){ .res-grid { grid-template-columns: 1fr; } }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -1245,6 +1258,45 @@ const TRACK_DETAIL = [
 ];
 
 const TRACK_SLUGS = ['life_science','material_science','earth_science','quantum','operator','free'];
+
+/* ── 资源包 · 一套可复用组件（首页卡片样式，编辑此处所有详情页同步）── */
+const RES_BRAND = '上海人工智能实验室 × 壁仞科技';
+const RES_HEAD = '限量 500 份 · 先到先得 · 赛事开赛后即可领取';
+const RES_ITEMS = {
+  apikey: { title:'壁仞科技 API Key', limit:'限量 1000 份', remain:'剩余 998 / 999', pct:99,
+    desc:'欢迎报名参加本次大赛，此次大赛模型算力由壁仞科技支持，开放周期为 7.1-7.15，届时各位可调用 stepfun3.5 和 minimax2.5 进行 AI 辅助开发，敬请期待！！！', btn:'立即领取 API Key' },
+  gpu: { title:'国产算力开发环境', tag:'模型与算子赛道 · 量子计算赛道', limit:'限量 500 份', remain:'剩余 499 / 499', pct:99,
+    desc:'恭喜您成为壁仞专属赛道开发者，我们将为您提供壁仞 GPU 开发环境，环境将于 7.1 正式开放申领，数量有限，先到先得！', btn:'立即领取开发环境' }
+};
+function resourcePackHTML(keys){
+  const cards = keys.map(k=>{ const r=RES_ITEMS[k]; if(!r) return '';
+    return `<div class="card-info res-card">
+      <div class="meta-row" style="margin-bottom:10px; gap:8px;"><span class="label label--strong">${RES_BRAND}</span></div>
+      <h3 class="title-m" style="margin-bottom:6px;">${r.title}</h3>
+      <div class="meta-row" style="gap:6px; margin-bottom:2px;"><span class="pill pill-primary">${r.limit}</span>${r.tag?`<span class="pill">${r.tag}</span>`:''}<span class="label" style="text-transform:none; letter-spacing:.04em; margin-left:2px;">${r.remain}</span></div>
+      <div class="res-meter"><i style="width:${r.pct}%"></i></div>
+      <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; margin-top:8px; flex:1;">${r.desc}</p>
+      <a class="btn" href="#/manage" style="margin-top:14px; align-self:flex-start;">${r.btn}</a>
+    </div>`;
+  }).join('');
+  return `<p class="field-help" style="margin:-2px 0 14px;">${RES_HEAD}</p><div class="res-grid${keys.length<2?' one':''}">${cards}</div>`;
+}
+
+/* ── 赛题 Tab 分组配置（按 slug）── */
+const TAB_CFG = {
+  quantum:  { groupTitle:'竞赛赛题', tabStart:/^赛题[一二三四]/, groupEnd:/资源|社群|统一要求/, label:t=>t.split(/\s|：|:/)[0] },
+  operator: { groupTitle:'竞赛赛题', tabStart:/^[一二三四]、(必选题|进阶题)/, groupEnd:/^三、|统一要求|计算特征|资源|社群|FAQ/, label:t=>/必选/.test(t)?'必选题':'进阶题' },
+  free:     { groupTitle:'参考赛题', tabStart:/^参考赛题[一二三]/, groupEnd:/统一要求|资源|社群/, label:t=>t.split(/[：:]/)[0] }
+};
+function wireTabs(root){
+  root.querySelectorAll('.td-tabwrap').forEach(wrap=>{
+    const ac = wrap.dataset.accent || 'var(--vermilion)';
+    const tabs=[...wrap.querySelectorAll('.td-tab')], panels=[...wrap.querySelectorAll('.td-tabpanel')];
+    const sel=i=>{ tabs.forEach((t,k)=>{ const on=k===i; t.classList.toggle('on',on); t.style.color=on?ac:''; t.style.borderBottomColor=on?ac:''; }); panels.forEach((p,k)=>p.classList.toggle('on',k===i)); };
+    tabs.forEach((t,i)=>t.addEventListener('click',()=>sel(i))); sel(0);
+  });
+}
+
 function renderTrackDetail(idx){
   const root = document.getElementById('trackDetail');
   if(!root) return;
@@ -1280,20 +1332,11 @@ function renderTrackDetail(idx){
   });
   const segHasTable = s => s.nodes.some(n=> n.nodeType===1 && (n.matches&&n.matches('table,.td-table-wrap') || (n.querySelector&&n.querySelector('table.td-table'))));
 
-  // 2) 合并赛程：把「赛程安排」后连续的含表阶段合并成一张表
-  function scheduleTable(phases){
-    let labels=null; const rows=[];
-    phases.forEach(p=>{
-      const w=document.createElement('div'); p.nodes.forEach(n=>w.appendChild(n.cloneNode(true)));
-      const tb=w.querySelector('table.td-table'); if(!tb) return;
-      const ths=[...tb.querySelectorAll('thead th')].map(th=>th.textContent.trim());
-      if(!labels) labels=ths;
-      [...tb.querySelectorAll('tbody tr')].forEach(tr=>rows.push([p.title, ...[...tr.children].map(td=>td.innerHTML)]));
-    });
-    if(!labels) return '';
-    const header=['赛程阶段',...labels];
-    return '<div class="td-table-wrap"><table class="td-table"><thead><tr>'+header.map(h=>'<th>'+h+'</th>').join('')+
-      '</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table></div>';
+  // 2) 赛程：忠实分阶段（保留前置说明 + 各阶段原表，不合并 / 不删减）
+  function scheduleGrouped(parent, phases){
+    const d=document.createElement('div'); parent.nodes.forEach(n=>d.appendChild(n.cloneNode(true)));
+    phases.forEach(p=>{ const h=document.createElement('h3'); h.textContent=p.title; d.appendChild(h); p.nodes.forEach(n=>d.appendChild(n.cloneNode(true))); });
+    return d.innerHTML;
   }
   // 3) 评测标准 → 表格（含权重条）
   function evalTransform(d){
@@ -1338,33 +1381,57 @@ function renderTrackDetail(idx){
     groups.forEach(g=>{ g.titleEl.remove(); g.body.forEach(b=>b.remove()); });
   }
 
-  // 5) 组装模块
-  const modules=[];
-  for(let i=0;i<segs.length;i++){
-    const s=segs[i];
-    // 跳过源页自带的「社群交流/联系」占位段（本页末尾会统一渲染社群模块，避免重复）
-    if(/社群|交流|联系我们|二维码|加入我们|关注我们/.test(s.title)) continue;
-    if(/赛程/.test(s.title)){
-      const phases=[]; let j=i+1;
-      while(j<segs.length && segHasTable(segs[j])){ phases.push(segs[j]); j++; }
-      if(phases.length){ s.scheduleHTML=scheduleTable(phases); i=j-1; }
-    }
-    modules.push(s);
+  // 5) 渲染单段 body（含 评测%→表、数据集→卡片 转换）
+  function segBody(s){
+    const d=document.createElement('div'); s.nodes.forEach(n=>d.appendChild(n.cloneNode(true)));
+    evalTransform(d);
+    if(/数据集|数据/.test(s.title)) datasetTransform(d);
+    return d.innerHTML;
   }
-  const modHTML = modules.map((s,i)=>{
-    let bodyHTML;
-    if(s.scheduleHTML){ bodyHTML=s.scheduleHTML; }
-    else {
-      const d=document.createElement('div'); s.nodes.forEach(n=>d.appendChild(n.cloneNode(true)));
-      evalTransform(d);
-      if(/数据集|数据/.test(s.title)) datasetTransform(d);
-      bodyHTML=d.innerHTML;
-    }
-    const k=pick(s.title);
+  const pad = n => String(n).padStart(2,'0');
+  function modShell(num, title, k, bodyHTML){
     return '<section class="td-mod"><div class="td-mod-head">'+
       '<span class="td-mod-ico" style="background:'+a.c1+'; color:'+a.c4+'">'+svg(k)+'</span>'+
-      '<div><div class="td-mod-eyebrow">'+String(i+1).padStart(2,'0')+' · '+t.en+'</div><div class="td-mod-title">'+s.title+'</div></div>'+
+      '<div><div class="td-mod-eyebrow">'+pad(num)+' · '+t.en+'</div><div class="td-mod-title">'+title+'</div></div>'+
       '</div><div class="td-prose">'+bodyHTML+'</div></section>';
+  }
+
+  // 6) 组装渲染单元
+  const cfg = TAB_CFG[TRACK_SLUGS[idx]];
+  const resKeys = (idx===5) ? ['apikey'] : ['apikey','gpu'];
+  const fsegs = segs.filter(s=> !/社群|交流|联系我们|二维码|加入我们|关注我们/.test(s.title));
+  const units=[];
+  for(let i=0;i<fsegs.length;i++){
+    const s=fsegs[i];
+    if(/资源/.test(s.title)){ units.push({kind:'res', title:s.title}); continue; }
+    if(/赛程/.test(s.title)){
+      const phases=[]; let j=i+1;
+      while(j<fsegs.length && segHasTable(fsegs[j])){ phases.push(fsegs[j]); j++; }
+      if(phases.length){ units.push({kind:'sched', title:s.title, html:scheduleGrouped(s,phases)}); i=j-1; continue; }
+    }
+    if(cfg && cfg.tabStart.test(s.title)){
+      const grp=[]; let j=i;
+      while(j<fsegs.length && !cfg.groupEnd.test(fsegs[j].title)){ grp.push(fsegs[j]); j++; }
+      const tabs=[];
+      grp.forEach(g=>{ if(cfg.tabStart.test(g.title)) tabs.push({label:cfg.label(g.title), segs:[g]}); else if(tabs.length) tabs[tabs.length-1].segs.push(g); });
+      if(tabs.length){ units.push({kind:'tabs', title:cfg.groupTitle, tabs}); i=j-1; continue; }
+    }
+    units.push({kind:'mod', seg:s});
+  }
+
+  // 7) 渲染
+  let num=0;
+  const modHTML = units.map(u=>{
+    num++;
+    if(u.kind==='res')   return modShell(num, u.title, 'pkg', resourcePackHTML(resKeys));
+    if(u.kind==='sched') return modShell(num, u.title, 'cal', u.html);
+    if(u.kind==='tabs'){
+      const bar = u.tabs.map((tb,ti)=>'<button class="td-tab'+(ti===0?' on':'')+'" type="button">'+tb.label+'</button>').join('');
+      const panels = u.tabs.map((tb,ti)=>'<div class="td-tabpanel'+(ti===0?' on':'')+'">'+
+        tb.segs.map(g=>'<h3>'+g.title+'</h3>'+segBody(g)).join('')+'</div>').join('');
+      return modShell(num, u.title, 'target', '<div class="td-tabwrap" data-accent="'+a.c4+'"><div class="td-tabs">'+bar+'</div>'+panels+'</div>');
+    }
+    return modShell(num, u.seg.title, pick(u.seg.title), segBody(u.seg));
   }).join('');
 
   root.innerHTML = `
@@ -1392,7 +1459,7 @@ function renderTrackDetail(idx){
       <div class="td-modules">${modHTML}
         <section class="td-mod">
           <div class="td-mod-head"><span class="td-mod-ico" style="background:${a.c1}; color:${a.c4}">${svg('chat')}</span>
-            <div><div class="td-mod-eyebrow">${String(modules.length+1).padStart(2,'0')} · COMMUNITY</div><div class="td-mod-title">社群交流</div></div></div>
+            <div><div class="td-mod-eyebrow">${pad(num+1)} · COMMUNITY</div><div class="td-mod-title">社群交流</div></div></div>
           <div class="card-info" style="display:flex; gap:18px; align-items:center; max-width:540px;">
             <div style="width:88px; height:88px; flex:none; border:1px solid var(--rule); border-radius:4px; background:repeating-linear-gradient(45deg, var(--ink) 0 3px, transparent 3px 7px); opacity:.5;"></div>
             <div><div class="title-s" style="margin-bottom:6px; color:var(--ink);">扫码加入「${t.tag}」赛道交流群</div><p style="font-size:13px; color:var(--ink-mute); line-height:1.65;">报名后请备注【${t.tag} + 单位 + 姓名】，获取赛题答疑、数据集与资源领取通知。</p></div>
@@ -1400,6 +1467,7 @@ function renderTrackDetail(idx){
         </section>
       </div>
     </div>`;
+  wireTabs(root);
 }
 
 /* 赛程时间线 · 真实阶段 */
