@@ -392,7 +392,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       <div class="appear-3" style="margin-top:56px; display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--rule); border-radius:2px; background:var(--paper-cool); max-width:840px;">
         <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
           <div class="label" style="margin-bottom:8px;">赛事奖金池</div>
-          <div style="font-family:var(--font-serif); font-size:28px; color:var(--vermilion); line-height:1;">总奖金<br><span style="font-size:42px; font-weight:600;">高达</span></div>
+          <div style="font-family:var(--font-serif); font-size:13px; color:var(--ink-mute); line-height:1.3;">总奖金高达<br><span style="font-size:42px; font-weight:600; color:var(--vermilion);">60<span style="font-size:18px;">万元</span></span></div>
         </div>
         <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
           <div class="label" style="margin-bottom:8px;">参赛赛道</div>
@@ -402,7 +402,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div style="padding:20px 22px; border-right:1px solid var(--rule-soft);">
           <div class="label" style="margin-bottom:8px;">报名时间</div>
           <div class="title-m" style="line-height:1.4;">即日起</div>
-          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 2026.2.28</div>
+          <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 7月15日</div>
         </div>
         <div style="padding:20px 22px;">
           <div class="label" style="margin-bottom:8px;">组队要求</div>
@@ -419,7 +419,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       <a class="section-nav-link" href="#/#about" data-sec="about">赛事简介</a>
       <a class="section-nav-link" href="#/#tracks" data-sec="tracks">赛道介绍</a>
       <a class="section-nav-link" href="#/#schedule" data-sec="schedule">赛程安排</a>
-      <a class="section-nav-link" href="#/#awards" data-sec="awards">奖项设置</a>
+      <a class="section-nav-link" href="#/#awards" data-sec="awards">激励</a>
       <a class="section-nav-link" href="#/#more-incentives" data-sec="more-incentives">相关资源</a>
       <a class="section-nav-link" href="#/#faq" data-sec="faq">常见问题</a>
     </div>
@@ -470,7 +470,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     <div class="wrap">
       <div class="section-head">
         <div class="eyebrow">Schedule · 赛程安排</div>
-        <h2 class="section-hero" style="margin-top:14px;">从报名到名次公布，五个阶段</h2>
+        <h2 class="section-hero" style="margin-top:14px;">从报名到颁奖典礼，六个阶段</h2>
       </div>
       <div id="timeline"><!-- 时间线由 JS 注入 --></div>
     </div>
@@ -480,73 +480,68 @@ section[id], .section[id] { scroll-margin-top: 116px; }
   <section class="section" id="awards">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow">Awards · 赛事奖金池</div>
-        <h2 class="section-hero" style="margin-top:14px;">奖金、人气与总冠军</h2>
+        <div class="eyebrow">Awards · 激励</div>
+        <h2 class="section-hero" style="margin-top:14px;">赛事奖金池</h2>
       </div>
       <div class="grid-3" style="gap:12px;">
-        <div class="card">
+        <div class="card-emphasis">
           <div class="meta-row" style="justify-content:space-between;">
             <span class="title-m">一等奖</span><span class="pill pill-warning">每赛道 1 名</span>
           </div>
-          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">各赛道最高荣誉，奖金 + 优先录用 + 社区高端交流资格。</p>
+          <div style="font-family:var(--font-serif); font-size:34px; font-weight:600; color:var(--vermilion); line-height:1; margin-top:14px;">¥50,000</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">各赛道最高荣誉，授予该赛道综合评定第一名的队伍。</p>
         </div>
-        <div class="card">
+        <div class="card-emphasis">
           <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">二等奖</span><span class="pill">每赛道 4 名</span>
+            <span class="title-m">黑客松总冠军</span><span class="pill pill-primary">1 名</span>
           </div>
-          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">实力强劲队伍，获奖金与组织单位深度参与机会。</p>
+          <div style="font-family:var(--font-serif); font-size:34px; font-weight:600; color:var(--vermilion); line-height:1; margin-top:14px;">¥100,000</div>
+          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">跨赛道角逐，本届书生国智科探挑战赛的最高荣誉。</p>
         </div>
-        <div class="card">
-          <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">三等奖</span><span class="pill">每赛道若干</span>
-          </div>
-          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">入围决赛即获认可，作品发布在科学发现平台。</p>
+        <div class="card" style="background:var(--paper-warm); border-left:3px solid var(--vermilion); display:flex; flex-direction:column; justify-content:center;">
+          <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:8px;">总奖金高达</div>
+          <div style="font-family:var(--font-serif); font-size:44px; font-weight:600; color:var(--ink); line-height:1;">60<span style="font-size:20px; color:var(--ink-mute); font-family:var(--font-sans); margin-left:2px;">万元</span></div>
+          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">覆盖各赛道一等奖与黑客松总冠军等奖项。</p>
         </div>
-        <div class="card-emphasis" style="grid-column:span 1;">
-          <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">最佳人气奖</span><span class="pill pill-primary">社区投票</span>
-          </div>
-          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">成果上传至 SCP 广场，由浦江科学社区投票产生。</p>
-        </div>
-        <div class="card-emphasis" style="grid-column:span 2;">
-          <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">黑客松总冠军</span><span class="pill pill-primary">全场最高</span>
-          </div>
-          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">跨赛道角逐，授予本届书生国智科探挑战赛的最高荣誉，将受邀深度参与组织单位重大任务攻关。</p>
-        </div>
+      </div>
+
+      <!-- 更多激励 -->
+      <div class="meta-row" style="margin:32px 0 14px;">
+        <span class="section-label" style="border:none; margin:0; padding:0;">更多激励</span>
+      </div>
+      <div class="grid-3" style="gap:12px;">
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">优先录用机会</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得组织单位的实习、全职、双聘等录用资格。</p></div>
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">重大攻关揭榜</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得深度参与组织单位重大任务攻关揭榜的机会。</p></div>
+        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">加入浦江科学社区</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">受邀加入浦江科学社区，参与各类高端交流活动。</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ───────── 更多激励 ───────── -->
+  <!-- ───────── 相关资源 ───────── -->
   <section class="section" id="more-incentives">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow">Incentives · 更多激励</div>
-        <h2 class="section-hero" style="margin-top:14px;">不止奖金</h2>
+        <div class="eyebrow">Resources · 相关资源</div>
+        <h2 class="section-hero" style="margin-top:14px;">开发者专属资源包</h2>
+        <p class="section-desc">上海人工智能实验室 × 壁仞科技 · 限量发放，先到先得，赛事开赛后即可领取。</p>
       </div>
       <div class="grid-2" style="gap:14px;">
         <div class="card-info">
           <div class="meta-row" style="margin-bottom:10px;">
-            <span class="label label--strong">壁仞科技 · 开发者专属资源包</span>
+            <span class="label label--strong">上海人工智能实验室 × 壁仞科技</span>
           </div>
-          <h3 class="title-m" style="margin-bottom:6px;">立即领取 API Key</h3>
+          <h3 class="title-m" style="margin-bottom:6px;">壁仞科技 API Key</h3>
           <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">限量 1000 份，先到先得，赛事开赛后即可领取。可调用 stepfun3.5 与 minimax2.5 进行 AI 辅助开发。</p>
           <a class="btn" href="#/manage" style="margin-top:14px;">立即领取 API Key</a>
         </div>
         <div class="card-info">
           <div class="meta-row" style="margin-bottom:10px;">
-            <span class="label label--strong">国产算力 · 创新计算</span>
+            <span class="label label--strong">上海人工智能实验室 × 壁仞科技</span>
           </div>
-          <h3 class="title-m" style="margin-bottom:6px;">立即领取开发环境</h3>
+          <h3 class="title-m" style="margin-bottom:6px;">国产算力开发环境</h3>
           <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">限量 500 份，先到先得，赛事开赛后即可领取。国产 GPU 云端开发环境，探索创新计算与应用。</p>
           <a class="btn" href="#/manage" style="margin-top:14px;">立即领取开发环境</a>
         </div>
-      </div>
-      <div class="grid-3" style="gap:12px; margin-top:14px;">
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">优先录用机会</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得组织单位的实习、全职、双聘等资格。</p></div>
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">重大任务攻关</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得深度参与组织单位重大任务攻关的机会。</p></div>
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">浦江科学社区</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">受邀参与浦江科学社区各类高端交流活动。</p></div>
       </div>
     </div>
   </section>
@@ -977,11 +972,12 @@ function renderTracks(){
 
 /* 赛程时间线 · 真实阶段 */
 const PHASES = [
-  { n:'01', t:'报名及初赛', d:'即日起 – 2026.2.28', desc:'完成报名并提交初赛作品。A 榜筛选出网络结构合理、能跑通二维场预测、且在「平均态」下表现稳定的模型。', state:'running' },
-  { n:'02', t:'Expert Review 专家评审', d:'初评 · 盲审', desc:'由 AI 与双学科专家对初评材料进行书面评审与打分，确定进入里程碑阶段的队伍名单。专家评审团对 AI Proposal 进行合规评估与筛选。', state:'' },
-  { n:'03', t:'复赛 · Milestone 实验', d:'里程碑验证', desc:'高级验证：针对最具潜力的靶点，验证 5–10 个科学假说；实验验证：针对高潜力靶点，验证 100 个科学假说。', state:'' },
-  { n:'04', t:'决赛 · 专家问辩', d:'Expert Q&A Defense', desc:'入围队伍进行专家问辩答辩，成果上传至 SCP 广场，开启社区投票。', state:'' },
-  { n:'05', t:'名次公布', d:'结果公布', desc:'名次将发布在大赛官网、Intern Science 小红书账号等渠道。公布结果并将模型与智能体发布在科学发现平台。', state:'' },
+  { n:'01', t:'报名', d:'即日起 – 7月15日', desc:'完成赛道选择与队伍信息录入，提交报名。一个账号只能加入一个队伍，报名成功后赛道不可更改。', state:'running' },
+  { n:'02', t:'海选赛', d:'7月15日 – 7月30日', desc:'Skill / Agent 开发。在开放周期内调用国产大模型与算力完成作品开发与提交。', state:'' },
+  { n:'03', t:'作品上传审核', d:'7月30日 – 8月6日', desc:'成果上传至 SCP 广场，由赛事方完成作品合规审核。', state:'' },
+  { n:'04', t:'社区投票', d:'8月7日 – 9月7日', desc:'成果验证及社区投票，由浦江科学社区对上传至 SCP 广场的成果进行投票。', state:'' },
+  { n:'05', t:'复赛', d:'9月7日 – 9月16日', desc:'大众投票 + 专家评审综合评定，各赛道累计晋级 200 个团队。', state:'' },
+  { n:'06', t:'线下黑客松 / 颁奖典礼', d:'9月下旬', desc:'晋级的 50 个团队前往壁仞科技总部，参加线下黑客松与颁奖典礼。', state:'' },
 ];
 function renderTimeline(){
   const wrap = document.getElementById('timeline');
