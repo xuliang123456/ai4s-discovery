@@ -1834,18 +1834,19 @@ window.addEventListener('hashchange', router);
 function initHeroCanvas(){
   const cv = document.getElementById('heroCanvas'); if(!cv) return;
   const ctx = cv.getContext('2d');
-  let W=0, H=0, DPR=1, parts=[], nodes=[], raf=null, mouse={x:-9999,y:-9999};
+  const NAMES = ['生命科学','物质科学','地球科学','量子计算','模型与算子','自由赛道'];
+  let W=0, H=0, DPR=1, parts=[], nodes=[], raf=null, mouse={x:-9999,y:-9999}, rot=0, tick=0, hoverIdx=-1;
   const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   let COL = {};
   function recolor(){ COL = { ink:css('--ink')||'#2a2320', verm:css('--vermilion')||'#c5402b',
-    aux:[css('--aux-magenta-4'),css('--aux-cyan-4'),css('--aux-mint-4'),css('--aux-violet-4'),css('--aux-cyan-4'),css('--vermilion')] }; }
+    aux:[css('--aux-magenta-4'),css('--aux-cyan-4'),css('--aux-mint-4'),css('--aux-violet-4'),css('--aux-violet-4'),css('--vermilion')] }; }
   window.__recolorHero = recolor;
   function build(){
-    const n = Math.round(Math.min(96, Math.max(34, W*H/15000)));
-    parts = Array.from({length:n}, ()=>({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.28, vy:(Math.random()-.5)*.28, r:Math.random()*1.7+.7 }));
-    const cx=W*0.72, cy=H*0.46, R=Math.min(W,H)*0.30;
-    nodes = COL.aux.map((c,i)=>({ c, ang:i/6*Math.PI*2, R, spd:.0010+i*0.00007, size:3+(i%2)*1.2 }));
-    nodes._cx=cx; nodes._cy=cy;
+    const n = Math.round(Math.min(90, Math.max(30, W*H/16000)));
+    parts = Array.from({length:n}, ()=>({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.26, vy:(Math.random()-.5)*.26, r:Math.random()*1.7+.7 }));
+    const cx = W*0.71, cy = H*0.47, Rx = Math.min(W*0.30, 280), Ry = Rx*0.82;
+    nodes = NAMES.map((name,i)=>({ name, c:COL.aux[i], idx:i, ang0:i/6*Math.PI*2, x:0, y:0 }));
+    nodes._cx=cx; nodes._cy=cy; nodes._Rx=Rx; nodes._Ry=Ry;
   }
   function resize(){
     DPR = Math.min(window.devicePixelRatio||1, 2);
@@ -1854,32 +1855,70 @@ function initHeroCanvas(){
     cv.width = Math.round(W*DPR); cv.height = Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
     build();
   }
+  function rr(x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
   function frame(){
     if(!W||!H){ resize(); raf=requestAnimationFrame(frame); return; }
+    tick++;
+    const cx=nodes._cx, cy=nodes._cy, Rx=nodes._Rx, Ry=nodes._Ry;
+    // 节点位置（用当前 rot）
+    nodes.forEach(nd=>{ const a=nd.ang0+rot; nd.x=cx+Math.cos(a)*Rx; nd.y=cy+Math.sin(a)*Ry; });
+    // 命中检测
+    hoverIdx=-1; let best=26*26;
+    for(const nd of nodes){ const dx=nd.x-mouse.x, dy=nd.y-mouse.y, d2=dx*dx+dy*dy; if(d2<best){ best=d2; hoverIdx=nd.idx; } }
+    const paused = hoverIdx>=0;
+    if(sec) sec.style.cursor = paused ? 'pointer' : '';
+
     ctx.clearRect(0,0,W,H);
+    // ── 粒子场（hover 节点时冻结）──
     for(let i=0;i<parts.length;i++){
-      const p=parts[i]; p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1;
+      const p=parts[i];
+      if(!paused){ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1; }
       for(let j=i+1;j<parts.length;j++){
         const q=parts[j], dx=p.x-q.x, dy=p.y-q.y, d=Math.hypot(dx,dy);
-        if(d<116){ ctx.globalAlpha=(1-d/116)*0.13; ctx.strokeStyle=COL.ink; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
+        if(d<114){ ctx.globalAlpha=(1-d/114)*0.12; ctx.strokeStyle=COL.ink; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.stroke(); }
       }
-      const mdx=p.x-mouse.x, mdy=p.y-mouse.y, md=Math.hypot(mdx,mdy);
-      if(md<160){ ctx.globalAlpha=(1-md/160)*0.55; ctx.strokeStyle=COL.verm; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); p.x-=mdx/md*0.5; p.y-=mdy/md*0.5; }
+      if(!paused){ const mdx=p.x-mouse.x, mdy=p.y-mouse.y, md=Math.hypot(mdx,mdy);
+        if(md<150){ ctx.globalAlpha=(1-md/150)*0.5; ctx.strokeStyle=COL.verm; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(mouse.x,mouse.y); ctx.stroke(); p.x-=mdx/md*0.5; p.y-=mdy/md*0.5; } }
     }
-    ctx.globalAlpha=.5; ctx.fillStyle=COL.ink;
+    ctx.globalAlpha=.45; ctx.fillStyle=COL.ink;
     parts.forEach(p=>{ ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.2832); ctx.fill(); });
-    const cx=nodes._cx, cy=nodes._cy;
-    nodes.forEach(nd=>{ nd.ang+=nd.spd*16; const x=cx+Math.cos(nd.ang)*nd.R, y=cy+Math.sin(nd.ang)*nd.R*0.72;
-      ctx.globalAlpha=.16; ctx.fillStyle=nd.c; ctx.beginPath(); ctx.arc(x,y,nd.size*4.5,0,6.2832); ctx.fill();
-      ctx.globalAlpha=.92; ctx.beginPath(); ctx.arc(x,y,nd.size,0,6.2832); ctx.fill();
+
+    // ── 轨道环 ──
+    ctx.globalAlpha=.5; ctx.strokeStyle=COL.ink; ctx.lineWidth=1; ctx.setLineDash([2,5]);
+    ctx.globalAlpha=.18; ctx.beginPath(); ctx.ellipse(cx,cy,Rx,Ry,0,0,6.2832); ctx.stroke(); ctx.setLineDash([]);
+    // ── 辐条 core→node ──
+    nodes.forEach(nd=>{ ctx.globalAlpha = (nd.idx===hoverIdx)?.5:.12; ctx.strokeStyle = (nd.idx===hoverIdx)?nd.c:COL.ink; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(nd.x,nd.y); ctx.stroke(); });
+    // ── 中心核（脉冲）──
+    const pulse = 4 + Math.sin(tick*0.05)*1.4;
+    ctx.globalAlpha=.14; ctx.fillStyle=COL.verm; ctx.beginPath(); ctx.arc(cx,cy,pulse*3.2,0,6.2832); ctx.fill();
+    ctx.globalAlpha=1; ctx.fillStyle=COL.verm; ctx.beginPath(); ctx.arc(cx,cy,4.5,0,6.2832); ctx.fill();
+    ctx.globalAlpha=1; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(cx,cy,1.6,0,6.2832); ctx.fill();
+    // ── 学科节点 ──
+    nodes.forEach(nd=>{
+      const on = nd.idx===hoverIdx, sz = on?7.5:5;
+      ctx.globalAlpha = on?.28:.16; ctx.fillStyle=nd.c; ctx.beginPath(); ctx.arc(nd.x,nd.y, sz*(on?3.4:3), 0,6.2832); ctx.fill();
+      ctx.globalAlpha=1; ctx.fillStyle=nd.c; ctx.beginPath(); ctx.arc(nd.x,nd.y,sz,0,6.2832); ctx.fill();
+      if(on){ ctx.globalAlpha=1; ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(nd.x,nd.y,sz+3,0,6.2832); ctx.stroke(); }
     });
+    // ── 悬停标签 ──
+    if(paused){
+      const nd=nodes[hoverIdx];
+      ctx.font='600 13px "PingFang SC","Microsoft YaHei",sans-serif';
+      const tw=ctx.measureText(nd.name).width, padX=11, h=26, w=tw+padX*2;
+      let lx=nd.x+16, ly=nd.y-h/2; if(lx+w>W-8) lx=nd.x-16-w; if(ly<8) ly=8; if(ly+h>H-8) ly=H-8-h;
+      ctx.globalAlpha=1; ctx.fillStyle=nd.c; rr(lx,ly,w,h,3); ctx.fill();
+      ctx.fillStyle='#fff'; ctx.textBaseline='middle'; ctx.textAlign='left'; ctx.fillText(nd.name, lx+padX, ly+h/2+0.5);
+    }
     ctx.globalAlpha=1;
+    if(!paused) rot += 0.0022;
     raf=requestAnimationFrame(frame);
   }
   const sec = cv.closest('.hero-full');
-  if(sec){ sec.addEventListener('mousemove', e=>{ const r=cv.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
-    sec.addEventListener('mouseleave', ()=>{ mouse.x=mouse.y=-9999; }); }
+  if(sec){
+    sec.addEventListener('mousemove', e=>{ const r=cv.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
+    sec.addEventListener('mouseleave', ()=>{ mouse.x=mouse.y=-9999; });
+    sec.addEventListener('click', ()=>{ if(hoverIdx>=0) location.hash='#/track/'+hoverIdx; });
+  }
   window.addEventListener('resize', resize);
   recolor(); resize();
   window.__heroStart = ()=>{ if(!raf){ if(!W) resize(); frame(); } };
