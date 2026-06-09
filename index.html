@@ -298,6 +298,9 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-ico { width: 22px; height: 22px; flex: none; display: inline-grid; place-items: center; border-radius: 5px; background: var(--vermilion-bg); color: var(--vermilion); }
 .td-ico svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .td-prose ul li::marker { color: var(--vermilion); }
+/* 平台能力卡片图标 */
+.plat-ico { width: 30px; height: 30px; border-radius: 7px; background: var(--vermilion-bg); color: var(--vermilion); display: grid; place-items: center; flex: none; }
+.plat-ico svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 /* 详情页 · 模块化版式 */
 .td-modules { max-width: 880px; margin: 0 auto; }
 .td-mod { padding: 30px 0 8px; border-top: 1px solid var(--rule); }
@@ -571,25 +574,35 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         </div>
       </div>
 
-      <!-- 平台三件套 -->
+      <!-- 平台能力 -->
       <div class="meta-row" style="margin-bottom:14px;">
-        <span class="section-label" style="border:none; margin:0; padding:0;">科学发现平台 · 三件套</span>
+        <span class="section-label" style="border:none; margin:0; padding:0;">科学发现平台 · 平台能力</span>
       </div>
       <div class="grid-3">
         <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">Intern-S1</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">最先进的开源多模态推理模型</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">在具备强大通用任务能力的同时，于广泛的科学任务中达到最先进性能，可与最先进的闭源商业模型相媲美。</p>
+          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><span class="pill pill-primary">Intern-S1</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">书生科学多模态大模型</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">作为最先进的开源多模态推理模型，在具备强大通用任务能力的同时，于广泛的科学任务中也达到最先进性能，可与最先进的闭源商业模型相媲美。</p>
         </div>
         <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">Intern·Agent</span></div>
+          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16 8l-2.5 5.5L8 16l2.5-5.5L16 8Z"/></svg></span><span class="pill pill-primary">Intern·Agent</span></div>
           <h3 class="title-m" style="margin-bottom:8px;">类人科学家的自主探索能力</h3>
           <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">自动化科研流程，生成实验构想、代码并调优；分析问题、查阅文献、调研反思，开展实验验证。</p>
         </div>
         <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px;"><span class="pill pill-primary">科研助手</span></div>
+          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span><span class="pill pill-primary">科学研究助手</span></div>
           <h3 class="title-m" style="margin-bottom:8px;">科研问答与深度思考</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">辅助解决学术难题，生成学术报告；科研智慧提炼，将科研数据与 AI Skills / Agent 深度结合。</p>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">科研问答与深度思考，辅助解决学术难题、生成学术报告；自动化科研流程，生成实验构想、代码并调优。</p>
+        </div>
+        <div class="card-emphasis">
+          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><span class="pill pill-primary">科研论文搜索</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">学术搜索与文献精读</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">针对赛事资料查阅需求推出学术搜索，一键检索论文、精读入库深度学习，查看引用网络高效梳理研究脉络。</p>
+        </div>
+        <div class="card-emphasis">
+          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="pill pill-primary">SCP 广场</span></div>
+          <h3 class="title-m" style="margin-bottom:8px;">科研要素的 API 化聚合</h3>
+          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">链接数据、工具、智能体、专业模型、湿实验设备等科研要素并实现 API 化整合，提供六大学科 1600+ 科学发现工具 API，为跨领域科学发现提供标准化环境。</p>
         </div>
       </div>
     </div>
