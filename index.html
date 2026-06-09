@@ -260,6 +260,17 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-hero-veil { position: absolute; inset: 0; background: linear-gradient(180deg, var(--paper) 0%, rgba(0,0,0,0) 40%, var(--paper) 100%); }
 .td-section { padding: 40px 0; border-top: 1px solid var(--rule-soft); }
 .td-section:first-of-type { border-top: none; }
+/* 赛道详情正文 */
+.td-prose { max-width: 840px; font-size: 14px; line-height: 1.9; color: var(--ink-soft); }
+.td-prose h2 { font: 600 20px/1.4 'Noto Serif SC', serif; color: var(--ink); margin: 30px 0 12px; padding-top: 22px; border-top: 1px solid var(--rule-soft); letter-spacing: .01em; }
+.td-prose h2:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.td-prose h3 { font: 600 16px/1.5 'Noto Serif SC', serif; color: var(--ink); margin: 22px 0 10px; }
+.td-prose p { margin: 0 0 13px; }
+.td-prose ul { margin: 0 0 14px; padding-left: 22px; }
+.td-prose li { margin: 0 0 7px; }
+.td-prose strong { color: var(--ink); font-weight: 600; }
+.td-prose code { font-family: var(--font-mono); font-size: 12.5px; background: var(--paper-warm); padding: 1px 5px; border-radius: 3px; color: var(--vermilion); }
+.td-code { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; background: #0f1830; color: #d8e1f2; padding: 16px 18px; border-radius: 6px; overflow-x: auto; margin: 14px 0 18px; white-space: pre; -webkit-overflow-scrolling: touch; }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -1173,11 +1184,14 @@ const TRACK_DETAIL = [
     ] },
 ];
 
+const TRACK_SLUGS = ['life_science','material_science','earth_science','quantum','operator','free'];
 function renderTrackDetail(idx){
   const root = document.getElementById('trackDetail');
   if(!root) return;
   idx = Math.max(0, Math.min(TRACKS.length-1, idx|0));
-  const t = TRACKS[idx], a = AUX[t.aux], d = TRACK_DETAIL[idx] || {sections:[]};
+  const t = TRACKS[idx], a = AUX[t.aux];
+  const tpl = document.getElementById('td-' + TRACK_SLUGS[idx]);
+  const body = tpl ? tpl.innerHTML : '<p style="color:var(--ink-mute);">内容加载中…</p>';
   root.innerHTML = `
     <section class="td-hero">
       <div class="td-hero-img" style="background-image:url('${IMG}${t.img}');"></div>
@@ -1192,19 +1206,17 @@ function renderTrackDetail(idx){
         </div>
         <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag} · ${t.en}</span>
         <h1 class="section-hero" style="font-size:clamp(28px,4.4vw,42px); margin:14px 0 12px;">${t.title}</h1>
-        <p style="font-size:14px; color:var(--ink-soft); line-height:1.85; max-width:700px;">${d.lead || t.desc}</p>
+        <p style="font-size:14px; color:var(--ink-soft); line-height:1.85; max-width:700px;">${t.desc}</p>
         <div class="meta-row" style="gap:12px; margin-top:26px;">
           <a class="btn btn-primary btn-lg" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${idx}),60)">立即报名 · 带入本赛道</a>
           <a class="btn btn-lg" href="#/#tracks">返回赛道列表</a>
         </div>
       </div>
     </section>
-    <div class="wrap" style="padding:8px 24px 48px;">
-      ${d.sections.map(s=>`<section class="td-section">
-        ${s.eyebrow?`<div class="eyebrow" style="margin-bottom:14px;">${s.eyebrow}</div>`:''}
-        ${s.title?`<h2 class="title-l" style="margin-bottom:18px;">${s.title}</h2>`:''}
-        ${s.html}
-      </section>`).join('')}
+    <div class="wrap" style="padding:36px 24px 40px;">
+      <article class="td-prose">${body}</article>
+    </div>
+    <div class="wrap" style="padding:0 24px 56px;">
       <section class="td-section">
         <div class="eyebrow" style="margin-bottom:14px;">Community · 社群交流</div>
         <h2 class="title-l" style="margin-bottom:18px;">加入「${t.tag}」赛道社群</h2>
@@ -1947,5 +1959,1191 @@ function initSectionSpy(){
 }
 window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas(); initSectionSpy(); router(); });
 </script>
+<div id="td-store" hidden>
+<template id="td-life_science"><h2>赛事简介</h2>
+<p>在人类对抗重大疾病的征途上，创新药物靶点的发现始终是至关重要却又充满挑战的第一步。传统的靶点发现路径，往往依赖于资深课题组的经验积累、漫长而低通量的实验筛选，或是高成本的大规模数据积累，效率亟待提升。而生命科学与人工智能深度融合的时代，AI Agents（智能体）的涌现为科研范式带来了革命性的变革。
+本赛题正是旨在汇聚全球顶尖AI研发力量，通过通用型AI Agent（不限定于特定专业模型，鼓励整合专业工具）进行“群体智慧”式的协作攻关，以前所未有的速度和效率，直接产出高价值的科学发现——全新的重大疾病治疗靶点。</p>
+<h2>数据集</h2>
+<p>本赛题将开放两个来源于真实高通量实验的化学反应数据集，同时有第三个真实高通量实验的化学反应数据集作为内部评测集：</p>
+<p>Suzuki 偶联反应数据集（Suzuki）</p>
+<p>任务：在给定底物与电性匹配的前提下，优化配体、碱、溶剂等条件，以最大化产率。
+特点：变量以类别为主（数十种配体/碱/溶剂组合），高产率条件极少。</p>
+<p>Buchwald–Hartwig 偶联反应数据集 1</p>
+<p>任务：固定部分底物与配体族群，优化碱、溶剂等条件变量。
+特点：变量数目略少，空间结构相对规整，高产率较少，对“局部精细搜索”敏感。</p>
+<p>每个数据集将划分为：</p>
+<ul><li>公开子集（约 1% 标注）：包含少量已知反应结果，可用于算法预训练 / 先验建模（对于Buchwald-hartwing反应的公开数据集，存在产物和反应物不完全一致的情况，对于其他两个反应数据集，产物和反应物完全一致）；</li><li>评测数据集（未标注条件集合）：只提供变量描述，不公开产率，由评测平台在算法查询时返回真实结果（在每个反应的评测数据集中，反应物和产物完全一致）。</li></ul>
+<h2>赛程安排</h2>
+<h2>报名及作品提交</h2>
+<p>时间</p>
+<p>提交内容</p>
+<p>内容</p>
+<p>即日起-2026.2.28</p>
+<p>*Proposal</p>
+<p>（一份独立pdf文件）</p>
+<ul><li>肝癌新靶点假说，需包含清晰的靶点信息：基因/蛋白命名 (Gene symbol, Uniprot ID)；</li><li>提出该假说的推理逻辑和支持证据</li><li>假说的新颖性、科学意义和临床意义论证</li><li>验证方案及可行性论证，需明确验证方案采用的具体药物（单克隆抗体/小分子/多肽/双特异性抗体等）【注：药物没有新颖性要求】</li><li>如选择单克隆抗体/多肽/双特异性抗体：提供氨基酸序列</li><li>如选择小分子，需提供SMILES和PubChem ID（如有）</li><li>选择该药物的理由，需包含药物和假说所提出的靶点特异性结合的证据（可以是参考文献/专利/数据库/建模）</li></ul>
+<p>*Method</p>
+<p>（一份独立pdf文件）</p>
+<p>需包含对产出Proposal的AI scientist实现方案的描述。</p>
+<p>*复现材料</p>
+<p>（从中任选一种）</p>
+<p>源码仓库（GitHub），容器镜像（Docker），可调用的API（附文档），可公开访问的 Web 应用（URL和使用说明）。</p>
+<p>其他材料</p>
+<p>（如适用）</p>
+<p>运行日志、数据许可声明。</p>
+<p>备注：加*为必须项</p>
+<h2>初赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>3月初-3月中旬</p>
+<p>Expert Review 专家评审</p>
+<p>专家评审团对AI Proposal进行合规评估与筛选。</p>
+<h2>复赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>3月中旬-4月中旬</p>
+<p>Milestone 1A：细胞实验</p>
+<p>（实验验证） 针对高潜力靶点，验证100个科学假说。</p>
+<p>Milestone 1B：类器官实验</p>
+<p>（实验验证） 针对最具创新性的靶点，验证20-30个科学假说。 (1A, 1B可二选一或同时进行)</p>
+<p>Milestone 2：动物实验</p>
+<p>（高级验证） 针对最具潜力的靶点，验证5-10个科学假说。</p>
+<h2>决赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>5月初</p>
+<p>专家问辩</p>
+<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
+<h2>成果展示</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>待定</p>
+<p>名次公布</p>
+<p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p>
+<p>上传平台</p>
+<p>公布结果并将模型与智能体发布在科学发现平台</p>
+<h2>社群交流</h2></template>
+<template id="td-material_science"><h2>赛事简介</h2>
+<p>自动化高通量实验极大提高了化学反应条件优化的效率，但在实际研发中，反应条件组合空间巨大、实验预算有限仍然是核心瓶颈。传统贝叶斯优化（BO）在小样本条件下表现优异，但在化学场景中往往面临以下困境：变量空间高度离散、非结构化（配体、溶剂、添加剂等）；可用标注数据极少；先验化学知识分散在文献、专利与专家经验中，难以系统利用。
+本赛题聚焦“如何在极少真实实验的条件下，加速化学反应条件优化”，鼓励选手利用大模型、机器学习和强化学习等方法系统整合化学知识和有限实验数据，设计高效的优化策略。</p>
+<h2>数据集</h2>
+<p>本赛题将开放两个来源于真实高通量实验的化学反应数据集，同时有第三个真实高通量实验的化学反应数据集作为内部评测集：</p>
+<p>Suzuki 偶联反应数据集（Suzuki）</p>
+<p>任务：在给定底物与电性匹配的前提下，优化配体、碱、溶剂等条件，以最大化产率。
+特点：变量以类别为主（数十种配体/碱/溶剂组合），高产率条件极少。</p>
+<p>Buchwald–Hartwig 偶联反应数据集 1</p>
+<p>任务：固定部分底物与配体族群，优化碱、溶剂等条件变量。
+特点：变量数目略少，空间结构相对规整，高产率较少，对“局部精细搜索”敏感。</p>
+<p>每个数据集将划分为： 
+公开子集（约 1% 标注）：包含少量已知反应结果，可用于算法预训练 / 先验建模（对于Buchwald-hartwing反应的公开数据集，存在产物和反应物不完全一致的情况，对于其他两个反应数据集，产物和反应物完全一致）； 
+评测数据集（未标注条件集合）：只提供变量描述，不公开产率，由评测平台在算法查询时返回真实结果（在每个反应的评测数据集中，反应物和产物完全一致）。</p>
+<h2>赛程安排</h2>
+<h2>报名及作品提交</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>即日起-2026.2.28</p>
+<p>提交初评材料</p>
+<p>参赛队伍提交《AI技术方案书和干实验报告》，包括整体框架、先验知识利用方式、拟采用模型与优化策略、实验设置，实验结果和分析等，用于专家书面评审和筛选进入复评阶段（湿实验）的参赛队伍。</p>
+<h2>初赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>3月初-3月中旬</p>
+<p>Expert Review 专家评审（初评，盲审）</p>
+<p>由AI与化学双学科专家对初评材料进行书面评审与打分，确定进入里程碑阶段的队伍名单。</p>
+<h2>复赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>5月中上旬</p>
+<p>Expert Review 实验评审</p>
+<p>（实验验证）选择最有竞争力的1-3个队伍， 针对鲜有公开报道或权威认证有难度或有商业价值的1-2个化学反应，通过算法驱动高通量实验设备来完成化学反应条件的优化。在相同实验轮数的预算情况下，依据初始轮最大值，最终最大值和收敛速度三个指标综合量化评分。</p>
+<h2>决赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>5月初</p>
+<p>Expert Review 专家评审</p>
+<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
+<h2>成果展示</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>2026.6.1-2026.6.30</p>
+<p>结果公布</p>
+<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
+<p>待定</p>
+<p>继续进行算法在真实的湿实验场景中的验证，可根据结果决定是否开启商业化转换阶段。</p>
+<h2>社群交流</h2></template>
+<template id="td-earth_science"><h2>赛事简介</h2>
+<p>厄尔尼诺-南方涛动（ENSO）是全球气候年际变率最强的信号，对全球粮食安全、水资源管理及防灾减灾具有决定性影响。然而，过去几十年，学界和业界习惯用单一的指数（如 Niño 3.4）来监测和预测它。但这种“平均化”的处理方式，掩盖了ENSO复杂的空间结构差异，在面对极端气候时正在失效。
+本赛题旨在打破传统线性统计与低维指数的桎梏，要求参赛的通用智能体或预测模型直接挑战二维海温异常场的精细化预报与机制解读。</p>
+<h2>数据集</h2>
+<p>训练集</p>
+<p>1850-2014 年的多模式或者再分析作为训练集。</p>
+<p>A榜测试集</p>
+<p>从 1850-2024 年中，随机抽取 240~360 个非连续的起始月。</p>
+<p>B榜测试集</p>
+<p>1980-2023 年的全量验证，包含近 40 多年的所有 ENSO 循环。</p>
+<h2>赛程安排</h2>
+<h2>报名及初赛</h2>
+<p>A榜：筛选出网络结构合理、能跑通二维场预测、且在“平均态”下表现稳定的模型。</p>
+<p>预测任务： 输入起始月状态，输出未来 12 个月的二维 SSTA 场。</p>
+<p>时间</p>
+<p>提交内容</p>
+<p>提交要求</p>
+<p>即日起-2026.2.28</p>
+<p>预测结果文件</p>
+<p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 
+<strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p>
+<ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul>
+<p>*Method</p>
+<p>（一份独立pdf文件）</p>
+<p>需包含对产出的模型方案的描述。</p>
+<p>B榜：迫使模型解决不对称性和多样性问题。</p>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>即日起-2026.2.28</p>
+<p>预测结果文件</p>
+<p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 
+<strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p>
+<ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul>
+<p>*Method</p>
+<p>（一份独立pdf文件）</p>
+<p>需包含对产出的模型方案的描述。</p>
+<h2>决赛</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>3月中旬</p>
+<p>专家问辩</p>
+<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。（方法，结果，复现，模型权重）</p>
+<h2>成果展示</h2>
+<p>时间</p>
+<p>阶段</p>
+<p>内容</p>
+<p>待定</p>
+<p>名次公布</p>
+<p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p>
+<p>上传平台</p>
+<p>公布结果并将模型与智能体发布在科学发现平台</p>
+<h2>社群交流</h2></template>
+<template id="td-quantum"><h2>赛事简介</h2>
+<p>量子计算被视为下一代计算技术的核心方向，在科学计算、材料模拟、组合优化与人工智能等领域具有深远潜在价值。本赛道聚焦量子计算模拟与跨场景应用探索，旨在依托壁仞国产GPU平台，推动量子线路模拟、主流算法演示与行业场景落地，鼓励参赛者以智能体辅助开发模式，构建兼具可运行性、可解释性与创新价值的量子计算原型成果。</p>
+<p>面向量子计算基础模拟、主流算法、开发框架与行业应用场景，鼓励参赛者依托壁仞 BR106/BR166 平台及配套软件栈，完成量子线路模拟、量子算法执行、量子计算工具开发与跨行业应用探索，形成可运行、可验证、可展示、可复用的原型成果。本赛道设置 2 道赛题，参赛队伍可任选其一，也可多题参与。</p>
+<p>两道赛题分别聚焦量子计算模拟、主流算法演示与框架适配，以及量子计算在行业场景中的应用探索。参赛作品应优先保证任务闭环完整、运行流程清晰、结果可验证；在此基础上，可进一步扩展算法能力、交互体验、行业场景或智能化功能，形成兼具可运行性、可解释性和展示效果的量子计算原型。</p>
+<h2>赛题一 量子计算模拟与算法演示平台</h2>
+<h2>1. 赛题简介</h2>
+<p>量子计算是未来算力发展的重要方向，在高精度科学运算、新型材料仿真、复杂组合优化、信息密码安全及人工智能研发等诸多领域具备极高的应用潜力与发展前景。受限于当前量子计算硬件条件，量子计算模拟技术在理解量子运行机理、验证量子算法、培养开发者生态以及探索前沿应用场景等方面发挥着重要基础作用，是连接量子理论研究、算法设计与工程实践的关键支撑。</p>
+<p>本题鼓励参赛队伍结合量子电路仿真、并行运算、数据分析与可视化展示等技术，搭建运行稳定、结果可精准核验的量子电路模拟平台，直观呈现量子态演变、测量数据统计与运行流程分析。同时，作品应引入 <code>Agent/Skills</code> 智能化能力，降低量子计算使用门槛，提升平台交互性、任务组织能力与展示效果。</p>
+<h2>2. 可选方向</h2>
+<p>以下方向仅作为参考示例，参赛队伍可围绕量子计算模拟、算法演示与平台实现目标自主选题。</p>
+<ul><li>量子线路实验室：运行典型量子线路，展示量子态变化、测量概率和采样结果。</li><li>轻量量子模拟器：实现状态矢量模拟、采样测量或期望值计算，并与公开框架结果对比。</li><li>框架适配工具：支持主流量子框架或线路格式的导入、执行与验证。</li><li>算法演示样例库：围绕搜索、优化、变分算法等提供可复现实验。</li><li>可视化分析工具：展示线路结构、门操作序列、概率分布、运行时间或资源消耗。</li></ul>
+<p>在完成自主选题的基础上，参赛队伍须将面向量子模拟与算法执行的 <code>Agent/Skills</code> 能力集成到作品中，支持通过自然语言描述量子线路或算法需求，并完成线路构建、算法配置、模拟执行、结果分析与可视化展示等关键流程，体现智能体对量子计算模拟与算法执行流程的支撑作用。</p>
+<h2>3. 基础完成要求</h2>
+<ul><li>至少给出 <code>1</code> 个典型量子线路或算法示例的运行结果。</li><li>提供正确性验证，例如与公开框架结果、小规模精确结果或解析结果对比。</li><li>提供简要说明，介绍系统设计、计算流程、结果含义等，并明确GPU（如使用）参与环节和承担任务。</li><li>集成面向量子模拟与算法执行的 <code>Agent/Skills</code> 能力，支持通过自然语言完成一个完整任务闭环。</li></ul>
+<h2>4. 提交与评审</h2>
+<p>提交内容包括项目说明文档、可运行代码或工程、单卡运行日志/截图/结果文件、正确性验证说明和简要展示材料。作品需说明 <code>Agent/Skills</code> 能力的任务流程、调用链路、输入输出形式、自然语言交互方式和展示样例。</p>
+<p>评审重点关注作品的可运行性、结果可信度、量子模拟或算法执行过程的清晰度、文档与展示材料的完整性；同时关注 <code>Agent/Skills</code> 的任务闭环完整性、自然语言交互效果，以及其对量子计算模拟与算法执行流程的组织支撑能力。</p>
+<h2>赛题二 量子应用与跨界探索</h2>
+<h2>1. 赛题简介</h2>
+<p>随着量子算法、量子模拟及智能体技术持续革新，量子计算在组合优化、机器学习、科学计算、金融分析、材料研发等领域应用优势日益凸显，可为复杂问题决策、前沿科学探索和跨领域创新实践提供全新技术支撑。加快实现量子计算技术与现实业务场景深度融合，构建可直观展示、可数据分析、可实践验证的应用原型或方案，是推动量子技术落地应用的重要手段。</p>
+<p>本题立足实际应用场景开展量子算法实践研究，鼓励参赛队伍依托量子线路构建、量子模拟运算技术，结合各类行业实际需求，打造兼具实用价值与创新表现力的应用成果，可广泛适配行业问题求解、工程仿真、科学计算与数据分析等场景。在此基础上，作品应融入 <code>Agent/Skills</code> 智能化能力，进一步简化操作流程，提升智能调度能力、场景适配能力与综合展示成效。</p>
+<h2>2. 可选方向</h2>
+<p>以下方向仅作为参考示例，参赛队伍可围绕量子计算应用与跨界探索目标自主选题，也可结合真实场景需求自行拓展。</p>
+<ul><li>智慧物流/城市配送：面向小规模路线规划、订单分配或任务调度问题，构建量子优化模型，展示求解过程、结果解释与经典方法对比。</li><li>金融科技/资产配置：围绕小型投资组合选择、风险收益平衡或金融衍生品定价等问题，探索量子优化或量子模拟方法，并提供可解释结果分析。</li><li>工程仿真/方程求解：面向芯片散热、污染物扩散、流体输运等行业问题，基于 UnitaryLab 等工具探索偏微分方程的量子求解流程，展示建模过程、求解结果、误差分析与经典方法对比。</li><li>科学计算/材料模拟：面向小分子体系或基础物理模型，展示量子模拟、量子求解或量子态演化流程。</li><li>AI 应用/数据分析：结合小型分类、特征映射、聚类分析或异常检测等任务，探索量子机器学习方法的建模、训练与结果对比。</li></ul>
+<p>在完成自主选题的基础上，参赛队伍须围绕所选择的行业应用场景，将 <code>Agent/Skills</code> 能力集成到作品中，使其能够理解所选场景任务，辅助完成量子计算方案设计，并组织实验执行、结果解释与应用分析，体现智能体在连接行业问题与量子计算方法中的作用。</p>
+<p>参赛队伍可结合实际选题选择合适的量子计算工具与框架，推荐工具包括 <code>UnitaryLab</code> 模拟器及算法库(https://unitarylab.com/)、Qiskit、PennyLane、Cirq 等公开框架。</p>
+<h2>3. 基础完成要求</h2>
+<ul><li>构建一个完整应用原型，包含清晰场景、输入、计算过程和输出结果。</li><li>作品中包含真实量子线路、量子模拟或量子算法执行过程。</li><li>至少提供 <code>1</code> 个可复现实验案例，介绍量子方法在该场景的具体作用、GPU（如使用）参与环节和承担任务等。</li><li>集成面向行业应用探索的 <code>Agent/Skills</code> 能力，支持围绕所选场景通过自然语言完成一个完整应用任务闭环。</li></ul>
+<h2>4. 提交与评审</h2>
+<p>提交内容包括应用原型或系统代码、场景说明文档、单卡运行日志/截图/结果文件、结果分析与正确性说明、演示视频或展示材料。作品需说明 <code>Agent/Skills</code> 能力的任务流程、调用链路、输入输出形式、自然语言交互方式、能力边界和展示样例。</p>
+<p>评审重点关注应用场景的清晰度和展示价值、量子计算与核心流程的结合深度、结果的可解释性与可复现性；同时关注 <code>Agent/Skills</code> 的任务闭环完整性、自然语言交互效果，以及其对量子应用探索流程的组织支撑能力。</p>
+<h2>统一要求</h2>
+<ul><li>参赛项目优选壁仞GPU平台实现，提交材料中需说明所使用平台、运行环境和核心计算环节。</li><li>可使用公开开源资源，但须注明来源。</li><li>建议单个演示样例的运行时间控制在 <code>10</code> 分钟以内，完整评测脚本控制在 <code>30</code> 分钟以内。</li></ul>
+<h2>壁仞科技  ·  开发者专属资源包</h2>
+<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h3>API Key</h3>
+<p>限量1000份</p>
+<p>剩余 998 / 999</p>
+<p>欢迎报名参加本次大赛，此次大赛模型算力由壁仞科技支持，开放周期为7.1-7.15，届时各位可调用stepfun3.5和minimax2.5进行AI辅助开发，敬请期待！！！</p>
+<h3>国产算力开发环境</h3>
+<p>模型与算子赛道量子计算赛道</p>
+<p>限量500份</p>
+<p>剩余 499 / 499</p>
+<p>恭喜您成为壁仞专属赛道开发者，我们将为您提供壁仞GPU开发环境，环境将于7.1正式开放申领，数量有限，先到先得！</p>
+<h2>社群交流</h2></template>
+<template id="td-operator"><h2>赛事简介</h2>
+<p>面向 AI for Science（AI4S）领域的核心计算算子与科学计算模型，鼓励参赛者依托壁仞 BIREN GPU 芯片及配套软件栈，采用 AI Agent 辅助开发模式，结合壁仞自研的模型/算子开发Agent，完成高性能算子实现与科学计算模型部署，形成可运行、可验证、可复现的成果。本赛道设置 1 道必选题和 3 道进阶题（三选一），参赛队伍须完成必选题，并从进阶题中任选一道完成。</p>
+<h2>赛道特色：Agent 驱动的国产 GPU 开发范式（必须项）</h2>
+<p>本赛道要求参赛者采用 AI Agent 辅助开发模式，结合壁仞自研模型/算子开发 Agent 与通用 AI 编程工具（如 Claude Code、Cursor 等），实践&quot;人机协同&quot;的高效开发范式。参赛者必须在开发过程中记录 Agent 交互日志，展示如何利用 Agent 进行算子设计与调试、性能瓶颈分析、模型适配与优化、结果验证与迭代。Agent 辅助开发记录为必须提交材料，未提交视为不合格。Agent 辅助开发的深度、效率提升效果及工程实践质量将作为重要评审维度。</p>
+<h2>一、必选题：Spectral Convolution 算子开发</h2>
+<h2>【AI4S 算子】Fourier Neural Operator 核心算子实现</h2>
+<h3>1. 赛题简介</h3>
+<p>Fourier Neural Operator（FNO）是 AI for Science 领域最具代表性的神经算子架构之一，广泛应用于流体力学模拟、天气预报、地下水流预测等偏微分方程（PDE）求解场景。FNO 的核心创新在于 Spectral Convolution（谱卷积）算子——在傅里叶频域空间中学习全局卷积核，相比传统卷积具有分辨率无关性和全局感受野等优势。</p>
+<p>Spectral Convolution 的计算流程为：</p>
+<p>输入特征 x(shape: [B, C_in, H, W]) 
+→ FFT 变换到频域 
+→ 频域复数矩阵乘法（可学习权重 R，shape: [C_in, C_out, modes, modes]） 
+→ IFFT 变换回空间域 
+→ 输出特征 y(shape: [B, C_out, H, W])</p>
+<p>本题要求参赛者在壁仞 GPU 平台上实现高性能的 Spectral Convolution 算子，并通过正确性验证和性能测试。注意：FFT 运算建议优先支持空间维度为 2 的幂次（如 64, 128, 256）的输入 shape，以获得最佳计算性能。</p>
+<h3>2. 任务要求</h3>
+<p>基础要求（必须完成）：</p>
+<p>实现 2D Spectral Convolution 算子的前向计算（Forward）。</p>
+<p>支持输入 shape 为 [B, C_in, H, W]，输出 shape 为 [B, C_out, H, W]。</p>
+<p>支持可配置的傅里叶模态截断数 modes（仅保留低频分量）。</p>
+<p>首选在壁仞 BIREN GPU 芯片上完成运行。</p>
+<p>与 PyTorch 参考实现（CPU/CUDA）进行数值正确性对比，相对误差 ≤ 1e-4。</p>
+<p>进阶要求（加分项）：</p>
+<p>实现反向传播（Backward），支持端到端训练。</p>
+<p>支持 3D Spectral Convolution（输入 shape [B, C, D, H, W]）。</p>
+<p>进行算子性能优化（显存优化、kernel 融合、计算并行度提升等）。</p>
+<p>提供不同分辨率（64×64, 128×128, 256×256，均为 2 的幂次）下的性能对比报告。</p>
+<p>展示 Agent 辅助开发过程（调试日志、性能分析对话记录）。</p>
+<h3>3. 完整PyTorch参考实现</h3>
+<p>以下为完整的可运行PyTorch参考实现，包含前向计算、反向传播、正确性验证和性能测试。该实现仅供算法逻辑参考。参赛者在 BIREN GPU 平台上实现时，建议采用以下方式之一：（1）使用 SUPA 源码直接实现算子核心计算逻辑，通过算子串联构建完整模型；（2）通过 torch.extension（C++/SUPA 扩展）封装自定义算子，在 Python 层组装模型。不建议直接使用原生 PyTorch 算子拼接模型，需体现对底层计算的理解和优化能力。</p>
+<h3>3.1 SpectralConv2d 算子实现（含前向和反向）</h3>
+<pre class="td-code">import torch
+import torch.nn as nn
+import torch.fft
+import time
+import numpy as np
+
+class SpectralConv2d(nn.Module):
+    &quot;&quot;&quot;2D Spectral Convolution 算子 - FNO核心组件
+
+    计算流程: FFT -&gt; 频域复数矩阵乘(截断低频) -&gt; IFFT
+    &quot;&quot;&quot;
+    def __init__(self, in_channels, out_channels, modes1, modes2):
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.modes1 = modes1  # 第一维频率截断模态数
+        self.modes2 = modes2  # 第二维频率截断模态数
+
+        scale = 1.0 / (in_channels * out_channels)
+        # 可学习的频域权重 (两组: 正频率区域 + 负频率区域)
+        self.weights1 = nn.Parameter(
+            scale * torch.rand(in_channels, out_channels, modes1, modes2, dtype=torch.cfloat))
+        self.weights2 = nn.Parameter(
+            scale * torch.rand(in_channels, out_channels, modes1, modes2, dtype=torch.cfloat))
+
+    def compl_mul2d(self, input, weights):
+        &quot;&quot;&quot;复数批量矩阵乘: (B, C_in, H, W) x (C_in, C_out, H, W) -&gt; (B, C_out, H, W)&quot;&quot;&quot;
+        return torch.einsum(&quot;bixy,ioxy-&gt;boxy&quot;, input, weights)
+
+    def forward(self, x):
+        &quot;&quot;&quot;
+        前向计算
+        Args:
+            x: [B, C_in, H, W] 实数张量
+        Returns:
+            [B, C_out, H, W] 实数张量
+        &quot;&quot;&quot;
+        B, C_in, H, W = x.shape
+
+        # Step 1: 2D实数FFT (rfft2), 输出shape: [B, C_in, H, W//2+1] (复数)
+        x_ft = torch.fft.rfft2(x)
+
+        # Step 2: 在频域进行低频模态的复数矩阵乘
+        out_ft = torch.zeros(B, self.out_channels, H, W // 2 + 1,
+                            dtype=torch.cfloat, device=x.device)
+
+        # 正频率部分 [:modes1, :modes2]
+        out_ft[:, :, :self.modes1, :self.modes2] = \
+            self.compl_mul2d(x_ft[:, :, :self.modes1, :self.modes2], self.weights1)
+
+        # 负频率部分 [-modes1:, :modes2]
+        out_ft[:, :, -self.modes1:, :self.modes2] = \
+            self.compl_mul2d(x_ft[:, :, -self.modes1:, :self.modes2], self.weights2)
+
+        # Step 3: 逆FFT回空间域
+        x_out = torch.fft.irfft2(out_ft, s=(H, W))
+        return x_out
+
+class SpectralConv3d(nn.Module):
+    &quot;&quot;&quot;3D Spectral Convolution 算子 (进阶)&quot;&quot;&quot;
+    def __init__(self, in_channels, out_channels, modes1, modes2, modes3):
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.modes1 = modes1
+        self.modes2 = modes2
+        self.modes3 = modes3
+
+        scale = 1.0 / (in_channels * out_channels)
+        self.weights1 = nn.Parameter(scale * torch.rand(
+            in_channels, out_channels, modes1, modes2, modes3, dtype=torch.cfloat))
+        self.weights2 = nn.Parameter(scale * torch.rand(
+            in_channels, out_channels, modes1, modes2, modes3, dtype=torch.cfloat))
+        self.weights3 = nn.Parameter(scale * torch.rand(
+            in_channels, out_channels, modes1, modes2, modes3, dtype=torch.cfloat))
+        self.weights4 = nn.Parameter(scale * torch.rand(
+            in_channels, out_channels, modes1, modes2, modes3, dtype=torch.cfloat))
+
+    def compl_mul3d(self, input, weights):
+        return torch.einsum(&quot;bixyz,ioxyz-&gt;boxyz&quot;, input, weights)
+
+    def forward(self, x):
+        B, C, D, H, W = x.shape
+        x_ft = torch.fft.rfftn(x, dim=[-3, -2, -1])
+
+        out_ft = torch.zeros(B, self.out_channels, D, H, W // 2 + 1,
+                            dtype=torch.cfloat, device=x.device)
+
+        out_ft[:, :, :self.modes1, :self.modes2, :self.modes3] = \
+            self.compl_mul3d(x_ft[:, :, :self.modes1, :self.modes2, :self.modes3], self.weights1)
+        out_ft[:, :, -self.modes1:, :self.modes2, :self.modes3] = \
+            self.compl_mul3d(x_ft[:, :, -self.modes1:, :self.modes2, :self.modes3], self.weights2)
+        out_ft[:, :, :self.modes1, -self.modes2:, :self.modes3] = \
+            self.compl_mul3d(x_ft[:, :, :self.modes1, -self.modes2:, :self.modes3], self.weights3)
+        out_ft[:, :, -self.modes1:, -self.modes2:, :self.modes3] = \
+            self.compl_mul3d(x_ft[:, :, -self.modes1:, -self.modes2:, :self.modes3], self.weights4)
+
+        x_out = torch.fft.irfftn(out_ft, s=(D, H, W))
+        return x_out</pre>
+<h3>3.2 正确性验证与性能测试脚本</h3>
+<pre class="td-code">def test_correctness():
+    &quot;&quot;&quot;正确性验证: 对比自定义实现与参考实现的数值一致性&quot;&quot;&quot;
+    device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+    # 参数配置
+    B, C_in, C_out = 4, 32, 64
+    H, W = 128, 128
+    modes1, modes2 = 16, 16
+
+    # 初始化
+    model = SpectralConv2d(C_in, C_out, modes1, modes2).to(device)
+    x = torch.randn(B, C_in, H, W, device=device)
+
+    # 前向计算
+    with torch.no_grad():
+        y = model(x)
+
+    print(f&quot;输入 shape: {x.shape}&quot;)
+    print(f&quot;输出 shape: {y.shape}&quot;)
+    print(f&quot;输出范围: [{y.min().item():.6f}, {y.max().item():.6f}]&quot;)
+
+    # 反向传播验证
+    x.requires_grad_(True)
+    y = model(x)
+    loss = y.sum()
+    loss.backward()
+    print(f&quot;梯度 shape: {x.grad.shape}&quot;)
+    print(f&quot;梯度范围: [{x.grad.min().item():.6f}, {x.grad.max().item():.6f}]&quot;)
+    print(&quot;正确性验证通过!&quot;)
+    return True
+
+def benchmark_performance():
+    &quot;&quot;&quot;性能测试: 不同分辨率下的执行时间和显存占用&quot;&quot;&quot;
+    device = torch.device(&quot;cuda&quot;)
+    results = []
+
+    resolutions = [(64, 64), (128, 128), (256, 256)]
+    B, C_in, C_out = 4, 32, 64
+    modes1, modes2 = 16, 16
+
+    for H, W in resolutions:
+        model = SpectralConv2d(C_in, C_out, modes1, modes2).to(device)
+        x = torch.randn(B, C_in, H, W, device=device)
+
+        # Warmup
+        for _ in range(10):
+            _ = model(x)
+        torch.cuda.synchronize()
+
+        # 前向计时
+        start = time.time()
+        for _ in range(100):
+            _ = model(x)
+        torch.cuda.synchronize()
+        fwd_time = (time.time() - start) / 100 * 1000  # ms
+
+        # 显存统计
+        torch.cuda.reset_peak_memory_stats()
+        _ = model(x)
+        mem = torch.cuda.max_memory_allocated() / 1024**2  # MB
+
+        results.append({
+            &quot;resolution&quot;: f&quot;{H}x{W}&quot;,
+            &quot;forward_time_ms&quot;: f&quot;{fwd_time:.3f}&quot;,
+            &quot;memory_MB&quot;: f&quot;{mem:.1f}&quot;,
+        })
+        print(f&quot;分辨率 {H}x{W}: 前向 {fwd_time:.3f}ms, 显存 {mem:.1f}MB&quot;)
+
+    return results
+
+if __name__ == &quot;__main__&quot;:
+    test_correctness()
+    print(&quot;\n--- 性能测试 ---&quot;)
+    benchmark_performance()</pre>
+<h3>5. 评测标准</h3>
+<p>维度权重说明</p>
+<p>正确性35%与参考实现的数值一致性（相对误差≤1e-4）</p>
+<p>性能25%算子执行时间、显存占用</p>
+<p>代码质量10%可读性、模块化、SUPA/extension实现质量</p>
+<p>Agent 开发15%Agent 辅助开发的深度和效果（必须提交）</p>
+<p>扩展能力15%进阶功能实现情况（3D、反向传播等）</p>
+<h2>二、进阶题（三选一）</h2>
+<h2>进阶题 A：Physics-Informed Neural Network 求解热传导方程</h2>
+<h3>【AI4S 模型】PINN 求解二维稳态热传导问题</h3>
+<h3>1. 赛题简介</h3>
+<p>Physics-Informed Neural Network（PINN）是将物理定律嵌入神经网络训练过程的经典方法，通过将 PDE 残差作为损失函数的一部分，实现无需标注数据即可求解微分方程。</p>
+<p>求解目标: 二维稳态热传导方程（Laplace/Poisson 方程）:</p>
+<p>∂²u/∂x² + ∂²u/∂y² = f(x, y), (x, y) ∈ Ω</p>
+<p>应用场景：芯片散热分析、建筑热工设计、地热资源评估。</p>
+<h3>2. 任务要求</h3>
+<p>基础要求：</p>
+<p>实现一个 MLP 网络（≥ 4 层，每层 ≥ 64 个神经元）作为 PDE 解的近似。</p>
+<p>构造 PINN 损失函数：PDE 残差损失 + 边界条件损失。</p>
+<p>在规则域（如单位正方形 [0,1]×[0,1]）上训练并求解。</p>
+<p>提供至少 1 个 benchmark 案例（如已知解析解的问题），验证相对 L2 误差 ≤ 1%。</p>
+<p>首选在壁仞 BIREN GPU 芯片上完成模型搭建与推理验证（训练为加分项，非硬性要求）。</p>
+<h3>3. 完整PyTorch参考实现</h3>
+<h3>3.1 PINN模型与训练完整实现</h3>
+<pre class="td-code">import torch
+import torch.nn as nn
+import numpy as np
+import matplotlib.pyplot as plt
+
+class PINN(nn.Module):
+    &quot;&quot;&quot;Physics-Informed Neural Network for 2D heat equation&quot;&quot;&quot;
+    def __init__(self, layers=[2, 64, 64, 64, 64, 1], activation=nn.Tanh):
+        super().__init__()
+        modules = []
+        for i in range(len(layers) - 1):
+            modules.append(nn.Linear(layers[i], layers[i+1]))
+            if i &lt; len(layers) - 2:
+                modules.append(activation())
+        self.network = nn.Sequential(*modules)
+        self._initialize_weights()
+
+    def _initialize_weights(self):
+        for m in self.modules():
+            if isinstance(m, nn.Linear):
+                nn.init.xavier_normal_(m.weight)
+                nn.init.zeros_(m.bias)
+
+    def forward(self, x):
+        &quot;&quot;&quot;x: [N, 2] -&gt; u: [N, 1]&quot;&quot;&quot;
+        return self.network(x)
+
+class PINNSolver:
+    &quot;&quot;&quot;PINN求解器: 求解 Δu = f(x,y) on [0,1]x[0,1]&quot;&quot;&quot;
+
+    def __init__(self, device=&#x27;cuda&#x27;):
+        self.device = torch.device(device if torch.cuda.is_available() else &#x27;cpu&#x27;)
+        self.model = PINN(layers=[2, 128, 128, 128, 128, 1]).to(self.device)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=1e-3)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=2000, gamma=0.5)
+
+    def exact_solution(self, x, y):
+        &quot;&quot;&quot;解析解: u(x,y) = sin(πx)·sin(πy)&quot;&quot;&quot;
+        return torch.sin(np.pi * x) * torch.sin(np.pi * y)
+
+    def source_term(self, x, y):
+        &quot;&quot;&quot;源项: f(x,y) = -2π²·sin(πx)·sin(πy)&quot;&quot;&quot;
+        return -2 * np.pi**2 * torch.sin(np.pi * x) * torch.sin(np.pi * y)
+
+    def compute_pde_residual(self, xy):
+        &quot;&quot;&quot;计算PDE残差: Δu - f = 0&quot;&quot;&quot;
+        xy.requires_grad_(True)
+        u = self.model(xy)
+
+        # 一阶导数
+        grad_u = torch.autograd.grad(u, xy, grad_outputs=torch.ones_like(u),
+                                      create_graph=True)[0]
+        u_x = grad_u[:, 0:1]
+        u_y = grad_u[:, 1:2]
+
+        # 二阶导数
+        u_xx = torch.autograd.grad(u_x, xy, grad_outputs=torch.ones_like(u_x),
+                                    create_graph=True)[0][:, 0:1]
+        u_yy = torch.autograd.grad(u_y, xy, grad_outputs=torch.ones_like(u_y),
+                                    create_graph=True)[0][:, 1:2]
+
+        # PDE残差: Δu - f
+        f = self.source_term(xy[:, 0:1], xy[:, 1:2])
+        residual = u_xx + u_yy - f
+        return residual
+
+    def compute_bc_loss(self, n_bc=200):
+        &quot;&quot;&quot;计算边界条件损失: u = 0 on ∂Ω&quot;&quot;&quot;
+        # 四条边界
+        t = torch.linspace(0, 1, n_bc, device=self.device).unsqueeze(1)
+        zeros = torch.zeros_like(t)
+        ones = torch.ones_like(t)
+
+        bc_points = torch.cat([
+            torch.cat([t, zeros], dim=1),     # 下边 y=0
+            torch.cat([t, ones], dim=1),      # 上边 y=1
+            torch.cat([zeros, t], dim=1),     # 左边 x=0
+            torch.cat([ones, t], dim=1),      # 右边 x=1
+        ], dim=0)
+
+        u_bc = self.model(bc_points)
+        return torch.mean(u_bc**2)
+
+    def train(self, n_epochs=10000, n_interior=2000, n_bc=200):
+        &quot;&quot;&quot;训练PINN&quot;&quot;&quot;
+        losses = []
+        for epoch in range(n_epochs):
+            self.optimizer.zero_grad()
+
+            # 内部采样点
+            xy_interior = torch.rand(n_interior, 2, device=self.device)
+
+            # PDE残差损失
+            residual = self.compute_pde_residual(xy_interior)
+            loss_pde = torch.mean(residual**2)
+
+            # 边界条件损失
+            loss_bc = self.compute_bc_loss(n_bc)
+
+            # 总损失
+            loss = loss_pde + 100.0 * loss_bc  # 边界条件权重更大
+
+            loss.backward()
+            self.optimizer.step()
+            self.scheduler.step()
+
+            losses.append(loss.item())
+
+            if (epoch + 1) % 1000 == 0:
+                l2_err = self.compute_l2_error()
+                print(f&quot;Epoch {epoch+1}: Loss={loss.item():.6f}, &quot;
+                      f&quot;PDE={loss_pde.item():.6f}, BC={loss_bc.item():.6f}, &quot;
+                      f&quot;L2 Error={l2_err:.6f}&quot;)
+
+        return losses
+
+    def compute_l2_error(self, n=100):
+        &quot;&quot;&quot;计算相对L2误差&quot;&quot;&quot;
+        x = torch.linspace(0, 1, n, device=self.device)
+        y = torch.linspace(0, 1, n, device=self.device)
+        X, Y = torch.meshgrid(x, y, indexing=&#x27;ij&#x27;)
+        xy = torch.stack([X.flatten(), Y.flatten()], dim=1)
+
+        with torch.no_grad():
+            u_pred = self.model(xy).reshape(n, n)
+        u_exact = self.exact_solution(X, Y)
+
+        l2_error = torch.norm(u_pred - u_exact) / torch.norm(u_exact)
+        return l2_error.item()
+
+    def visualize(self, save_path=&#x27;pinn_result.png&#x27;):
+        &quot;&quot;&quot;可视化结果&quot;&quot;&quot;
+        n = 100
+        x = torch.linspace(0, 1, n, device=self.device)
+        y = torch.linspace(0, 1, n, device=self.device)
+        X, Y = torch.meshgrid(x, y, indexing=&#x27;ij&#x27;)
+        xy = torch.stack([X.flatten(), Y.flatten()], dim=1)
+
+        with torch.no_grad():
+            u_pred = self.model(xy).reshape(n, n).cpu().numpy()
+        u_exact = self.exact_solution(X, Y).cpu().numpy()
+
+        fig, axes = plt.subplots(1, 3, figsize=(15, 4))
+        im0 = axes[0].imshow(u_exact, extent=[0,1,0,1], origin=&#x27;lower&#x27;, cmap=&#x27;hot&#x27;)
+        axes[0].set_title(&#x27;Exact Solution&#x27;)
+        plt.colorbar(im0, ax=axes[0])
+
+        im1 = axes[1].imshow(u_pred, extent=[0,1,0,1], origin=&#x27;lower&#x27;, cmap=&#x27;hot&#x27;)
+        axes[1].set_title(&#x27;PINN Prediction&#x27;)
+        plt.colorbar(im1, ax=axes[1])
+
+        im2 = axes[2].imshow(np.abs(u_pred - u_exact), extent=[0,1,0,1], origin=&#x27;lower&#x27;, cmap=&#x27;hot&#x27;)
+        axes[2].set_title(&#x27;Absolute Error&#x27;)
+        plt.colorbar(im2, ax=axes[2])
+
+        plt.tight_layout()
+        plt.savefig(save_path, dpi=150)
+        print(f&quot;结果已保存到 {save_path}&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    solver = PINNSolver(device=&#x27;cuda&#x27;)
+    losses = solver.train(n_epochs=10000)
+    l2_err = solver.compute_l2_error()
+    print(f&quot;\n最终相对L2误差: {l2_err:.6f}&quot;)
+    solver.visualize()</pre>
+<h3>5. 评测标准</h3>
+<p>维度权重说明</p>
+<p>正确性30%与解析解/参考解的误差（相对L2误差≤1%）</p>
+<p>模型搭建30%模型结构实现完整性、算子串联合理性</p>
+<p>性能10%训练收敛速度、推理延迟（加分项）</p>
+<p>可视化15%结果展示的清晰度和美观度</p>
+<p>Agent 开发15%Agent 辅助开发记录（必须提交）</p>
+<h2>进阶题 B：图神经网络预测分子性质</h2>
+<h3>【AI4S 模型】GNN 分子性质预测模型</h3>
+<h3>1. 赛题简介</h3>
+<p>分子性质预测是药物发现、材料设计、化学合成规划的基础任务。Graph Neural Network（GNN）通过将分子建模为图结构（原子为节点、化学键为边），学习分子的结构-性质映射关系。本题要求在壁仞 GPU 平台上实现一个 GNN 模型，基于 QM9 数据集预测分子性质。</p>
+<p>应用场景：药物先导化合物筛选、新能源材料 HOMO-LUMO gap 预测、毒性预测。</p>
+<h3>2. 任务要求</h3>
+<p>基础要求：</p>
+<p>实现 Message Passing Neural Network（MPNN）或 SchNet 风格的 GNN 模型。</p>
+<p>使用 QM9 数据集（约 13 万个小分子，≤ 9 个重原子）。</p>
+<p>预测至少 1 个分子性质（推荐 HOMO-LUMO gap 或 μ 偶极矩）。</p>
+<p>在标准数据集划分下，报告 MAE（Mean Absolute Error）。</p>
+<p>首选在壁仞 BIREN GPU 芯片上完成模型搭建与推理验证（训练为加分项，非硬性要求）。</p>
+<h3>3. 完整PyTorch参考实现</h3>
+<h3>3.1 MPNN模型实现（纯PyTorch，不依赖PyG）</h3>
+<pre class="td-code">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
+import numpy as np
+
+class EdgeModel(nn.Module):
+    &quot;&quot;&quot;边更新模型&quot;&quot;&quot;
+    def __init__(self, node_dim, edge_dim, hidden_dim):
+        super().__init__()
+        self.edge_mlp = nn.Sequential(
+            nn.Linear(2 * node_dim + edge_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, edge_dim)
+        )
+
+    def forward(self, src, dst, edge_attr):
+        &quot;&quot;&quot;src: [E, node_dim], dst: [E, node_dim], edge_attr: [E, edge_dim]&quot;&quot;&quot;
+        out = torch.cat([src, dst, edge_attr], dim=-1)
+        return self.edge_mlp(out)
+
+class NodeModel(nn.Module):
+    &quot;&quot;&quot;节点更新模型&quot;&quot;&quot;
+    def __init__(self, node_dim, edge_dim, hidden_dim):
+        super().__init__()
+        self.node_mlp = nn.Sequential(
+            nn.Linear(node_dim + edge_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, node_dim)
+        )
+
+    def forward(self, x, edge_index, edge_attr):
+        &quot;&quot;&quot;
+        x: [N, node_dim], edge_index: [2, E], edge_attr: [E, edge_dim]
+        &quot;&quot;&quot;
+        row, col = edge_index  # row-&gt;col 消息传递方向
+        # 聚合邻居边信息
+        agg = torch.zeros_like(x[:, :edge_attr.shape[1]])
+        # scatter_add 实现
+        agg = torch.zeros(x.shape[0], edge_attr.shape[1], device=x.device)
+        agg.scatter_add_(0, col.unsqueeze(1).expand_as(edge_attr), edge_attr)
+
+        out = torch.cat([x, agg], dim=-1)
+        return self.node_mlp(out)
+
+class MPNN(nn.Module):
+    &quot;&quot;&quot;Message Passing Neural Network for molecular property prediction&quot;&quot;&quot;
+    def __init__(self, node_input_dim=11, edge_input_dim=4, hidden_dim=128,
+                 output_dim=1, n_layers=3):
+        super().__init__()
+        self.node_embed = nn.Linear(node_input_dim, hidden_dim)
+        self.edge_embed = nn.Linear(edge_input_dim, hidden_dim)
+
+        self.message_layers = nn.ModuleList()
+        self.update_layers = nn.ModuleList()
+        for _ in range(n_layers):
+            self.message_layers.append(EdgeModel(hidden_dim, hidden_dim, hidden_dim))
+            self.update_layers.append(NodeModel(hidden_dim, hidden_dim, hidden_dim))
+
+        # 全局读出 (readout)
+        self.readout = nn.Sequential(
+            nn.Linear(hidden_dim, hidden_dim),
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim // 2),
+            nn.ReLU(),
+            nn.Linear(hidden_dim // 2, output_dim)
+        )
+
+    def forward(self, x, edge_index, edge_attr, batch):
+        &quot;&quot;&quot;
+        Args:
+            x: [N_total, node_input_dim] 节点特征
+            edge_index: [2, E_total] 边索引
+            edge_attr: [E_total, edge_input_dim] 边特征
+            batch: [N_total] 每个节点属于哪个图
+        Returns:
+            [B, output_dim] 每个图的预测
+        &quot;&quot;&quot;
+        # 嵌入
+        h = self.node_embed(x)
+        e = self.edge_embed(edge_attr)
+
+        # 消息传递
+        for msg_layer, upd_layer in zip(self.message_layers, self.update_layers):
+            row, col = edge_index
+            # 边更新
+            e = e + msg_layer(h[row], h[col], e)
+            # 节点更新
+            h = h + upd_layer(h, edge_index, e)
+
+        # 图级别聚合 (sum pooling)
+        num_graphs = batch.max().item() + 1
+        graph_repr = torch.zeros(num_graphs, h.shape[1], device=h.device)
+        graph_repr.scatter_add_(0, batch.unsqueeze(1).expand_as(h), h)
+
+        # 预测
+        out = self.readout(graph_repr)
+        return out
+
+class SimpleMolDataset(Dataset):
+    &quot;&quot;&quot;简化版分子数据集 (演示用, 实际使用QM9)&quot;&quot;&quot;
+    def __init__(self, n_molecules=1000, max_atoms=9):
+        self.n_molecules = n_molecules
+        self.max_atoms = max_atoms
+        # 模拟数据: 实际应加载QM9
+        self.data = self._generate_dummy_data()
+
+    def _generate_dummy_data(self):
+        data_list = []
+        for _ in range(self.n_molecules):
+            n_atoms = np.random.randint(3, self.max_atoms + 1)
+            x = torch.randn(n_atoms, 11)  # 原子特征 (原子类型one-hot等)
+            # 随机连接
+            edges = []
+            for i in range(n_atoms):
+                for j in range(i+1, min(i+3, n_atoms)):
+                    edges.append([i, j])
+                    edges.append([j, i])
+            edge_index = torch.tensor(edges, dtype=torch.long).t()
+            edge_attr = torch.randn(edge_index.shape[1], 4)  # 边特征
+            y = torch.randn(1)  # 目标性质
+            data_list.append((x, edge_index, edge_attr, y))
+        return data_list
+
+    def __len__(self):
+        return self.n_molecules
+
+    def __getitem__(self, idx):
+        return self.data[idx]
+
+def collate_graphs(batch):
+    &quot;&quot;&quot;将多个图合并为一个大图 (batching)&quot;&quot;&quot;
+    xs, edge_indices, edge_attrs, ys = [], [], [], []
+    batch_idx = []
+    node_offset = 0
+
+    for i, (x, edge_index, edge_attr, y) in enumerate(batch):
+        xs.append(x)
+        edge_indices.append(edge_index + node_offset)
+        edge_attrs.append(edge_attr)
+        ys.append(y)
+        batch_idx.append(torch.full((x.shape[0],), i, dtype=torch.long))
+        node_offset += x.shape[0]
+
+    return (torch.cat(xs, 0), torch.cat(edge_indices, 1),
+            torch.cat(edge_attrs, 0), torch.cat(ys, 0),
+            torch.cat(batch_idx, 0))
+
+def train_gnn():
+    &quot;&quot;&quot;训练GNN模型&quot;&quot;&quot;
+    device = torch.device(&#x27;cuda&#x27; if torch.cuda.is_available() else &#x27;cpu&#x27;)
+
+    # 数据
+    dataset = SimpleMolDataset(n_molecules=5000)
+    train_size = int(0.8 * len(dataset))
+    train_set, val_set = torch.utils.data.random_split(
+        dataset, [train_size, len(dataset) - train_size])
+
+    train_loader = DataLoader(train_set, batch_size=32, shuffle=True, collate_fn=collate_graphs)
+    val_loader = DataLoader(val_set, batch_size=32, collate_fn=collate_graphs)
+
+    # 模型
+    model = MPNN(node_input_dim=11, edge_input_dim=4, hidden_dim=128, output_dim=1).to(device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10, factor=0.5)
+
+    # 训练
+    for epoch in range(100):
+        model.train()
+        total_loss = 0
+        for x, edge_index, edge_attr, y, batch_idx in train_loader:
+            x, edge_index, edge_attr = x.to(device), edge_index.to(device), edge_attr.to(device)
+            y, batch_idx = y.to(device), batch_idx.to(device)
+
+            optimizer.zero_grad()
+            pred = model(x, edge_index, edge_attr, batch_idx)
+            loss = F.mse_loss(pred.squeeze(), y)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+
+        # 验证
+        model.eval()
+        val_mae = 0
+        n_val = 0
+        with torch.no_grad():
+            for x, edge_index, edge_attr, y, batch_idx in val_loader:
+                x, edge_index, edge_attr = x.to(device), edge_index.to(device), edge_attr.to(device)
+                y, batch_idx = y.to(device), batch_idx.to(device)
+                pred = model(x, edge_index, edge_attr, batch_idx)
+                val_mae += torch.abs(pred.squeeze() - y).sum().item()
+                n_val += y.shape[0]
+
+        val_mae /= n_val
+        scheduler.step(val_mae)
+
+        if (epoch + 1) % 10 == 0:
+            print(f&quot;Epoch {epoch+1}: Train Loss={total_loss/len(train_loader):.6f}, Val MAE={val_mae:.6f}&quot;)
+
+    return model
+
+if __name__ == &quot;__main__&quot;:
+    model = train_gnn()
+    print(&quot;训练完成!&quot;)</pre>
+<h3>5. 评测标准</h3>
+<p>维度权重说明</p>
+<p>精度30%预测 MAE 指标（越低越好）</p>
+<p>模型搭建30%模型结构实现完整性、SUPA/extension算子质量</p>
+<p>性能10%训练效率、推理速度（加分项）</p>
+<p>代码质量15%可读性、可复现性</p>
+<p>Agent 开发15%Agent 辅助开发记录（必须提交）</p>
+<h2>进阶题 C：神经算子求解 Navier-Stokes 方程</h2>
+<h3>【AI4S 模型】FNO 求解二维涡度方程</h3>
+<h3>1. 赛题简介</h3>
+<p>Navier-Stokes 方程是描述流体运动的基本方程。Fourier Neural Operator（FNO）通过数据驱动方式学习 PDE 解算子映射，训练完成后可对新的初始条件实现近实时推理。</p>
+<p>求解目标: 给定 t=0 时刻的涡度场 ω₀，预测 t=T 时刻的涡度场 ω_T。</p>
+<p>应用场景：飞行器气动设计、工业流体仿真加速、海洋环流预测。</p>
+<h3>2. 任务要求</h3>
+<p>基础要求：</p>
+<p>基于必选题实现的 Spectral Convolution 算子，搭建完整 FNO 模型（≥ 4 层 Fourier Layer）。</p>
+<p>使用公开的 Navier-Stokes 2D 数据集（64×64 粘度数据集）。</p>
+<p>完成模型训练，报告相对 L2 误差。</p>
+<p>首选在壁仞 BIREN GPU 芯片上完成模型搭建与推理验证（训练为加分项，非硬性要求）。</p>
+<p>可视化预测流场与 ground truth 对比。</p>
+<h3>3. 完整PyTorch参考实现</h3>
+<h3>3.1 完整FNO模型实现</h3>
+<pre class="td-code">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import numpy as np
+import h5py
+from torch.utils.data import Dataset, DataLoader
+
+class SpectralConv2d(nn.Module):
+    &quot;&quot;&quot;2D Spectral Convolution (复用必选题实现)&quot;&quot;&quot;
+    def __init__(self, in_channels, out_channels, modes1, modes2):
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.modes1 = modes1
+        self.modes2 = modes2
+        scale = 1.0 / (in_channels * out_channels)
+        self.weights1 = nn.Parameter(
+            scale * torch.rand(in_channels, out_channels, modes1, modes2, dtype=torch.cfloat))
+        self.weights2 = nn.Parameter(
+            scale * torch.rand(in_channels, out_channels, modes1, modes2, dtype=torch.cfloat))
+
+    def compl_mul2d(self, input, weights):
+        return torch.einsum(&quot;bixy,ioxy-&gt;boxy&quot;, input, weights)
+
+    def forward(self, x):
+        B, C, H, W = x.shape
+        x_ft = torch.fft.rfft2(x)
+        out_ft = torch.zeros(B, self.out_channels, H, W // 2 + 1,
+                            dtype=torch.cfloat, device=x.device)
+        out_ft[:, :, :self.modes1, :self.modes2] = \
+            self.compl_mul2d(x_ft[:, :, :self.modes1, :self.modes2], self.weights1)
+        out_ft[:, :, -self.modes1:, :self.modes2] = \
+            self.compl_mul2d(x_ft[:, :, -self.modes1:, :self.modes2], self.weights2)
+        return torch.fft.irfft2(out_ft, s=(H, W))
+
+class FourierLayer(nn.Module):
+    &quot;&quot;&quot;单个Fourier Layer: spectral conv + skip connection + activation&quot;&quot;&quot;
+    def __init__(self, width, modes1, modes2):
+        super().__init__()
+        self.spectral_conv = SpectralConv2d(width, width, modes1, modes2)
+        self.conv = nn.Conv2d(width, width, 1)  # 1x1卷积作为skip
+        self.norm = nn.InstanceNorm2d(width)
+
+    def forward(self, x):
+        return F.gelu(self.norm(self.spectral_conv(x) + self.conv(x)))
+
+class FNO2d(nn.Module):
+    &quot;&quot;&quot;Fourier Neural Operator for 2D Navier-Stokes&quot;&quot;&quot;
+    def __init__(self, modes1=12, modes2=12, width=32, n_layers=4,
+                 in_channels=12, out_channels=1):
+        super().__init__()
+        self.modes1 = modes1
+        self.modes2 = modes2
+        self.width = width
+
+        # 输入提升
+        self.lift = nn.Conv2d(in_channels + 2, width, 1)  # +2 for grid coordinates
+
+        # Fourier layers
+        self.fourier_layers = nn.ModuleList([
+            FourierLayer(width, modes1, modes2) for _ in range(n_layers)
+        ])
+
+        # 输出投影
+        self.project = nn.Sequential(
+            nn.Conv2d(width, 128, 1),
+            nn.GELU(),
+            nn.Conv2d(128, out_channels, 1)
+        )
+
+    def get_grid(self, shape, device):
+        &quot;&quot;&quot;生成网格坐标&quot;&quot;&quot;
+        B, C, H, W = shape
+        gridx = torch.linspace(0, 1, H, device=device).reshape(1, 1, H, 1).expand(B, 1, H, W)
+        gridy = torch.linspace(0, 1, W, device=device).reshape(1, 1, 1, W).expand(B, 1, H, W)
+        return torch.cat([gridx, gridy], dim=1)
+
+    def forward(self, x):
+        &quot;&quot;&quot;
+        Args:
+            x: [B, T_in, H, W] 输入时间步的涡度场
+        Returns:
+            [B, 1, H, W] 预测的涡度场
+        &quot;&quot;&quot;
+        # 拼接网格坐标
+        grid = self.get_grid(x.shape, x.device)
+        x = torch.cat([x, grid], dim=1)
+
+        # 提升维度
+        x = self.lift(x)
+
+        # Fourier layers
+        for layer in self.fourier_layers:
+            x = layer(x)
+
+        # 投影到输出
+        x = self.project(x)
+        return x
+
+class NavierStokesDataset(Dataset):
+    &quot;&quot;&quot;Navier-Stokes 2D 数据集&quot;&quot;&quot;
+    def __init__(self, data_path, n_train=1000, T_in=10, T_out=1, resolution=64):
+        &quot;&quot;&quot;
+        data_path: HDF5文件路径
+        数据格式: [N, T, H, W] N个样本, T个时间步, H×W空间分辨率
+        &quot;&quot;&quot;
+        self.T_in = T_in
+        self.T_out = T_out
+        self.resolution = resolution
+
+        # 加载数据 (实际使用时从文件加载)
+        # 此处用随机数据演示
+        self.data = torch.randn(n_train, T_in + T_out, resolution, resolution)
+
+    def __len__(self):
+        return self.data.shape[0]
+
+    def __getitem__(self, idx):
+        x = self.data[idx, :self.T_in]   # [T_in, H, W]
+        y = self.data[idx, -self.T_out:]  # [T_out, H, W]
+        return x, y
+
+def train_fno():
+    &quot;&quot;&quot;训练FNO模型&quot;&quot;&quot;
+    device = torch.device(&#x27;cuda&#x27; if torch.cuda.is_available() else &#x27;cpu&#x27;)
+
+    # 超参数
+    modes = 12
+    width = 32
+    n_layers = 4
+    T_in = 10
+    batch_size = 16
+    learning_rate = 1e-3
+    n_epochs = 100
+    resolution = 64
+
+    # 数据
+    train_dataset = NavierStokesDataset(
+        data_path=None, n_train=1000, T_in=T_in, resolution=resolution)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+
+    # 模型
+    model = FNO2d(modes1=modes, modes2=modes, width=width,
+                  n_layers=n_layers, in_channels=T_in, out_channels=1).to(device)
+
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate, weight_decay=1e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=n_epochs)
+
+    print(f&quot;模型参数量: {sum(p.numel() for p in model.parameters()):,}&quot;)
+
+    # 训练循环
+    for epoch in range(n_epochs):
+        model.train()
+        total_loss = 0
+        for x, y in train_loader:
+            x, y = x.to(device), y.to(device)
+
+            optimizer.zero_grad()
+            pred = model(x)
+
+            # 相对L2损失
+            loss = torch.norm(pred - y) / torch.norm(y)
+            loss.backward()
+            optimizer.step()
+            total_loss += loss.item()
+
+        scheduler.step()
+
+        if (epoch + 1) % 10 == 0:
+            avg_loss = total_loss / len(train_loader)
+            print(f&quot;Epoch {epoch+1}/{n_epochs}: Relative L2 Loss = {avg_loss:.6f}&quot;)
+
+    return model
+
+def evaluate_fno(model, test_loader, device):
+    &quot;&quot;&quot;评估FNO模型&quot;&quot;&quot;
+    model.eval()
+    total_l2 = 0
+    n_samples = 0
+
+    with torch.no_grad():
+        for x, y in test_loader:
+            x, y = x.to(device), y.to(device)
+            pred = model(x)
+            l2 = torch.norm(pred - y, dim=(-2, -1)) / torch.norm(y, dim=(-2, -1))
+            total_l2 += l2.sum().item()
+            n_samples += x.shape[0]
+
+    return total_l2 / n_samples
+
+if __name__ == &quot;__main__&quot;:
+    model = train_fno()
+    print(&quot;FNO训练完成!&quot;)</pre>
+<h3>5. 评测标准</h3>
+<p>维度权重说明</p>
+<p>精度25%预测相对 L2 误差（越低越好）</p>
+<p>模型搭建30%模型结构实现完整性、与必选题算子的衔接</p>
+<p>性能10%训练效率、推理速度（加分项）</p>
+<p>可视化20%流场预测对比展示</p>
+<p>Agent 开发15%Agent 辅助开发记录（必须提交）</p>
+<h2>三、统一要求</h2>
+<h2>开发环境</h2>
+<p>硬件平台：首选壁仞 BIREN GPU 芯片</p>
+<p>语言：推荐 Python（模型层）、C++/SUPA（算子 kernel 层）</p>
+<p>框架：推荐基于壁仞 br_pytorch 生态，可使用 PyTorch 兼容接口</p>
+<p>算子实现方式：建议使用 SUPA 源码实现核心算子，或通过 torch.extension 封装自定义算子</p>
+<h2>模型与算子实现要求</h2>
+<p>本赛道的模型题（进阶题 A/B/C）不建议直接使用原生 PyTorch 算子拼接模型。参赛者应体现对底层计算逻辑和 BIREN GPU 架构的深入理解，推荐采用以下实现方式：</p>
+<p>方式一（推荐）：使用 SUPA 源码直接实现模型中的核心算子（如消息传递、注意力计算、PDE残差计算等），通过算子串联构建完整的模型前向/反向计算流程。</p>
+<p>方式二：通过 torch.extension（C++/SUPA 扩展）封装自定义算子，注册为 PyTorch 可调用的 Function/Module，在 Python 层组装模型结构。</p>
+<p>必选题（算子题）必须使用 SUPA 或 torch.extension 实现核心计算 kernel。</p>
+<p>评审时将重点考察：算子实现的正确性与性能、对 BIREN GPU 计算特性的利用程度、kernel 设计的合理性（如内存合并访问、并行度、shared memory 利用等）。</p>
+<h2>Agent 开发要求（必须项）</h2>
+<p>参赛者必须使用壁仞自研模型/算子开发 Agent 或通用 AI 编程工具（如 Claude Code、Cursor 等）辅助开发，Agent 辅助开发记录作为必须提交材料。</p>
+<p>必须提交 Agent 交互日志或截图（至少 5 段有效交互记录），未提交 Agent 记录的作品视为不合格。</p>
+<p>Agent 使用场景要求（至少覆盖以下 3 项）：算子 kernel 设计/调试/优化、模型架构选型与超参搜索、数据预处理与特征工程、性能瓶颈分析与定位、结果分析与可视化代码生成、BIREN GPU 平台适配问题排查</p>
+<p>Agent 辅助开发的深度、效率提升效果及工程实践质量将作为重要评审维度（占比 15%）。</p>
+<h2>提交规范</h2>
+<p>项目源代码（含完整依赖说明，模型题需含 SUPA 源码或 torch.extension 实现）</p>
+<p>运行说明文档（README）</p>
+<p>正确性验证脚本与结果</p>
+<p>性能测试报告</p>
+<p>【必须】Agent 开发日志（至少 5 段有效交互记录，含完整对话或截图）</p>
+<p>单卡运行日志/截图</p>
+<p>展示材料（PPT/视频，可选）</p>
+<h2>运行要求</h2>
+<p>本赛道以考察模型搭建能力为主，模型训练和推理不作为硬性要求（完成训练为加分项）。</p>
+<p>必须提交：可运行的模型前向计算代码，能在 BIREN GPU 上完成单次推理验证。</p>
+<p>不要求多卡训练或分布式运行，优先保证单卡可运行、可复现。</p>
+<p>如提交训练流程：建议控制在 2 小时以内（可提供预训练 checkpoint）。</p>
+<p>完整评测脚本建议控制在 30 分钟以内。</p>
+<h2>四、各题目计算特征汇总</h2>
+<p>题目核心计算BIREN 平台关键依赖显存估算难度评级</p>
+<p>必选题:SpectralConvFFT + 复数einsum + IFFTcuFFT等价库、cfloat支持2-8GB中等</p>
+<p>进阶A:PINNMLP前向 + 二阶autograd完整autograd、create_graph&lt;2GB中等偏低</p>
+<p>进阶B:GNNscatter_add + MLP高效scatter/gather、动态索引&lt;1GB中等</p>
+<p>进阶C:FNO-NS多层FFT+复数乘+Conv2dcuFFT等价、cfloat、大显存3-10GB中等偏高</p>
+<p>关键API依赖清单（BIREN 平台需支持）：</p>
+<p>torch.fft.rfft2 / irfft2 / rfftn / irfftn — FFT操作族</p>
+<p>torch.einsum — 复数张量缩并</p>
+<p>torch.autograd.grad (create_graph=True) — 高阶自动微分</p>
+<p>scatter_add_ — 稀疏聚合操作</p>
+<p>nn.Conv2d, nn.Linear — 标准层</p>
+<p>F.gelu, nn.Tanh, nn.ReLU — 激活函数</p>
+<p>nn.InstanceNorm2d — 归一化层</p>
+<p>Adam, lr_scheduler — 优化器和调度器</p>
+<h2>五、FAQ</h2>
+<p><strong>Q1：必须使用壁仞 GPU 吗？</strong></p>
+<p>A：是的，所有提交首选在壁仞 BIREN GPU 芯片上运行验证。开发阶段可先在其他平台调试。</p>
+<p><strong>Q2：进阶题 C 可以不使用必选题的算子吗？</strong></p>
+<p>A：可以使用其他方式实现 FNO 模型，但复用必选题算子将获得额外加分（体现工程衔接能力）。</p>
+<p><strong>Q3：Agent 日志如何提交？</strong></p>
+<p>A：Agent 开发日志为必须提交材料。可以是 AI 工具的对话导出文件、终端日志截图、或整理后的 Markdown 文档，需体现真实交互过程，至少包含 5 段有效交互记录。</p>
+<p><strong>Q4：数据集需要自己收集吗？</strong></p>
+<p>A：所有题目均提供公开数据集来源。组委会将提供数据集下载链接或预处理脚本。</p>
+<p><strong>Q5：可以使用预训练模型吗？</strong></p>
+<p>A：允许使用公开预训练权重作为初始化，但须注明来源。核心算子必须自主实现。</p>
+<p><strong>Q6：模型题可以直接用原生 PyTorch 实现吗？</strong></p>
+<p>A：不建议。模型题要求参赛者使用 SUPA 源码实现模型的算子串联，或通过 torch.extension 的形式构建自定义算子并组装模型，以体现对底层计算逻辑和 BIREN GPU 架构的理解。</p>
+<h2>壁仞科技  ·  开发者专属资源包</h2>
+<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h3>API Key</h3>
+<p>限量1000份</p>
+<p>剩余 998 / 999</p>
+<p>欢迎报名参加本次大赛，此次大赛模型算力由壁仞科技支持，开放周期为7.1-7.15，届时各位可调用stepfun3.5和minimax2.5进行AI辅助开发，敬请期待！！！</p>
+<h3>国产算力开发环境</h3>
+<p>模型与算子赛道量子计算赛道</p>
+<p>限量500份</p>
+<p>剩余 499 / 499</p>
+<p>恭喜您成为壁仞专属赛道开发者，我们将为您提供壁仞GPU开发环境，环境将于7.1正式开放申领，数量有限，先到先得！</p>
+<h2>社群交流</h2></template>
+<template id="td-free"><h2>赛事简介</h2>
+<p>当 <em>AI4S（AI for Science）</em> 在生命、物质、地球等硬科技领域掀起范式革命的同时，人文、艺术与社会科学领域同样亟需一场属于自己的智能化转型——这就是  <em>AI4SS（AI for Social Science）</em>  所指向的广阔天地。
+作为本届大赛 唯一面向全社会开放的自由赛道 ，我们以 「科艺融合 × 通用智能」 为核心命题，强调跨学科融合与广泛通用性，特别鼓励来自历史、考古、文学、艺术、设计、传媒、教育、心理、社会、经济、管理、法律等人文社科领域 的研究者、教育者、创作者与开发者积极参赛。
+你不必拥有深厚的算法底色——只要在自己的专业领域沉淀过独特的方法、流程、知识体系或审美判断，都可将其提炼为标准化的 AI Skills 或 Agent，沉淀至书生科学发现平台（Intern Discovery）SCP 广场，让属于人文社科的智慧，借助 AI 实现广泛流动与价值放大。</p>
+<h2>参考方向 · 自主选题</h2>
+<p>赛道命题完全开放，以下方向供参考（详见《开放赛道》具体命题）：</p>
+<ul><li>AI 科研助理：面向文献检索、论文阅读、社科调研、实验/田野复现等场景，构建跨学科智能化研究辅助工具；</li><li>数字人文：以碑帖、古籍、文物、档案、影像等为对象，融合 AI 图像修复、古文 OCR、知识图谱等技术，构建人文知识网络；</li><li>艺术科技：融合计算机视觉、生成式 AI 与艺术美学，打造名画风格迁移、艺术再创作、动态艺术视频等创作平台；</li><li>其他方向：教育智能体、文化传播 Agent、商业洞察助手、政策分析工具、文创设计平台、城市文化 Agent 等均欢迎自由命题。</li></ul>
+<h2>加分项</h2>
+<p>作品在社会治理、文化传承、文创产业、教育普及、商业创新、城市更新等真实社会、文化、经济、产业场景中具备清晰应用价值与落地路径者，将在评审中获得显著加分。
+让 AI 不止于硬科技实验室，更走进博物馆、图书馆、艺术工作室、社会田野与商业现场——这是属于科艺融合与人文社科的 AI 时刻。</p>
+<h2>参考赛题一：科研能力提炼方向</h2>
+<h2>方向说明</h2>
+<p>将科研全链路中的核心能力，封装为可复用的 AI 工具。科研工作涵盖文献调研、假设构建、实验设计、数据分析、成果撰写等完整链路，每个环节都存在大量重复性、可标准化的工作。本方向鼓励参赛者聚焦科研工作流中的具体痛点，将优秀的方法论封装为标准化 Skills。</p>
+<h2>可参考的细分场景</h2>
+<p>科研环节可开发方向示例</p>
+<p>文献阅读与管理论文核心信息自动提取、多篇文献对比分析、研究空白识别</p>
+<p>知识图谱构建领域知识自动建图、概念关联可视化、研究脉络梳理</p>
+<p>实验设计辅助实验方案智能推荐、参数空间探索、对照组自动设计</p>
+<p>数据处理分析科研数据清洗、异常值检测、多维统计分析自动化</p>
+<p>论文写作辅助学术摘要生成、图表描述自动撰写、引用规范检查</p>
+<p>代码与实验复现论文代码自动解析、实验环境一键配置、结果自动对标</p>
+<h2>参考赛题二：数字人文方向</h2>
+<h2>赛题背景</h2>
+<p>古代碑帖与拓片是中华文明的重要载体，然而面临风化破损、识别难度高、资料零散等多重挑战，传统数字化手段难以实现深度保护与研究利用。</p>
+<h2>核心任务</h2>
+<p>以古代碑帖、拓片为数据源，融合 AI 图像修复、古籍 OCR、知识图谱等技术，完成碑帖高清数字化、文字识别与结构化处理，搭建碑帖人文知识网络，实现文物永久保存与学术研究一体化。</p>
+<h2>主要功能方向</h2>
+<ul><li><strong>碑帖图像智能修复</strong>：AI 去污渍、超分辨率重建，修复残损笔画</li><li><strong>古籍专用 OCR 识别</strong>：适配多书体，精准识别异体字与模糊字</li><li><strong>文本结构化处理</strong>：自动断句、加注、标准化录入元数据</li><li><strong>人文知识网络构建</strong>：抽取人物、地名、历史事件，搭建知识图谱</li><li><strong>智能检索与可视化</strong>：支持多维检索，生成时间轴与人物关系网</li></ul>
+<h2>参考赛题三：艺术科技方向</h2>
+<h2>赛题背景</h2>
+<p>经典艺术作品蕴含深厚的美学逻辑与创作智慧，然而艺术学习门槛高、创意设计成本大、传统 AI 绘画同质化严重等问题，制约了艺术智慧的广泛传播与现代化应用。</p>
+<h2>核心任务</h2>
+<p>融合计算机视觉与生成式 AI 技术，以世界名画、古典画作为基础数据集，打造专业化 AI 艺术创作平台，实现名画风格解析、风格迁移、原创艺术生成与艺术视频制作，打通古典艺术与现代 AI 创作的边界。</p>
+<h2>主要功能方向</h2>
+<ul><li><strong>名画风格解析</strong>：AI 拆解构图、笔触、光影、配色与流派特征</li><li><strong>高精度风格迁移</strong>：一键复刻梵高、莫奈、国画等经典画风</li><li><strong>智能艺术原创生成</strong>：输入文字或草图，结合名画美学逻辑生成原创作品</li><li><strong>画作修复与二次创作</strong>：老旧名画修复、残缺画作补全</li><li><strong>艺术风格视频生成</strong>：生成油画、水墨、国风等多种艺术风格动画短片</li></ul>
+<h2>统一要求</h2>
+<p>科研能力的价值不应止步于个人的实验室。本赛道致力于将科研工作者在真实研究场景中积累的方法论与工作流程，转化为可被广泛调用的标准化 AI 工具。每一个通过审核的 Skills/Agent，都将永久上架书生科学发现平台 SCP 广场，持续服务于全国科研从业者的日常研究工作，让优秀的科研智慧真正流动起来。</p>
+<h2>参赛形式</h2>
+<ul><li>支持个人或团队参赛，每队不超过 5 人</li><li>参赛者需基于真实科研场景，自主选定研究方向与工具开发目标</li><li>鼓励跨学科组队，科研背景与工程能力的结合将更具竞争优势</li></ul>
+<h2>作品要求</h2>
+<ul><li>参赛作品须以 <strong>AI Skill 或 Agent</strong> 的形式呈现，需具备实际可运行的功能</li><li>作品须聚焦真实科研场景痛点，具备清晰的使用场景与目标用户定位</li><li>提交材料包括：作品 + 功能介绍 PPT + 完整代码</li><li>作品需具备良好的可复用性与可扩展性，文档清晰完整</li></ul>
+<h2>评审机制</h2>
+<ul><li>通过初审的作品将正式上架书生科学发现平台 SCP 广场</li><li><strong>晋级标准</strong>：用户收藏量（Star 数）40% + 专家评审评分 60%</li><li><strong>专家评审维度</strong>：科研价值与实用性、技术实现质量、创新性与差异化、文档完整度与可复用性</li><li>收藏量统计周期：作品上架后至投票截止日（约 30 天）</li><li>Top 200 作品晋级复赛，Top 50 作品受邀参加线下黑客松</li></ul>
+<h2>知识产权</h2>
+<ul><li>参赛作品知识产权归参赛者本人所有</li><li>参赛者授权主办方在平台内展示、推广该作品的非独家授权</li><li>最佳开源贡献奖获奖方需将作品完整开源至书生科学发现平台</li></ul>
+<p>说明：用户收藏量统计周期为作品上架后至投票截止日（约 30 天）。专家评审将在收藏量统计截止后进行，综合两项得分确定晋级名单。</p>
+<h2>壁仞科技  ·  开发者专属资源包</h2>
+<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h3>API Key</h3>
+<p>限量1000份</p>
+<p>剩余 998 / 999</p>
+<p>欢迎报名参加本次大赛，此次大赛模型算力由壁仞科技支持，开放周期为7.1-7.15，届时各位可调用stepfun3.5和minimax2.5进行AI辅助开发，敬请期待！！！</p>
+<h2>社群交流</h2></template>
+</div>
 </body>
 </html>
