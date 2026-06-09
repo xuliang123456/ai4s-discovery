@@ -214,6 +214,25 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .card { background: var(--paper-cool); border: 1px solid var(--rule); border-radius: 2px; padding: 14px 16px; transition: background var(--t-base) var(--ease); }
 [data-theme="dark"] .card, [data-theme="cool"] .card { background: var(--paper-warm); }
 .card:hover { background: var(--paper-warm); }
+/* 赛道卡 · 顶部配图 */
+.track-card { padding: 0 !important; overflow: hidden; }
+.track-card:hover { box-shadow: 0 12px 28px -16px rgba(40,30,20,.4); transform: translateY(-2px); }
+.track-card { transition: background var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease), transform var(--t-base) var(--ease); }
+.tc-figure { position: relative; overflow: hidden; height: 152px; }
+.tc-img { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s var(--ease); }
+.track-card:hover .tc-img { transform: scale(1.07); }
+.tc-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(28,22,16,.62), rgba(28,22,16,.08) 52%, rgba(28,22,16,.10)); }
+/* Hero 两栏 + 配图 */
+.hero-cols { display: grid; grid-template-columns: 1fr 0.74fr; gap: 48px; align-items: center; }
+.hero-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 22px 54px -30px rgba(40,30,20,.55); }
+.hf-img { height: 366px; background-size: cover; background-position: center; }
+.hf-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 13px; background: linear-gradient(to top, rgba(14,11,20,.74), transparent); color: rgba(255,255,255,.86); font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; }
+@media (max-width: 880px){ .hero-cols { grid-template-columns: 1fr; gap: 26px; } .hf-img { height: 230px; } }
+/* 图文区 */
+.media-cols { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; align-items: center; }
+.media-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 18px 44px -30px rgba(40,30,20,.5); }
+.media-figure .mf-img { height: 320px; background-size: cover; background-position: center; }
+@media (max-width: 880px){ .media-cols { grid-template-columns: 1fr; gap: 24px; } .media-figure .mf-img { height: 220px; } }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -376,16 +395,24 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       linear-gradient(var(--rule-soft) 1px, transparent 1px),
       linear-gradient(90deg, var(--rule-soft) 1px, transparent 1px);
       background-size: 56px 56px; opacity:.35; mask-image: radial-gradient(ellipse 80% 80% at 50% 30%, #000, transparent 75%);"></div>
-    <div class="wrap" style="position:relative; padding:80px 24px 72px;">
-      <div class="eyebrow appear" style="margin-bottom:24px;">AI for Science · 书生国智科探挑战赛</div>
-      <h1 class="hero-title appear-2" style="max-width:840px;">让 <em>AI 智能体</em> 像科学家一样<br>自主探索、提出并验证假说</h1>
-      <p class="appear-3" style="font-size:16px; color:var(--ink-soft); max-width:620px; line-height:1.75; margin-top:20px;">
-        Intern·Agent 使 AI 获得类似人类科学家的自主探索能力，开展分析问题、查阅文献、调研反思与实验，实现「想法生成 — 方案设计 — 代码实现 — 实验验证」全流程闭环。
-      </p>
-      <div class="meta-row appear-3" style="margin-top:32px; gap:12px;">
-        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
-        <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
-        <a class="btn btn-ghost btn-lg" href="#/manage">立即体验科研助手</a>
+    <div class="wrap" style="position:relative; padding:72px 24px 64px;">
+      <div class="hero-cols">
+        <div>
+          <div class="eyebrow appear" style="margin-bottom:24px;">AI for Science · 书生国智科探挑战赛</div>
+          <h1 class="hero-title appear-2">让 <em>AI 智能体</em> 像科学家一样<br>自主探索、提出并验证假说</h1>
+          <p class="appear-3" style="font-size:16px; color:var(--ink-soft); max-width:560px; line-height:1.75; margin-top:20px;">
+            Intern·Agent 使 AI 获得类似人类科学家的自主探索能力，开展分析问题、查阅文献、调研反思与实验，实现「想法生成 — 方案设计 — 代码实现 — 实验验证」全流程闭环。
+          </p>
+          <div class="meta-row appear-3" style="margin-top:32px; gap:12px;">
+            <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
+            <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
+            <a class="btn btn-ghost btn-lg" href="#/manage">立即体验科研助手</a>
+          </div>
+        </div>
+        <div class="hero-figure appear-3">
+          <div class="hf-img" style="background-image:url('https://xuliang123456.github.io/ai4s-discovery/assets/hero.jpg');"></div>
+          <div class="hf-cap">仙女座星系 M31 · 图：NASA / JPL-Caltech</div>
+        </div>
       </div>
 
       <!-- 关键数据条 -->
@@ -425,12 +452,29 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     </div>
   </nav>
 
-  <!-- ───────── 平台能力 ───────── -->
+  <!-- ───────── 赛事简介 ───────── -->
   <section class="section" id="about">
     <div class="wrap">
       <div class="section-head">
-        <div class="eyebrow">Platform · 科学发现平台</div>
-        <h2 class="section-hero" style="margin-top:14px;">三件套，支撑从想法到验证的科研闭环</h2>
+        <div class="eyebrow">About · 赛事简介</div>
+        <h2 class="section-hero" style="margin-top:14px;">国芯 · 国模 · 国云 · 国智，四位一体</h2>
+      </div>
+
+      <!-- 图文简介 -->
+      <div class="media-cols" style="margin-bottom:44px;">
+        <div class="media-figure">
+          <div class="mf-img" style="background-image:url('https://xuliang123456.github.io/ai4s-discovery/assets/about.jpg');"></div>
+          <div class="hf-cap">蓝色弹珠 · 地球 · 图：NASA</div>
+        </div>
+        <div>
+          <p style="font-size:14px; color:var(--ink-soft); line-height:1.85; margin-bottom:14px;">上海人工智能实验室联合壁仞科技发起「书生国智科探挑战赛」，聚焦<strong style="color:var(--ink);">生命科学、物质科学、地球科学、量子计算、模型与算子开发</strong>五大核心领域及开放自由赛道，探索 AI Skills 与智能体在靶点发现、反应优化、气候预测、量子算法创新等关键科研场景中的突破性应用。</p>
+          <p style="font-size:14px; color:var(--ink-soft); line-height:1.85;">大赛以「科研数据 × AI Skills/Agent」为核心路径，依托国产算力底座（壁仞 BR 芯片）、国产大模型（书生 Intern 系列）与国产云端平台（壁仞云），构建<strong style="color:var(--vermilion);">国芯 · 国模 · 国云 · 国智</strong>四位一体的完整国产 AI 科研生态，并通过书生科学发现平台（Intern Discovery）SCP 广场永久开放。</p>
+        </div>
+      </div>
+
+      <!-- 平台三件套 -->
+      <div class="meta-row" style="margin-bottom:14px;">
+        <span class="section-label" style="border:none; margin:0; padding:0;">科学发现平台 · 三件套</span>
       </div>
       <div class="grid-3">
         <div class="card-emphasis">
@@ -574,13 +618,16 @@ section[id], .section[id] { scroll-margin-top: 116px; }
   </section>
 
   <!-- ───────── 报名 CTA ───────── -->
-  <section style="border-top:1px solid var(--rule); background:var(--paper-warm);">
-    <div class="wrap" style="padding:56px 24px; text-align:center;">
-      <h2 class="section-hero" style="margin-bottom:12px;">准备好让 AI 成为你的科研伙伴了吗？</h2>
-      <p style="font-size:14px; color:var(--ink-soft); margin-bottom:24px;">报名前请了解并同意免责协议和法律条款。团队至多 5 名成员，鼓励多赛道参赛。</p>
+  <section style="position:relative; overflow:hidden; border-top:1px solid var(--rule);">
+    <div aria-hidden="true" style="position:absolute; inset:0; background-image:url('https://xuliang123456.github.io/ai4s-discovery/assets/cta.jpg'); background-size:cover; background-position:center;"></div>
+    <div aria-hidden="true" style="position:absolute; inset:0; background:linear-gradient(105deg, rgba(20,14,28,.92) 0%, rgba(28,18,30,.78) 45%, rgba(176,58,38,.62) 100%);"></div>
+    <div class="wrap" style="position:relative; padding:64px 24px; text-align:center;">
+      <div class="eyebrow eyebrow--center" style="color:#fff; justify-content:center; margin-bottom:18px;">Join Now · 即刻参赛</div>
+      <h2 class="section-hero" style="color:#fff; margin-bottom:12px;">准备好让 AI 成为你的科研伙伴了吗？</h2>
+      <p style="font-size:14px; color:rgba(255,255,255,.82); margin-bottom:28px; max-width:560px; margin-left:auto; margin-right:auto; line-height:1.7;">报名即日起至 7 月 15 日。当前账号默认作为队长创建队伍，团队至多 5 名成员，提交后赛道不可更改。</p>
       <div class="meta-row" style="justify-content:center; gap:12px;">
-        <a class="btn btn-primary btn-lg" href="#/apply">提交报名</a>
-        <a class="btn btn-lg" href="#/protocol">阅读服务协议</a>
+        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
+        <a class="btn btn-lg" href="#/protocol" style="background:transparent; color:#fff; border-color:rgba(255,255,255,.5);">阅读参赛协议</a>
       </div>
     </div>
   </section>
@@ -906,7 +953,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     </div>
   </div>
   <div class="wrap" style="margin-top:32px; padding-top:20px; border-top:1px solid var(--rule-soft); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
-    <span class="label" style="text-transform:none; letter-spacing:.04em;">© All Rights Reserved. 沪ICP备2021009351号-21</span>
+    <span class="label" style="text-transform:none; letter-spacing:.04em;">© All Rights Reserved. 沪ICP备2021009351号-21 · 配图：NASA（公有领域）/ Unsplash</span>
     <span class="label" style="letter-spacing:.12em;">Powered by Intern Discovery Platform</span>
   </div>
 </footer>
@@ -914,28 +961,29 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 <script>
 /* ═══════════════ 内容数据（取自原站真实文案）═══════════════ */
 /* 六大赛道 · 用辅助色（§1.1.5）做学科区分，≤4 色相规约：这里 6 条复用 4 色相 + vermilion */
+const IMG = 'https://xuliang123456.github.io/ai4s-discovery/assets/';
 const TRACKS = [
-  { no:'赛道一', tag:'生命科学', en:'Life Sciences', aux:'magenta',
+  { no:'赛道一', tag:'生命科学', en:'Life Sciences', aux:'magenta', img:'track-life.jpg',
     title:'重大疾病靶点发现',
     desc:'聚焦重大疾病治疗靶点的前沿发现，汇聚 AI 智能体「群体智慧」，以高效计算与智能协作突破传统研发范式，直接产出全新治疗靶点。',
     metas:['*Proposal 靶点假说', '*Method 实现方案', '*复现材料'] },
-  { no:'赛道二', tag:'物质科学', en:'Chemistry', aux:'cyan',
+  { no:'赛道二', tag:'物质科学', en:'Chemistry', aux:'cyan', img:'track-matter.jpg',
     title:'偶联反应',
     desc:'聚焦偶联反应条件优化，在极少真实实验下用大模型、机器学习与化学知识设计高效优化策略，破解高通量实验的组合空间与预算瓶颈。',
     metas:['Suzuki 数据集', 'Buchwald–Hartwig 数据集', '技术方案书 + 干实验报告'] },
-  { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint',
+  { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint', img:'track-earth.jpg',
     title:'厄尔尼诺-南方涛动 (ENSO)',
     desc:'聚焦 ENSO 气候预测，超越单一指数传统，驱动 AI 对二维海温异常场精细化预报与机制解读，提升极端气候预测能力，服务防灾减灾。',
     metas:['1850–2014 训练集', 'A / B 榜测试集', '二维 SSTA 场预测'] },
-  { no:'赛道四', tag:'飞翔杯·量子计算', en:'Quantum Computing', aux:'violet',
+  { no:'赛道四', tag:'飞翔杯·量子计算', en:'Quantum Computing', aux:'violet', img:'track-quantum.jpg',
     title:'国产 GPU 创新计算与应用探索',
     desc:'聚焦量子线路模拟与跨场景应用探索，依托壁仞国产 GPU 平台，以 AI Agent 辅助开发，构建可运行、具创新价值的量子计算原型成果。',
     metas:['BIREN GPU', '量子线路 / 算法', 'Agent 辅助开发'] },
-  { no:'赛道五', tag:'飞翔杯·模型与算子', en:'Model & Operator', aux:'cyan',
+  { no:'赛道五', tag:'飞翔杯·模型与算子', en:'Model & Operator', aux:'cyan', img:'track-operator.jpg',
     title:'基于 Agent 的模型和算子开发',
     desc:'聚焦 AI4S 关键算子与科学计算模型的工程实现，依托壁仞 BR106 国产 GPU，以 AI Agent 辅助开发范式探索人机协同的高效开发路径。',
     metas:['Spectral Convolution 必选题', 'PINN / GNN / FNO 进阶', 'Agent 交互日志'] },
-  { no:'赛道六', tag:'自由赛道', en:'AI for Social Science', aux:'vermilion',
+  { no:'赛道六', tag:'自由赛道', en:'AI for Social Science', aux:'vermilion', img:'track-free.jpg',
     title:'科艺融合 · 科研智慧提炼',
     desc:'聚焦「科艺融合 × AI4SS」，面向人文、艺术、社科、教育、传媒、商业等多元领域，将各领域方法论与智慧提炼为标准化 Skills / Agent。',
     metas:['科研能力提炼', '数字人文', '艺术科技'] },
@@ -952,13 +1000,17 @@ function renderTracks(){
   if(!grid) return;
   grid.innerHTML = TRACKS.map(t => {
     const a = AUX[t.aux];
-    return `<a class="card" href="#/apply" style="text-decoration:none; display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden;">
-      <div style="height:3px; background:${a.c4};"></div>
-      <div style="padding:16px;">
-        <div class="meta-row" style="justify-content:space-between; margin-bottom:12px;">
-          <span class="label" style="color:${a.c4};">${t.no}</span>
-          <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
+    return `<a class="card track-card" href="#/apply" style="text-decoration:none; display:flex; flex-direction:column; gap:0;">
+      <div class="tc-figure">
+        <div class="tc-img" style="background-image:url('${IMG}${t.img}');"></div>
+        <div class="tc-scrim"></div>
+        <div style="position:absolute; top:0; left:0; right:0; height:3px; background:${a.c4};"></div>
+        <div style="position:absolute; left:0; right:0; bottom:0; padding:11px 14px; display:flex; justify-content:space-between; align-items:center;">
+          <span class="label" style="color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.4);">${t.no}</span>
+          <span class="pill" style="background:rgba(255,255,255,.94); color:${a.c4};">${t.tag}</span>
         </div>
+      </div>
+      <div style="padding:16px; display:flex; flex-direction:column; flex:1;">
         <div class="label" style="font-size:10px; letter-spacing:.16em; color:var(--ink-faint); margin-bottom:6px;">${t.en}</div>
         <h3 class="title-m" style="margin-bottom:10px; line-height:1.4;">${t.title}</h3>
         <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:14px; flex:1;">${t.desc}</p>
