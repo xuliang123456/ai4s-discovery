@@ -233,6 +233,11 @@ select.input { cursor: pointer; appearance: none; background-image: url("data:im
 .checkbox { width: 14px; height: 14px; border: 1px solid var(--rule); border-radius: 2px; background: var(--paper); display: inline-grid; place-items: center; cursor: pointer; transition: background var(--t-base) var(--ease); flex-shrink: 0; }
 .checkbox[aria-checked="true"] { background: var(--vermilion); border-color: var(--vermilion); }
 .checkbox[aria-checked="true"]::after { content: ''; width: 5px; height: 9px; border-right: 1.5px solid #fff; border-bottom: 1.5px solid #fff; transform: translateY(-1px) rotate(45deg); }
+/* 开关（指导教师/专家）*/
+.switch { width: 38px; height: 22px; border-radius: 11px; background: var(--rule); position: relative; cursor: pointer; transition: background var(--t-base) var(--ease); flex-shrink: 0; border: none; padding: 0; }
+.switch[aria-checked="true"] { background: var(--vermilion); }
+.switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform var(--t-base) var(--ease); box-shadow: 0 1px 2px rgba(0,0,0,.2); }
+.switch[aria-checked="true"]::after { transform: translateX(16px); }
 
 /* ═══════════════ §3.6 徽章系统 ═══════════════ */
 .pill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .04em; padding: 2px 8px; border-radius: 2px; background: var(--paper-warm); color: var(--ink-mute); }
@@ -601,40 +606,30 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     </div>
     <div class="eyebrow" style="margin-bottom:16px;">Join Competition · 赛事报名</div>
     <h1 class="section-hero" style="margin-bottom:8px;">提交参赛报名</h1>
-    <p style="font-size:14px; color:var(--ink-soft); line-height:1.7; max-width:640px;">团队至多 5 名成员，鼓励多赛道参赛。备注：标 <span style="color:var(--vermilion);">*</span> 为必填项。</p>
+    <p style="font-size:14px; color:var(--ink-soft); line-height:1.7; max-width:640px;">当前登录账号默认作为<strong style="color:var(--ink);">队长</strong>创建队伍，团队至多 5 名成员。标 <span style="color:var(--vermilion);">*</span> 为必填项。</p>
 
-    <!-- 报名前提示 -->
+    <!-- 报名须知 -->
     <div class="card-info" style="margin:24px 0 32px; display:flex; gap:12px; align-items:flex-start;">
       <svg class="icon" viewBox="0 0 24 24" style="color:var(--vermilion); margin-top:2px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      <p style="font-size:13px; color:var(--ink-soft); line-height:1.65;">报名前请了解并同意<a href="#/protocol" style="color:var(--vermilion);">免责协议和法律条款</a>。提交的作品必须是 AI 智能体，需包含对产出 Proposal 的 AI scientist 实现方案的描述。</p>
+      <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">一个账号只能加入一个队伍。报名成功后<strong style="color:var(--ink);">赛道、队员与指导专家不可修改</strong>，请确认无误后提交。已加入队伍？<a href="#/manage" style="color:var(--vermilion);">前往参赛管理 →</a></p>
     </div>
 
     <form id="applyForm" onsubmit="return false;">
 
       <!-- 选择赛道 -->
       <div style="margin-bottom:32px;">
-        <div class="section-label">选择赛道 *</div>
+        <div class="section-label">选择赛道 <span class="req" style="color:var(--vermilion);">*</span></div>
         <div class="grid-2" style="gap:10px;" id="trackSelect"><!-- 赛道单选由 JS 注入 --></div>
-        <p class="field-help" style="margin-top:8px;">可在报名后于「参赛管理」中加入更多赛道。</p>
+        <p class="field-help" id="trackErr" style="margin-top:8px;">报名仅允许选择 1 个赛道，提交后不可更改。</p>
       </div>
 
-      <!-- 团队信息 -->
+      <!-- 队伍名称 -->
       <div style="margin-bottom:32px;">
-        <div class="section-label">团队信息</div>
+        <div class="section-label">队伍名称</div>
         <div class="field">
           <label class="field-label">团队名称 <span class="req">*</span></label>
-          <input class="input" placeholder="请填写团队名称" maxlength="30">
+          <input class="input" data-rule="team" placeholder="请填写团队名称" maxlength="30">
           <p class="field-help">支持中文、英文、数字、空格、-、_，3–30 字符。</p>
-        </div>
-        <div class="grid-2">
-          <div class="field">
-            <label class="field-label">所属机构 / 高校 <span class="req">*</span></label>
-            <input class="input" placeholder="请填写单位信息">
-          </div>
-          <div class="field">
-            <label class="field-label">参赛赛道</label>
-            <input class="input" value="赛道三 · 厄尔尼诺-南方涛动 (ENSO) 预测" readonly style="color:var(--ink-mute);">
-          </div>
         </div>
       </div>
 
@@ -644,29 +639,30 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div class="grid-2">
           <div class="field">
             <label class="field-label">姓名 <span class="req">*</span></label>
-            <input class="input" placeholder="请填写真实姓名">
-            <p class="field-help">仅支持中文、英文，2–30 字符。</p>
+            <input class="input" data-rule="name" placeholder="请填写真实姓名">
           </div>
           <div class="field">
             <label class="field-label">职业 <span class="req">*</span></label>
-            <input class="input" placeholder="请填写职业信息">
+            <input class="input" data-rule="job" placeholder="请填写职业信息">
           </div>
           <div class="field">
-            <label class="field-label">证件类型 <span class="req">*</span></label>
-            <select class="input"><option>身份证</option><option>护照</option></select>
-          </div>
-          <div class="field">
-            <label class="field-label">证件号码 <span class="req">*</span></label>
-            <input class="input" placeholder="请输入身份证 / 护照号码">
-            <p class="field-help">身份证 18 位 / 护照 7–15 位。</p>
+            <label class="field-label">身份证 / 护照 <span class="req">*</span></label>
+            <div style="display:flex; gap:8px;">
+              <select class="input doc-type" style="width:104px; flex:none;"><option value="id">身份证</option><option value="passport">护照</option></select>
+              <input class="input" data-rule="doc" placeholder="请输入 18 位有效身份证号">
+            </div>
           </div>
           <div class="field">
             <label class="field-label">手机号码 <span class="req">*</span></label>
-            <input class="input" placeholder="请填入联系的手机号">
+            <input class="input" data-rule="phone" placeholder="请填写 11 位手机号" maxlength="11" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label class="field-label">所属机构 / 高校 <span class="req">*</span></label>
+            <input class="input" data-rule="org" placeholder="请填写单位信息">
           </div>
           <div class="field">
             <label class="field-label">电子邮箱 <span class="req">*</span></label>
-            <input class="input" placeholder="请填写邮箱（机构或高校邮箱）">
+            <input class="input" data-rule="email" placeholder="请填写邮箱（机构或高校邮箱）">
           </div>
         </div>
       </div>
@@ -675,27 +671,31 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       <div style="margin-bottom:32px;">
         <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--rule-soft);">
           <span class="section-label" style="border:none; margin:0; padding:0;">队员信息</span>
-          <span class="label" style="text-transform:none; letter-spacing:.04em;">团队至多 5 名成员</span>
+          <span class="label" style="text-transform:none; letter-spacing:.04em;">队长占 1 名 · 至多 4 名队员</span>
         </div>
+        <p class="field-help" style="margin:-4px 0 12px;">每名队员填写后点击「确认添加」，确认后锁定；提交前可删除，提交后不可修改。</p>
         <div id="memberList"></div>
-        <button class="btn btn-ghost" id="addMember" type="button" style="margin-top:8px;">
+        <button class="btn btn-ghost" id="addMember" type="button" style="margin-top:4px;">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> 添加队员
         </button>
       </div>
 
-      <!-- 指导教师 -->
+      <!-- 指导教师 / 专家 -->
       <div style="margin-bottom:32px;">
-        <div class="section-label">指导教师 / 专家 <span style="color:var(--ink-faint); font-weight:400;">（如适用）</span></div>
-        <div class="grid-2">
-          <div class="field"><label class="field-label">姓名</label><input class="input" placeholder="Advisor / Expert"></div>
-          <div class="field"><label class="field-label">所属机构</label><input class="input" placeholder="所属机构 / 高校"></div>
+        <div class="meta-row" style="justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--rule-soft);">
+          <div>
+            <span class="section-label" style="border:none; margin:0; padding:0;">指导教师 / 专家</span>
+            <span class="label" style="text-transform:none; letter-spacing:.04em; margin-left:8px; color:var(--ink-faint);">选填 · 至多 1 名</span>
+          </div>
+          <button class="switch" id="advisorSwitch" role="switch" aria-checked="false" aria-label="启用指导教师 / 专家" type="button"></button>
         </div>
+        <div id="advisorBox" hidden></div>
       </div>
 
       <!-- 协议 -->
       <div class="card-emphasis" style="margin-bottom:28px; display:flex; gap:10px; align-items:flex-start; cursor:pointer;" id="agreeBox">
         <span class="checkbox" role="checkbox" aria-checked="false" id="agreeChk" tabindex="0"></span>
-        <span style="font-size:13px; color:var(--ink-soft); line-height:1.6;">我已阅读并同意<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">服务协议</a>、<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">免责协议和法律条款</a>及<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">个人信息保护政策</a>。</span>
+        <span style="font-size:13px; color:var(--ink-soft); line-height:1.6;">我已阅读并同意<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">《参赛协议》</a>与<a href="#/protocol" style="color:var(--vermilion);" onclick="event.stopPropagation()">《隐私政策》</a>。</span>
       </div>
 
       <!-- 操作 -->
@@ -920,30 +920,30 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 /* ═══════════════ 内容数据（取自原站真实文案）═══════════════ */
 /* 六大赛道 · 用辅助色（§1.1.5）做学科区分，≤4 色相规约：这里 6 条复用 4 色相 + vermilion */
 const TRACKS = [
-  { no:'赛道一', tag:'物质科学', en:'Materials Science', aux:'cyan',
-    title:'国产GPU创新计算与应用探索',
-    desc:'面向国产 GPU 的创新计算与应用，探索算力底座上的科学计算新范式。',
-    metas:['国产算力开发环境', 'SSH 命令接入', 'A/B 榜测试集'] },
-  { no:'赛道二', tag:'模型与算子', en:'Model & Operator', aux:'violet',
-    title:'基于 Agent 的模型与算子开发',
-    desc:'Skill / Agent 开发赛道，需提交 AI 智能体作品，包含对产出模型方案的描述。',
-    metas:['Skill / Agent 开发', '提交作品须为智能体', '复现材料'] },
-  { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint',
-    title:'厄尔尼诺-南方涛动 (ENSO) 预测',
-    desc:'输入起始月状态，输出未来 12 个月的二维 SSTA 场。1980–2023 年全量验证，包含近 40 多年所有 ENSO 循环。',
-    metas:['1850–2014 训练集', '240~360 起始月', '二维 SSTA 场预测'] },
-  { no:'赛道四', tag:'物质科学', en:'Chemistry', aux:'cyan',
-    title:'偶联反应预测',
-    desc:'Suzuki 与 Buchwald–Hartwig 偶联反应数据集。B 榜迫使模型解决不对称性与多样性问题。',
-    metas:['Suzuki 数据集', 'Buchwald–Hartwig 数据集', '说明文档 A / B'] },
-  { no:'赛道五', tag:'生命科学', en:'Life Sciences', aux:'magenta',
+  { no:'赛道一', tag:'生命科学', en:'Life Sciences', aux:'magenta',
     title:'重大疾病靶点发现',
-    desc:'针对高潜力靶点验证科学假说，经细胞、类器官与动物实验逐级推进至重大疾病治疗靶点发现。',
-    metas:['Milestone 1A 细胞实验', 'Milestone 1B 类器官', 'Milestone 2 动物实验'] },
+    desc:'聚焦重大疾病治疗靶点的前沿发现，汇聚 AI 智能体「群体智慧」，以高效计算与智能协作突破传统研发范式，直接产出全新治疗靶点。',
+    metas:['*Proposal 靶点假说', '*Method 实现方案', '*复现材料'] },
+  { no:'赛道二', tag:'物质科学', en:'Chemistry', aux:'cyan',
+    title:'偶联反应',
+    desc:'聚焦偶联反应条件优化，在极少真实实验下用大模型、机器学习与化学知识设计高效优化策略，破解高通量实验的组合空间与预算瓶颈。',
+    metas:['Suzuki 数据集', 'Buchwald–Hartwig 数据集', '技术方案书 + 干实验报告'] },
+  { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint',
+    title:'厄尔尼诺-南方涛动 (ENSO)',
+    desc:'聚焦 ENSO 气候预测，超越单一指数传统，驱动 AI 对二维海温异常场精细化预报与机制解读，提升极端气候预测能力，服务防灾减灾。',
+    metas:['1850–2014 训练集', 'A / B 榜测试集', '二维 SSTA 场预测'] },
+  { no:'赛道四', tag:'飞翔杯·量子计算', en:'Quantum Computing', aux:'violet',
+    title:'国产 GPU 创新计算与应用探索',
+    desc:'聚焦量子线路模拟与跨场景应用探索，依托壁仞国产 GPU 平台，以 AI Agent 辅助开发，构建可运行、具创新价值的量子计算原型成果。',
+    metas:['BIREN GPU', '量子线路 / 算法', 'Agent 辅助开发'] },
+  { no:'赛道五', tag:'飞翔杯·模型与算子', en:'Model & Operator', aux:'cyan',
+    title:'基于 Agent 的模型和算子开发',
+    desc:'聚焦 AI4S 关键算子与科学计算模型的工程实现，依托壁仞 BR106 国产 GPU，以 AI Agent 辅助开发范式探索人机协同的高效开发路径。',
+    metas:['Spectral Convolution 必选题', 'PINN / GNN / FNO 进阶', 'Agent 交互日志'] },
   { no:'赛道六', tag:'自由赛道', en:'AI for Social Science', aux:'vermilion',
-    title:'科艺融合 · AI for Social Science',
-    desc:'自由赛道，科艺融合 × AI4SS，鼓励跨学科创意与社会科学方向的 AI 探索。',
-    metas:['科艺融合', 'AI4SS', '自由命题'] },
+    title:'科艺融合 · 科研智慧提炼',
+    desc:'聚焦「科艺融合 × AI4SS」，面向人文、艺术、社科、教育、传媒、商业等多元领域，将各领域方法论与智慧提炼为标准化 Skills / Agent。',
+    metas:['科研能力提炼', '数字人文', '艺术科技'] },
 ];
 const AUX = {
   mint:    { c1:'var(--aux-mint-1)',    c3:'var(--aux-mint-3)',    c4:'var(--aux-mint-4)' },
@@ -1045,106 +1045,230 @@ function renderHome(){ renderTracks(); renderTimeline(); renderFaq(); }
 
 /* ═══════════════ 报名表单页 (/apply) ═══════════════ */
 function renderApply(){
-  // 赛道单选（复用赛道数据 + 辅助色）
-  const ts = document.getElementById('trackSelect');
-  if(ts){
-    ts.innerHTML = TRACKS.map((t,i)=>{
-      const a = AUX[t.aux];
-      return `<label class="track-radio card" data-idx="${i}" style="cursor:pointer; display:flex; gap:12px; align-items:flex-start; padding:14px 16px; ${i===2?'border-left:3px solid var(--vermilion); background:var(--paper-warm);':''}">
-        <span class="radio-dot" style="width:14px; height:14px; border-radius:50%; border:1px solid ${i===2?'var(--vermilion)':'var(--rule)'}; ${i===2?'box-shadow:inset 0 0 0 4px var(--vermilion);':''} flex-shrink:0; margin-top:2px; transition:box-shadow var(--t-base) var(--ease), border-color var(--t-base) var(--ease);"></span>
-        <span>
-          <span style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-            <span class="label" style="color:${a.c4};">${t.no}</span>
-            <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
-          </span>
-          <span class="title-s" style="display:block; color:var(--ink); font-size:13px; line-height:1.4;">${t.title}</span>
-        </span>
-      </label>`;
-    }).join('');
-    ts.querySelectorAll('.track-radio').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        ts.querySelectorAll('.track-radio').forEach(x=>{
-          x.style.borderLeft=''; x.style.background='';
-          const d=x.querySelector('.radio-dot'); d.style.boxShadow=''; d.style.borderColor='var(--rule)';
-        });
-        el.style.borderLeft='3px solid var(--vermilion)'; el.style.background='var(--paper-warm)';
-        const d=el.querySelector('.radio-dot'); d.style.boxShadow='inset 0 0 0 4px var(--vermilion)'; d.style.borderColor='var(--vermilion)';
+  const form = document.getElementById('applyForm');
+  if(!form) return;
+
+  /* 校验规则 · 正则与提示文案取自 demo 实际实现 */
+  const RULES = {
+    team:    { re:/^[一-龥A-Za-z0-9 _-]{3,30}$/,  empty:'团队名称不能为空', bad:'团队名称格式有误，支持中文 / 英文 / 数字 / 空格 / - / _，3–30 字符' },
+    name:    { re:/^[一-龥A-Za-z·]{1,30}$/,        empty:'姓名不能为空',     bad:'姓名格式有误，仅支持中文、英文，1–30 字符' },
+    job:     { re:/^[一-龥A-Za-z]{2,30}$/,         empty:'职业不能为空',     bad:'职业格式有误，仅支持中文、英文，2–30 字符' },
+    org:     { re:/^[一-龥A-Za-z0-9()（）]{2,30}$/, empty:'单位不能为空',    bad:'单位格式有误，2–30 字符' },
+    phone:   { re:/^1[3-9]\d{9}$/,                          empty:'手机号不能为空',   bad:'手机号格式有误，请检查后重新填写' },
+    email:   { re:/^[A-Za-z0-9._-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$/, empty:'邮箱地址不能为空', bad:'邮箱格式有误，请检查后重新填写' },
+    id:      { re:/^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}[\dXx]$/, empty:'证件号不能为空', bad:'身份证号格式有误，请输入 18 位有效身份证号' },
+    passport:{ re:/^[a-zA-Z0-9]{7,15}$/,                    empty:'证件号不能为空',   bad:'护照格式有误，请输入 7-15 位有效护照号' },
+  };
+  function ruleFor(input){
+    let key = input.dataset.rule;
+    if(key === 'doc'){
+      const sel = input.closest('.field').querySelector('.doc-type');
+      key = (sel && sel.value === 'passport') ? 'passport' : 'id';
+    }
+    return RULES[key];
+  }
+  function errSlot(input){
+    const field = input.closest('.field');
+    let el = field.querySelector('.field-error');
+    if(!el){ el = document.createElement('p'); el.className = 'field-error'; field.appendChild(el); }
+    return el;
+  }
+  function validate(input, required){
+    const rule = ruleFor(input);
+    if(!rule) return true;
+    const v = input.value.trim();
+    let msg = '';
+    if(!v){ if(required) msg = rule.empty; }
+    else if(rule.re && !rule.re.test(v)){ msg = rule.bad; }
+    errSlot(input).textContent = msg;
+    input.classList.toggle('input--error', !!msg);
+    return !msg;
+  }
+  function bindValidation(scope){
+    scope.querySelectorAll('input[data-rule]').forEach(inp=>{
+      if(inp.dataset.vbound) return; inp.dataset.vbound = '1';
+      inp.addEventListener('blur', ()=> validate(inp, true));
+      inp.addEventListener('input', ()=>{ if(inp.classList.contains('input--error')) validate(inp, true); });
+    });
+    scope.querySelectorAll('.doc-type').forEach(sel=>{
+      if(sel.dataset.vbound) return; sel.dataset.vbound = '1';
+      sel.addEventListener('change', ()=>{
+        const inp = sel.closest('.field').querySelector('input[data-rule="doc"]');
+        inp.placeholder = sel.value === 'passport' ? '请输入 7-15 位有效护照号' : '请输入 18 位有效身份证号';
+        if(inp.value.trim() || inp.classList.contains('input--error')) validate(inp, true);
       });
     });
   }
 
-  // 队员行
+  if(form.dataset.bound) return;   // 只初始化一次
+  form.dataset.bound = '1';
+
+  /* ── 赛道单选（复用 TRACKS + 辅助色，默认选中第 1 个）── */
+  const ts = document.getElementById('trackSelect');
+  let selectedTrack = 0;
+  function paintTrack(){
+    ts.querySelectorAll('.track-radio').forEach((x,i)=>{
+      const on = i === selectedTrack;
+      x.style.borderLeft = on ? '3px solid var(--vermilion)' : '';
+      x.style.background  = on ? 'var(--paper-warm)' : '';
+      const d = x.querySelector('.radio-dot');
+      d.style.boxShadow = on ? 'inset 0 0 0 4px var(--vermilion)' : '';
+      d.style.borderColor = on ? 'var(--vermilion)' : 'var(--rule)';
+    });
+  }
+  ts.innerHTML = TRACKS.map((t,i)=>{
+    const a = AUX[t.aux];
+    return `<label class="track-radio card" data-idx="${i}" style="cursor:pointer; display:flex; gap:12px; align-items:flex-start; padding:14px 16px;">
+      <span class="radio-dot" style="width:14px; height:14px; border-radius:50%; border:1px solid var(--rule); flex-shrink:0; margin-top:2px; transition:box-shadow var(--t-base) var(--ease), border-color var(--t-base) var(--ease);"></span>
+      <span>
+        <span style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+          <span class="label" style="color:${a.c4};">${t.no}</span>
+          <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
+        </span>
+        <span class="title-s" style="display:block; color:var(--ink); font-size:13px; line-height:1.4;">${t.title}</span>
+      </span>
+    </label>`;
+  }).join('');
+  ts.querySelectorAll('.track-radio').forEach(el=>{
+    el.addEventListener('click', ()=>{ selectedTrack = +el.dataset.idx; paintTrack(); });
+  });
+  paintTrack();
+
+  /* ── 队长字段校验 ── */
+  bindValidation(form);
+
+  /* ── 队员（确认添加 / 删除 / 至多 4 名）── */
   const list = document.getElementById('memberList');
-  let memberCount = 0;
-  function memberRow(n){
-    const div = document.createElement('div');
-    div.className = 'card';
-    div.style.cssText = 'margin-bottom:10px; padding:14px 16px;';
-    div.innerHTML = `
+  const addBtn = document.getElementById('addMember');
+  const docRow = (compact)=>`<div style="display:flex; gap:8px;">
+      <select class="input doc-type" style="width:${compact?96:104}px; flex:none;"><option value="id">身份证</option><option value="passport">护照</option></select>
+      <input class="input" data-rule="doc" placeholder="请输入 18 位有效身份证号">
+    </div>`;
+  function renumber(){ [...list.querySelectorAll('.member-card .m-no')].forEach((s,i)=> s.textContent = i+1); }
+  function updateAddBtn(){
+    const n = list.querySelectorAll('.member-card').length;
+    addBtn.disabled = n >= 4;
+    addBtn.style.opacity = n >= 4 ? '.5' : '1';
+    addBtn.style.pointerEvents = n >= 4 ? 'none' : '';
+  }
+  function memberCard(){
+    const card = document.createElement('div');
+    card.className = 'card member-card'; card.dataset.confirmed = '0';
+    card.style.cssText = 'margin-bottom:10px; padding:14px 16px;';
+    card.innerHTML = `
       <div class="meta-row" style="justify-content:space-between; margin-bottom:12px;">
-        <span class="label label--strong">队员 ${n}</span>
-        <button class="btn btn-ghost" type="button" style="padding:4px 8px; color:var(--error);" title="删除成员">
+        <span class="label label--strong">队员 <span class="m-no">1</span></span>
+        <button class="btn btn-ghost rm" type="button" style="padding:4px 8px; color:var(--error);" title="删除队员">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
         </button>
       </div>
-      <div class="grid-2" style="gap:10px;">
-        <input class="input" placeholder="姓名 *">
-        <input class="input" placeholder="职业 *">
-        <input class="input" placeholder="手机号码 *">
-        <input class="input" placeholder="电子邮箱 *">
-      </div>`;
-    div.querySelector('button').addEventListener('click', ()=>{ div.remove(); updateAddBtn(); });
-    return div;
-  }
-  const addBtn = document.getElementById('addMember');
-  function updateAddBtn(){
-    const rows = list.querySelectorAll('.card').length;
-    // 队长占 1 名，队员至多 4 名 → 团队至多 5
-    addBtn.disabled = rows >= 4;
-    addBtn.style.opacity = rows >= 4 ? '.5' : '1';
-  }
-  if(addBtn && !addBtn.dataset.bound){
-    addBtn.dataset.bound = '1';
-    addBtn.addEventListener('click', ()=>{
-      if(list.querySelectorAll('.card').length >= 4) return;
-      memberCount++;
-      list.appendChild(memberRow(list.querySelectorAll('.card').length + 1));
-      updateAddBtn();
+      <div class="edit-area">
+        <div class="grid-2" style="gap:10px;">
+          <div class="field" style="margin:0;"><input class="input" data-rule="name" placeholder="姓名 *"></div>
+          <div class="field" style="margin:0;"><input class="input" data-rule="job" placeholder="职业 *"></div>
+          <div class="field" style="margin:0;">${docRow(true)}</div>
+          <div class="field" style="margin:0;"><input class="input" data-rule="phone" placeholder="手机号 *" maxlength="11" inputmode="numeric"></div>
+          <div class="field" style="margin:0;"><input class="input" data-rule="org" placeholder="所属机构 / 高校 *"></div>
+          <div class="field" style="margin:0;"><input class="input" data-rule="email" placeholder="电子邮箱 *"></div>
+        </div>
+        <button class="btn confirm" type="button" style="margin-top:12px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 确认添加</button>
+      </div>
+      <div class="summary" hidden></div>`;
+    bindValidation(card);
+    card.querySelector('.confirm').addEventListener('click', ()=>{
+      const inputs = [...card.querySelectorAll('input[data-rule]')];
+      const ok = inputs.map(i=>validate(i,true)).every(Boolean);
+      if(!ok) return;
+      const g = r => card.querySelector(`input[data-rule="${r}"]`).value.trim();
+      card.dataset.confirmed = '1';
+      card.querySelector('.summary').innerHTML =
+        `<span style="font-size:13px; color:var(--ink-soft);"><span style="color:var(--ink); font-weight:600;">${g('name')}</span> · ${g('job')} · ${g('org')} · ${g('phone')}</span> <span class="pill pill-success" style="margin-left:6px;">已确认</span>`;
+      card.querySelector('.edit-area').hidden = true;
+      card.querySelector('.summary').hidden = false;
     });
-    // 默认放一个队员行
-    list.appendChild(memberRow(1));
-    updateAddBtn();
+    card.querySelector('.rm').addEventListener('click', ()=>{ card.remove(); renumber(); updateAddBtn(); });
+    return card;
   }
+  addBtn.addEventListener('click', ()=>{
+    if(list.querySelectorAll('.member-card').length >= 4) return;
+    list.appendChild(memberCard()); renumber(); updateAddBtn();
+  });
+  updateAddBtn();
 
-  // 协议勾选
+  /* ── 指导教师 / 专家（开关 · 至多 1 名 · 确认添加）── */
+  const advSwitch = document.getElementById('advisorSwitch');
+  const advBox = document.getElementById('advisorBox');
+  function advisorCard(){
+    const card = document.createElement('div');
+    card.className = 'card advisor-card'; card.dataset.confirmed = '0';
+    card.style.cssText = 'padding:14px 16px;';
+    card.innerHTML = `
+      <div class="meta-row" style="justify-content:space-between; margin-bottom:12px;">
+        <span class="label label--strong">指导教师 / 专家</span>
+      </div>
+      <div class="edit-area">
+        <div class="grid-2" style="gap:10px;">
+          <div class="field" style="margin:0;"><input class="input" data-rule="name" placeholder="姓名 *"></div>
+          <div class="field" style="margin:0;"><input class="input" data-rule="org" placeholder="所属机构 / 高校 *"></div>
+          <div class="field" style="margin:0;"><input class="input adv-contact" placeholder="联系方式（选填）"></div>
+        </div>
+        <button class="btn confirm" type="button" style="margin-top:12px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 确认添加</button>
+      </div>
+      <div class="summary" hidden></div>`;
+    bindValidation(card);
+    card.querySelector('.confirm').addEventListener('click', ()=>{
+      const inputs = [...card.querySelectorAll('input[data-rule]')];
+      const ok = inputs.map(i=>validate(i,true)).every(Boolean);
+      if(!ok) return;
+      const g = r => card.querySelector(`input[data-rule="${r}"]`).value.trim();
+      const contact = card.querySelector('.adv-contact').value.trim();
+      card.dataset.confirmed = '1';
+      card.querySelector('.summary').innerHTML =
+        `<span style="font-size:13px; color:var(--ink-soft);"><span style="color:var(--ink); font-weight:600;">${g('name')}</span> · ${g('org')}${contact?' · '+contact:''}</span> <span class="pill pill-success" style="margin-left:6px;">已确认</span>`;
+      card.querySelector('.edit-area').hidden = true;
+      card.querySelector('.summary').hidden = false;
+    });
+    return card;
+  }
+  advSwitch.addEventListener('click', ()=>{
+    const on = advSwitch.getAttribute('aria-checked') !== 'true';
+    advSwitch.setAttribute('aria-checked', String(on));
+    if(on){ advBox.hidden = false; if(!advBox.querySelector('.advisor-card')) advBox.appendChild(advisorCard()); }
+    else { advBox.hidden = true; advBox.innerHTML = ''; }
+  });
+
+  /* ── 协议勾选 ── */
   const box = document.getElementById('agreeBox');
   const chk = document.getElementById('agreeChk');
-  function toggleAgree(){
-    const on = chk.getAttribute('aria-checked')==='true';
-    chk.setAttribute('aria-checked', String(!on));
-  }
-  if(box && !box.dataset.bound){
-    box.dataset.bound='1';
-    box.addEventListener('click', toggleAgree);
-    chk.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggleAgree(); }});
-  }
+  const toggleAgree = ()=> chk.setAttribute('aria-checked', String(chk.getAttribute('aria-checked')!=='true'));
+  box.addEventListener('click', toggleAgree);
+  chk.addEventListener('keydown', e=>{ if(e.key===' '||e.key==='Enter'){ e.preventDefault(); toggleAgree(); }});
 
-  // 提交反馈（原型演示，无后端）
+  /* ── 提交 ── */
   const submit = document.getElementById('submitApply');
-  if(submit && !submit.dataset.bound){
-    submit.dataset.bound='1';
-    submit.addEventListener('click', ()=>{
-      const hint = document.getElementById('applyHint');
-      if(chk.getAttribute('aria-checked')!=='true'){
-        hint.textContent='请先阅读并同意免责协议和法律条款';
-        hint.style.color='var(--error)';
-        return;
-      }
-      hint.textContent='报名成功！前往参赛管理查看 →';
-      hint.style.color='var(--success)';
-      setTimeout(()=>{ location.hash='#/manage'; }, 900);
-    });
-  }
+  const hint = document.getElementById('applyHint');
+  function setHint(msg, ok){ hint.textContent = msg; hint.style.color = ok ? 'var(--success)' : 'var(--error)'; }
+  submit.addEventListener('click', ()=>{
+    // 队长必填校验
+    const captainInputs = [...form.querySelectorAll('input[data-rule]')]
+      .filter(i => !i.closest('.member-card') && !i.closest('.advisor-card'));
+    let firstBad = null;
+    captainInputs.forEach(i=>{ if(!validate(i,true) && !firstBad) firstBad = i; });
+    if(firstBad){ setHint('请完善必填信息并修正格式错误', false); firstBad.focus(); firstBad.scrollIntoView({behavior:'smooth', block:'center'}); return; }
+    // 队员需全部「确认添加」
+    const unconfirmed = [...list.querySelectorAll('.member-card')].some(c => c.dataset.confirmed !== '1');
+    if(unconfirmed){ setHint('请先点击「确认添加」完成队员信息', false); return; }
+    // 指导专家（若启用）需确认
+    const advCard = advBox.querySelector('.advisor-card');
+    if(advSwitch.getAttribute('aria-checked')==='true' && advCard && advCard.dataset.confirmed!=='1'){
+      setHint('请先点击「确认添加」完成指导教师 / 专家信息', false); return;
+    }
+    // 协议
+    if(chk.getAttribute('aria-checked')!=='true'){ setHint('请先阅读并同意《参赛协议》与《隐私政策》', false); return; }
+    // 成功
+    setHint('报名成功！正在前往参赛管理 →', true);
+    setTimeout(()=>{ location.hash = '#/manage'; }, 900);
+  });
 }
 
 /* ═══════════════ 参赛管理（/manage）═══════════════ */
