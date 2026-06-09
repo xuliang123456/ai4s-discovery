@@ -314,7 +314,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-ds-name svg { width: 15px; height: 15px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; }
 .td-ds-body { font-size: 13px; color: var(--ink-soft); line-height: 1.7; flex: 1; }
 .td-ds-body p { margin: 0 0 6px; } .td-ds-body p:last-child { margin: 0; }
-.td-ds-dl { align-self: flex-start; margin-top: 13px; padding: 5px 14px; font-size: 12px; }
+.td-ds-dl { align-self: flex-start; margin-top: 13px; padding: 6px 16px; font-size: 12px; color: var(--vermilion); border-color: var(--vermilion-soft); background: var(--paper); }
+.td-ds-dl:hover { background: var(--vermilion-bg); border-color: var(--vermilion); color: var(--vermilion); }
 /* 评测标准 · 权重条 */
 .td-bar { height: 6px; border-radius: 3px; background: var(--rule-soft); overflow: hidden; margin-top: 5px; max-width: 120px; }
 .td-bar > i { display: block; height: 100%; border-radius: 3px; }
@@ -1341,6 +1342,8 @@ function renderTrackDetail(idx){
   const modules=[];
   for(let i=0;i<segs.length;i++){
     const s=segs[i];
+    // 跳过源页自带的「社群交流/联系」占位段（本页末尾会统一渲染社群模块，避免重复）
+    if(/社群|交流|联系我们|二维码|加入我们|关注我们/.test(s.title)) continue;
     if(/赛程/.test(s.title)){
       const phases=[]; let j=i+1;
       while(j<segs.length && segHasTable(segs[j])){ phases.push(segs[j]); j++; }
