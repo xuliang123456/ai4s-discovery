@@ -271,6 +271,20 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-prose strong { color: var(--ink); font-weight: 600; }
 .td-prose code { font-family: var(--font-mono); font-size: 12.5px; background: var(--paper-warm); padding: 1px 5px; border-radius: 3px; color: var(--vermilion); }
 .td-code { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; background: #0f1830; color: #d8e1f2; padding: 16px 18px; border-radius: 6px; overflow-x: auto; margin: 14px 0 18px; white-space: pre; -webkit-overflow-scrolling: touch; }
+/* 赛道详情 · 表格 */
+.td-table-wrap { overflow-x: auto; margin: 12px 0 18px; border: 1px solid var(--rule); border-radius: 4px; }
+.td-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.td-table th { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; font-weight: 600; text-transform: uppercase; color: var(--vermilion); text-align: left; padding: 11px 16px; background: var(--vermilion-bg); border-bottom: 1px solid var(--rule); white-space: nowrap; vertical-align: top; }
+.td-table td { padding: 12px 16px; border-bottom: 1px solid var(--rule-soft); color: var(--ink-soft); line-height: 1.75; vertical-align: top; }
+.td-table tr:last-child td { border-bottom: none; }
+.td-table td:first-child { color: var(--ink); font-weight: 500; white-space: nowrap; font-family: var(--font-mono); font-size: 12px; }
+.td-table td p { margin: 0 0 6px; } .td-table td p:last-child { margin: 0; }
+.td-table td ul { margin: 4px 0; padding-left: 18px; } .td-table td li { margin: 0 0 4px; }
+/* 赛道详情 · 区块标题图标 */
+.td-prose h2 { display: flex; align-items: center; gap: 10px; }
+.td-ico { width: 22px; height: 22px; flex: none; display: inline-grid; place-items: center; border-radius: 5px; background: var(--vermilion-bg); color: var(--vermilion); }
+.td-ico svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.td-prose ul li::marker { color: var(--vermilion); }
 .card-emphasis, .insight { background: var(--paper-warm); border: 1px solid var(--rule-soft); border-left: 3px solid var(--vermilion); border-radius: 2px; padding: 12px 14px; }
 .card-info { background: var(--paper-cool); border: 1px solid var(--rule-soft); border-radius: 2px; padding: 12px 14px; }
 
@@ -1227,6 +1241,31 @@ function renderTrackDetail(idx){
         </div>
       </section>
     </div>`;
+  // 区块标题图标（按关键词）— 增加视觉符号，弱化单调
+  const ICO = {
+    info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.5h.01"/>',
+    data:'<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/>',
+    cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 9h16M8 3v4M16 3v4"/>',
+    target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
+    pkg:'<path d="M21 8 12 3 3 8l9 5 9-5ZM3 8v8l9 5 9-5V8M12 13v8"/>',
+    check:'<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+    zap:'<path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>',
+    award:'<circle cx="12" cy="8" r="6"/><path d="M9 13l-2 8 5-3 5 3-2-8"/>',
+    chat:'<path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/>',
+    dot:'<circle cx="12" cy="12" r="4"/>'
+  };
+  const pick = txt => /简介|背景/.test(txt)?'info' : /数据集|数据/.test(txt)?'data'
+    : /赛程|时间|安排|节点/.test(txt)?'cal' : /赛题|必选|进阶|题|实现/.test(txt)?'target'
+    : /资源|领取/.test(txt)?'pkg' : /要求|规范|统一|提交/.test(txt)?'check'
+    : /特色|范式|驱动/.test(txt)?'zap' : /评测|标准|奖|排名/.test(txt)?'award'
+    : /社群|交流/.test(txt)?'chat' : 'dot';
+  root.querySelectorAll('.td-prose > h2').forEach(h=>{
+    const k = pick(h.textContent||'');
+    const ico = document.createElement('span');
+    ico.className = 'td-ico';
+    ico.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">'+ICO[k]+'</svg>';
+    h.insertBefore(ico, h.firstChild);
+  });
 }
 
 /* 赛程时间线 · 真实阶段 */
@@ -1975,57 +2014,15 @@ window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas()
 <ul><li>公开子集（约 1% 标注）：包含少量已知反应结果，可用于算法预训练 / 先验建模（对于Buchwald-hartwing反应的公开数据集，存在产物和反应物不完全一致的情况，对于其他两个反应数据集，产物和反应物完全一致）；</li><li>评测数据集（未标注条件集合）：只提供变量描述，不公开产率，由评测平台在算法查询时返回真实结果（在每个反应的评测数据集中，反应物和产物完全一致）。</li></ul>
 <h2>赛程安排</h2>
 <h2>报名及作品提交</h2>
-<p>时间</p>
-<p>提交内容</p>
-<p>内容</p>
-<p>即日起-2026.2.28</p>
-<p>*Proposal</p>
-<p>（一份独立pdf文件）</p>
-<ul><li>肝癌新靶点假说，需包含清晰的靶点信息：基因/蛋白命名 (Gene symbol, Uniprot ID)；</li><li>提出该假说的推理逻辑和支持证据</li><li>假说的新颖性、科学意义和临床意义论证</li><li>验证方案及可行性论证，需明确验证方案采用的具体药物（单克隆抗体/小分子/多肽/双特异性抗体等）【注：药物没有新颖性要求】</li><li>如选择单克隆抗体/多肽/双特异性抗体：提供氨基酸序列</li><li>如选择小分子，需提供SMILES和PubChem ID（如有）</li><li>选择该药物的理由，需包含药物和假说所提出的靶点特异性结合的证据（可以是参考文献/专利/数据库/建模）</li></ul>
-<p>*Method</p>
-<p>（一份独立pdf文件）</p>
-<p>需包含对产出Proposal的AI scientist实现方案的描述。</p>
-<p>*复现材料</p>
-<p>（从中任选一种）</p>
-<p>源码仓库（GitHub），容器镜像（Docker），可调用的API（附文档），可公开访问的 Web 应用（URL和使用说明）。</p>
-<p>其他材料</p>
-<p>（如适用）</p>
-<p>运行日志、数据许可声明。</p>
-<p>备注：加*为必须项</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>提交内容</th><th>内容</th></tr></thead><tbody><tr><td><p>即日起-2026.2.28</p></td><td><p>*Proposal</p></td><td><p>（一份独立pdf文件）</p><ul><li>肝癌新靶点假说，需包含清晰的靶点信息：基因/蛋白命名 (Gene symbol, Uniprot ID)；</li><li>提出该假说的推理逻辑和支持证据</li><li>假说的新颖性、科学意义和临床意义论证</li><li>验证方案及可行性论证，需明确验证方案采用的具体药物（单克隆抗体/小分子/多肽/双特异性抗体等）【注：药物没有新颖性要求】</li><li>如选择单克隆抗体/多肽/双特异性抗体：提供氨基酸序列</li><li>如选择小分子，需提供SMILES和PubChem ID（如有）</li><li>选择该药物的理由，需包含药物和假说所提出的靶点特异性结合的证据（可以是参考文献/专利/数据库/建模）</li></ul><p>*Method</p><p>（一份独立pdf文件）</p><p>需包含对产出Proposal的AI scientist实现方案的描述。</p><p>*复现材料</p><p>（从中任选一种）</p><p>源码仓库（GitHub），容器镜像（Docker），可调用的API（附文档），可公开访问的 Web 应用（URL和使用说明）。</p><p>其他材料</p><p>（如适用）</p><p>运行日志、数据许可声明。</p><p>备注：加*为必须项</p></td></tr></tbody></table></div>
 <h2>初赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>3月初-3月中旬</p>
-<p>Expert Review 专家评审</p>
-<p>专家评审团对AI Proposal进行合规评估与筛选。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>3月初-3月中旬</p></td><td><p>Expert Review 专家评审</p></td><td><p>专家评审团对AI Proposal进行合规评估与筛选。</p></td></tr></tbody></table></div>
 <h2>复赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>3月中旬-4月中旬</p>
-<p>Milestone 1A：细胞实验</p>
-<p>（实验验证） 针对高潜力靶点，验证100个科学假说。</p>
-<p>Milestone 1B：类器官实验</p>
-<p>（实验验证） 针对最具创新性的靶点，验证20-30个科学假说。 (1A, 1B可二选一或同时进行)</p>
-<p>Milestone 2：动物实验</p>
-<p>（高级验证） 针对最具潜力的靶点，验证5-10个科学假说。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>3月中旬-4月中旬</p></td><td><p>Milestone 1A：细胞实验</p></td><td><p>（实验验证） 针对高潜力靶点，验证100个科学假说。</p><p>Milestone 1B：类器官实验</p><p>（实验验证） 针对最具创新性的靶点，验证20-30个科学假说。 (1A, 1B可二选一或同时进行)</p><p>Milestone 2：动物实验</p><p>（高级验证） 针对最具潜力的靶点，验证5-10个科学假说。</p></td></tr></tbody></table></div>
 <h2>决赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>5月初</p>
-<p>专家问辩</p>
-<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>5月初</p></td><td><p>专家问辩</p></td><td><p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p></td></tr></tbody></table></div>
 <h2>成果展示</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>待定</p>
-<p>名次公布</p>
-<p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p>
-<p>上传平台</p>
-<p>公布结果并将模型与智能体发布在科学发现平台</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>待定</p></td><td><p>名次公布</p></td><td><p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p><p>上传平台</p><p>公布结果并将模型与智能体发布在科学发现平台</p></td></tr></tbody></table></div>
 <h2>社群交流</h2></template>
 <template id="td-material_science"><h2>赛事简介</h2>
 <p>自动化高通量实验极大提高了化学反应条件优化的效率，但在实际研发中，反应条件组合空间巨大、实验预算有限仍然是核心瓶颈。传统贝叶斯优化（BO）在小样本条件下表现优异，但在化学场景中往往面临以下困境：变量空间高度离散、非结构化（配体、溶剂、添加剂等）；可用标注数据极少；先验化学知识分散在文献、专利与专家经验中，难以系统利用。
@@ -2038,47 +2035,18 @@ window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas()
 <p>Buchwald–Hartwig 偶联反应数据集 1</p>
 <p>任务：固定部分底物与配体族群，优化碱、溶剂等条件变量。
 特点：变量数目略少，空间结构相对规整，高产率较少，对“局部精细搜索”敏感。</p>
-<p>每个数据集将划分为： 
-公开子集（约 1% 标注）：包含少量已知反应结果，可用于算法预训练 / 先验建模（对于Buchwald-hartwing反应的公开数据集，存在产物和反应物不完全一致的情况，对于其他两个反应数据集，产物和反应物完全一致）； 
-评测数据集（未标注条件集合）：只提供变量描述，不公开产率，由评测平台在算法查询时返回真实结果（在每个反应的评测数据集中，反应物和产物完全一致）。</p>
+<p>每个数据集将划分为： 公开子集（约 1% 标注）：包含少量已知反应结果，可用于算法预训练 / 先验建模（对于Buchwald-hartwing反应的公开数据集，存在产物和反应物不完全一致的情况，对于其他两个反应数据集，产物和反应物完全一致）； 评测数据集（未标注条件集合）：只提供变量描述，不公开产率，由评测平台在算法查询时返回真实结果（在每个反应的评测数据集中，反应物和产物完全一致）。</p>
 <h2>赛程安排</h2>
 <h2>报名及作品提交</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>即日起-2026.2.28</p>
-<p>提交初评材料</p>
-<p>参赛队伍提交《AI技术方案书和干实验报告》，包括整体框架、先验知识利用方式、拟采用模型与优化策略、实验设置，实验结果和分析等，用于专家书面评审和筛选进入复评阶段（湿实验）的参赛队伍。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>即日起-2026.2.28</p></td><td><p>提交初评材料</p></td><td><p>参赛队伍提交《AI技术方案书和干实验报告》，包括整体框架、先验知识利用方式、拟采用模型与优化策略、实验设置，实验结果和分析等，用于专家书面评审和筛选进入复评阶段（湿实验）的参赛队伍。</p></td></tr></tbody></table></div>
 <h2>初赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>3月初-3月中旬</p>
-<p>Expert Review 专家评审（初评，盲审）</p>
-<p>由AI与化学双学科专家对初评材料进行书面评审与打分，确定进入里程碑阶段的队伍名单。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>3月初-3月中旬</p></td><td><p>Expert Review 专家评审（初评，盲审）</p></td><td><p>由AI与化学双学科专家对初评材料进行书面评审与打分，确定进入里程碑阶段的队伍名单。</p></td></tr></tbody></table></div>
 <h2>复赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>5月中上旬</p>
-<p>Expert Review 实验评审</p>
-<p>（实验验证）选择最有竞争力的1-3个队伍， 针对鲜有公开报道或权威认证有难度或有商业价值的1-2个化学反应，通过算法驱动高通量实验设备来完成化学反应条件的优化。在相同实验轮数的预算情况下，依据初始轮最大值，最终最大值和收敛速度三个指标综合量化评分。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>5月中上旬</p></td><td><p>Expert Review 实验评审</p></td><td><p>（实验验证）选择最有竞争力的1-3个队伍， 针对鲜有公开报道或权威认证有难度或有商业价值的1-2个化学反应，通过算法驱动高通量实验设备来完成化学反应条件的优化。在相同实验轮数的预算情况下，依据初始轮最大值，最终最大值和收敛速度三个指标综合量化评分。</p></td></tr></tbody></table></div>
 <h2>决赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>5月初</p>
-<p>Expert Review 专家评审</p>
-<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>5月初</p></td><td><p>Expert Review 专家评审</p></td><td><p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p></td></tr></tbody></table></div>
 <h2>成果展示</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>2026.6.1-2026.6.30</p>
-<p>结果公布</p>
-<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p>
-<p>待定</p>
-<p>继续进行算法在真实的湿实验场景中的验证，可根据结果决定是否开启商业化转换阶段。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>2026.6.1-2026.6.30</p></td><td><p>结果公布</p></td><td><p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。</p><p>待定</p><p>继续进行算法在真实的湿实验场景中的验证，可根据结果决定是否开启商业化转换阶段。</p></td></tr></tbody></table></div>
 <h2>社群交流</h2></template>
 <template id="td-earth_science"><h2>赛事简介</h2>
 <p>厄尔尼诺-南方涛动（ENSO）是全球气候年际变率最强的信号，对全球粮食安全、水资源管理及防灾减灾具有决定性影响。然而，过去几十年，学界和业界习惯用单一的指数（如 Niño 3.4）来监测和预测它。但这种“平均化”的处理方式，掩盖了ENSO复杂的空间结构差异，在面对极端气候时正在失效。
@@ -2094,45 +2062,11 @@ window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas()
 <h2>报名及初赛</h2>
 <p>A榜：筛选出网络结构合理、能跑通二维场预测、且在“平均态”下表现稳定的模型。</p>
 <p>预测任务： 输入起始月状态，输出未来 12 个月的二维 SSTA 场。</p>
-<p>时间</p>
-<p>提交内容</p>
-<p>提交要求</p>
-<p>即日起-2026.2.28</p>
-<p>预测结果文件</p>
-<p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 
-<strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p>
-<ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul>
-<p>*Method</p>
-<p>（一份独立pdf文件）</p>
-<p>需包含对产出的模型方案的描述。</p>
-<p>B榜：迫使模型解决不对称性和多样性问题。</p>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>即日起-2026.2.28</p>
-<p>预测结果文件</p>
-<p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 
-<strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p>
-<ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul>
-<p>*Method</p>
-<p>（一份独立pdf文件）</p>
-<p>需包含对产出的模型方案的描述。</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>提交内容</th><th>提交要求</th></tr></thead><tbody><tr><td><p>即日起-2026.2.28</p></td><td><p>预测结果文件</p></td><td><p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 <strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p><ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul><p>*Method</p><p>（一份独立pdf文件）</p><p>需包含对产出的模型方案的描述。</p><p>B榜：迫使模型解决不对称性和多样性问题。</p><p>时间</p><p>阶段</p><p>内容</p><p>即日起-2026.2.28</p><p>预测结果文件</p><p><strong>文件格式</strong>： NetCDF (.nc) 或 HDF5 格式，符合地球科学通用标准。 <strong>数据维度</strong>： (Sample_ID, Lead_Time, Latitude, Longitude)</p><ul><li>Sample_ID: 对应测试集的样本编号 (0-199)。</li><li>Lead_Time: 预测未来 1-24 个月。</li><li>Lat/Lon: 覆盖热带太平洋</li></ul><p>*Method</p><p>（一份独立pdf文件）</p><p>需包含对产出的模型方案的描述。</p></td></tr></tbody></table></div>
 <h2>决赛</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>3月中旬</p>
-<p>专家问辩</p>
-<p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。（方法，结果，复现，模型权重）</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>3月中旬</p></td><td><p>专家问辩</p></td><td><p>专家评审团对晋级决赛的XX支队伍进行线下问辩，将根据初赛成绩（70%）和答辩成绩（30%）的加权得分进行排名。（方法，结果，复现，模型权重）</p></td></tr></tbody></table></div>
 <h2>成果展示</h2>
-<p>时间</p>
-<p>阶段</p>
-<p>内容</p>
-<p>待定</p>
-<p>名次公布</p>
-<p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p>
-<p>上传平台</p>
-<p>公布结果并将模型与智能体发布在科学发现平台</p>
+<div class="td-table-wrap"><table class="td-table"><thead><tr><th>时间</th><th>阶段</th><th>内容</th></tr></thead><tbody><tr><td><p>待定</p></td><td><p>名次公布</p></td><td><p>名次将发布在大赛官网、Intern Science小红书账号等渠道</p><p>上传平台</p><p>公布结果并将模型与智能体发布在科学发现平台</p></td></tr></tbody></table></div>
 <h2>社群交流</h2></template>
 <template id="td-quantum"><h2>赛事简介</h2>
 <p>量子计算被视为下一代计算技术的核心方向，在科学计算、材料模拟、组合优化与人工智能等领域具有深远潜在价值。本赛道聚焦量子计算模拟与跨场景应用探索，旨在依托壁仞国产GPU平台，推动量子线路模拟、主流算法演示与行业场景落地，鼓励参赛者以智能体辅助开发模式，构建兼具可运行性、可解释性与创新价值的量子计算原型成果。</p>
@@ -2167,8 +2101,8 @@ window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas()
 <p>评审重点关注应用场景的清晰度和展示价值、量子计算与核心流程的结合深度、结果的可解释性与可复现性；同时关注 <code>Agent/Skills</code> 的任务闭环完整性、自然语言交互效果，以及其对量子应用探索流程的组织支撑能力。</p>
 <h2>统一要求</h2>
 <ul><li>参赛项目优选壁仞GPU平台实现，提交材料中需说明所使用平台、运行环境和核心计算环节。</li><li>可使用公开开源资源，但须注明来源。</li><li>建议单个演示样例的运行时间控制在 <code>10</code> 分钟以内，完整评测脚本控制在 <code>30</code> 分钟以内。</li></ul>
-<h2>壁仞科技  ·  开发者专属资源包</h2>
-<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h2>壁仞科技 · 开发者专属资源包</h2>
+<p>限量500份 · 先到先得 · 赛事开赛后即可领取</p>
 <h3>API Key</h3>
 <p>限量1000份</p>
 <p>剩余 998 / 999</p>
@@ -2188,11 +2122,7 @@ window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas()
 <h3>1. 赛题简介</h3>
 <p>Fourier Neural Operator（FNO）是 AI for Science 领域最具代表性的神经算子架构之一，广泛应用于流体力学模拟、天气预报、地下水流预测等偏微分方程（PDE）求解场景。FNO 的核心创新在于 Spectral Convolution（谱卷积）算子——在傅里叶频域空间中学习全局卷积核，相比传统卷积具有分辨率无关性和全局感受野等优势。</p>
 <p>Spectral Convolution 的计算流程为：</p>
-<p>输入特征 x(shape: [B, C_in, H, W]) 
-→ FFT 变换到频域 
-→ 频域复数矩阵乘法（可学习权重 R，shape: [C_in, C_out, modes, modes]） 
-→ IFFT 变换回空间域 
-→ 输出特征 y(shape: [B, C_out, H, W])</p>
+<p>输入特征 x(shape: [B, C_in, H, W]) → FFT 变换到频域 → 频域复数矩阵乘法（可学习权重 R，shape: [C_in, C_out, modes, modes]） → IFFT 变换回空间域 → 输出特征 y(shape: [B, C_out, H, W])</p>
 <p>本题要求参赛者在壁仞 GPU 平台上实现高性能的 Spectral Convolution 算子，并通过正确性验证和性能测试。注意：FFT 运算建议优先支持空间维度为 2 的幂次（如 64, 128, 256）的输入 shape，以获得最佳计算性能。</p>
 <h3>2. 任务要求</h3>
 <p>基础要求（必须完成）：</p>
@@ -3079,8 +3009,8 @@ if __name__ == &quot;__main__&quot;:
 <p>A：允许使用公开预训练权重作为初始化，但须注明来源。核心算子必须自主实现。</p>
 <p><strong>Q6：模型题可以直接用原生 PyTorch 实现吗？</strong></p>
 <p>A：不建议。模型题要求参赛者使用 SUPA 源码实现模型的算子串联，或通过 torch.extension 的形式构建自定义算子并组装模型，以体现对底层计算逻辑和 BIREN GPU 架构的理解。</p>
-<h2>壁仞科技  ·  开发者专属资源包</h2>
-<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h2>壁仞科技 · 开发者专属资源包</h2>
+<p>限量500份 · 先到先得 · 赛事开赛后即可领取</p>
 <h3>API Key</h3>
 <p>限量1000份</p>
 <p>剩余 998 / 999</p>
@@ -3092,7 +3022,7 @@ if __name__ == &quot;__main__&quot;:
 <p>恭喜您成为壁仞专属赛道开发者，我们将为您提供壁仞GPU开发环境，环境将于7.1正式开放申领，数量有限，先到先得！</p>
 <h2>社群交流</h2></template>
 <template id="td-free"><h2>赛事简介</h2>
-<p>当 <em>AI4S（AI for Science）</em> 在生命、物质、地球等硬科技领域掀起范式革命的同时，人文、艺术与社会科学领域同样亟需一场属于自己的智能化转型——这就是  <em>AI4SS（AI for Social Science）</em>  所指向的广阔天地。
+<p>当 <em>AI4S（AI for Science）</em> 在生命、物质、地球等硬科技领域掀起范式革命的同时，人文、艺术与社会科学领域同样亟需一场属于自己的智能化转型——这就是 <em>AI4SS（AI for Social Science）</em> 所指向的广阔天地。
 作为本届大赛 唯一面向全社会开放的自由赛道 ，我们以 「科艺融合 × 通用智能」 为核心命题，强调跨学科融合与广泛通用性，特别鼓励来自历史、考古、文学、艺术、设计、传媒、教育、心理、社会、经济、管理、法律等人文社科领域 的研究者、教育者、创作者与开发者积极参赛。
 你不必拥有深厚的算法底色——只要在自己的专业领域沉淀过独特的方法、流程、知识体系或审美判断，都可将其提炼为标准化的 AI Skills 或 Agent，沉淀至书生科学发现平台（Intern Discovery）SCP 广场，让属于人文社科的智慧，借助 AI 实现广泛流动与价值放大。</p>
 <h2>参考方向 · 自主选题</h2>
@@ -3137,8 +3067,8 @@ if __name__ == &quot;__main__&quot;:
 <h2>知识产权</h2>
 <ul><li>参赛作品知识产权归参赛者本人所有</li><li>参赛者授权主办方在平台内展示、推广该作品的非独家授权</li><li>最佳开源贡献奖获奖方需将作品完整开源至书生科学发现平台</li></ul>
 <p>说明：用户收藏量统计周期为作品上架后至投票截止日（约 30 天）。专家评审将在收藏量统计截止后进行，综合两项得分确定晋级名单。</p>
-<h2>壁仞科技  ·  开发者专属资源包</h2>
-<p>限量500份  ·  先到先得  ·  赛事开赛后即可领取</p>
+<h2>壁仞科技 · 开发者专属资源包</h2>
+<p>限量500份 · 先到先得 · 赛事开赛后即可领取</p>
 <h3>API Key</h3>
 <p>限量1000份</p>
 <p>剩余 998 / 999</p>
