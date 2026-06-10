@@ -665,18 +665,18 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 </style>
 <style id="claim-style">
 /* 开发者资源包 · 深色卡（首页）*/
-#homeResPack .res-card{ background:linear-gradient(135deg,#141d33 0%,#1d2950 60%,#243663 100%); border:1px solid rgba(120,150,210,.22); box-shadow:0 22px 50px -32px rgba(10,16,40,.85); color:#fff; }
-#homeResPack .res-card:hover{ background:linear-gradient(135deg,#172138 0%,#213056 60%,#294072 100%); }
-#homeResPack .res-card .label--strong{ color:rgba(255,255,255,.6); }
-#homeResPack .res-card .title-m{ color:#fff; }
-#homeResPack .res-card .pill-primary{ background:rgba(127,176,236,.18); color:#bcd4f5; }
-#homeResPack .res-card .pill{ background:rgba(255,255,255,.1); color:rgba(255,255,255,.82); }
-#homeResPack .res-card .label{ color:rgba(255,255,255,.66); }
-#homeResPack .res-card p{ color:rgba(255,255,255,.78) !important; }
-#homeResPack .res-card .res-meter{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.14); }
-#homeResPack .res-card .res-meter > i{ background:linear-gradient(90deg,#7fb0ec,#5b88c2); }
-#homeResPack .res-card .btn{ background:rgba(255,255,255,.1); color:#fff; border-color:rgba(255,255,255,.3); }
-#homeResPack .res-card .btn:hover{ background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.5); }
+.res-pack .res-card{ background:linear-gradient(135deg,#141d33 0%,#1d2950 60%,#243663 100%); border:1px solid rgba(120,150,210,.22); box-shadow:0 22px 50px -32px rgba(10,16,40,.85); color:#fff; }
+.res-pack .res-card:hover{ background:linear-gradient(135deg,#172138 0%,#213056 60%,#294072 100%); }
+.res-pack .res-card .label--strong{ color:rgba(255,255,255,.6); }
+.res-pack .res-card .title-m{ color:#fff; }
+.res-pack .res-card .pill-primary{ background:rgba(127,176,236,.18); color:#bcd4f5; }
+.res-pack .res-card .pill{ background:rgba(255,255,255,.1); color:rgba(255,255,255,.82); }
+.res-pack .res-card .label{ color:rgba(255,255,255,.66); }
+.res-pack .res-card p{ color:rgba(255,255,255,.78) !important; }
+.res-pack .res-card .res-meter{ background:rgba(255,255,255,.1); border-color:rgba(255,255,255,.14); }
+.res-pack .res-card .res-meter > i{ background:linear-gradient(90deg,#7fb0ec,#5b88c2); }
+.res-pack .res-card .btn{ background:rgba(255,255,255,.1); color:#fff; border-color:rgba(255,255,255,.3); }
+.res-pack .res-card .btn:hover{ background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.5); }
 /* 领取弹窗 · 浅色（设计规范 · 2px 圆角，参考报名页）*/
 .claim-mask{ position:fixed; inset:0; z-index:var(--z-modal); background:rgba(20,25,40,.45); backdrop-filter:blur(3px); display:grid; place-items:center; padding:20px; animation:fadeIn .2s var(--ease); }
 .claim-modal{ position:relative; width:min(640px,100%); border-radius: 2px; padding:30px 32px 22px; background:var(--paper); border:1px solid var(--rule); box-shadow:var(--shadow-modal); color:var(--ink); animation:slideUp .25s var(--ease-out); }
@@ -702,10 +702,10 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 .claim-detail a{ color:var(--vermilion); cursor:pointer; text-decoration:none; }
 .claim-detail a:hover{ text-decoration:underline; }
 .claim-foot{ display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:18px; border-top:1px solid var(--rule-soft); }
-.claim-confirm{ padding:9px 26px; border:1px solid var(--vermilion); border-radius: 2px; background:var(--vermilion); color:#fff; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; transition:background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
-.claim-confirm:hover{ background:var(--vermilion-deep); border-color:var(--vermilion-deep); }
-.claim-goto{ padding:9px 18px; border:1px solid var(--rule); border-radius: 2px; background:var(--paper); color:var(--ink-soft); font-size:14px; cursor:pointer; font-family:inherit; transition:background var(--t-base) var(--ease); }
-.claim-goto:hover{ background:var(--paper-warm); }
+.claim-confirm{ padding:9px 26px; border:1px solid var(--rule); border-radius: 2px; background:var(--paper); color:var(--ink-soft); font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; transition:background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+.claim-confirm:hover{ background:var(--paper-warm); }
+.claim-goto{ padding:9px 18px; border:1px solid var(--vermilion); border-radius: 2px; background:var(--vermilion); color:#fff; font-size:14px; font-weight:500; cursor:pointer; font-family:inherit; transition:background var(--t-base) var(--ease), border-color var(--t-base) var(--ease); }
+.claim-goto:hover{ background:var(--vermilion-deep); border-color:var(--vermilion-deep); }
 .claim-toast{ position:fixed; left:50%; top:32px; transform:translateX(-50%); z-index:var(--z-toast); display:flex; align-items:center; gap:8px; background:var(--paper); color:var(--ink); border:1px solid var(--rule); border-radius: 2px; padding:10px 18px; font-size:13px; box-shadow:var(--shadow-overlay); animation:fadeIn .18s var(--ease); }
 .claim-toast svg{ width:16px; height:16px; }
 @media (max-width:640px){ .claim-modal{ padding:24px 18px 18px; } .claim-foot{ flex-direction:column-reverse; } .claim-confirm,.claim-goto{ width:100%; } }
@@ -995,7 +995,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 
       <!-- 03 开发者专项资源 -->
       <div class="plat-group" style="margin-top:56px;"><span class="pg-no">03</span><span class="pg-tt">开发者专项资源 · 限量发放</span><span class="pg-line"></span></div>
-      <div id="homeResPack"></div>
+      <div id="homeResPack" class="res-pack"></div>
     </div>
   </section>
 
@@ -1855,7 +1855,7 @@ function renderTrackDetail(idx){
   let num=0;
   const modHTML = units.map(u=>{
     num++;
-    if(u.kind==='res')   return modShell(num, u.title, 'pkg', resourcePackHTML(resKeys));
+    if(u.kind==='res')   return modShell(num, u.title, 'pkg', '<div class="res-pack">'+resourcePackHTML(resKeys)+'</div>');
     if(u.kind==='sched') return modShell(num, u.title, 'cal', u.html);
     if(u.kind==='tabs'){
       const bar = u.tabs.map((tb,ti)=>'<button class="td-tab'+(ti===0?' on':'')+'" type="button">'+tb.label+'</button>').join('');
