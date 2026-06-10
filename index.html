@@ -2418,7 +2418,7 @@ function router(){
   // scroll to anchor or top
   setTimeout(()=>{
     if(anchor){ const el = document.getElementById(anchor); if(el) el.scrollIntoView({behavior:'smooth', block:'start'}); }
-    else window.scrollTo({top:0, behavior:'instant'});
+    else { window.scrollTo({top:0, behavior:'instant'}); if(route==='home') window.__resetSectionNav && window.__resetSectionNav(); }
   }, 30);
 }
 window.addEventListener('hashchange', router);
@@ -2503,7 +2503,10 @@ function initSectionSpy(){
     if(inView[0]) setActive(inView[0].target.id);
   }, { rootMargin: '-116px 0px -55% 0px', threshold: 0 });
   sections.forEach(s => obs.observe(s));
-  setActive(links[0].dataset.sec);
+  const resetTop = ()=>{ if(sections[0] && window.scrollY < sections[0].offsetTop - 130) setActive(links[0].dataset.sec); };
+  window.addEventListener('scroll', resetTop, { passive:true });
+  window.__resetSectionNav = ()=> setActive(links[0].dataset.sec);
+  setActive(links[0].dataset.sec); resetTop();
 }
 /* ═══════════════ 资源领取弹窗（demo 1:1）═══════════════ */
 const CLAIM_DATA = {
