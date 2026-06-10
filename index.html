@@ -261,6 +261,11 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .apply-track.sel { border-color: #fff; box-shadow: 0 0 0 3px rgba(21,84,168,.45), 0 18px 42px -22px rgba(18,14,38,.75); }
 .apply-track.sel .at-check { background: var(--vermilion); border-color: var(--vermilion); }
 .apply-track.sel .at-check svg { opacity: 1; }
+/* 报名表单 · 模块卡 + 描边添加按钮 */
+.form-block { border: 1px solid var(--rule); border-radius: 12px; padding: 22px 24px 24px; margin-bottom: 16px; background: var(--paper); }
+.form-block > .section-label { border-bottom: none; padding-bottom: 0; margin-bottom: 18px; }
+.add-member-btn { width: 100%; justify-content: center; border: 1px dashed var(--rule); background: transparent; color: var(--ink-soft); padding: 11px; border-radius: 8px; }
+.add-member-btn:hover { border-color: var(--vermilion); color: var(--vermilion); background: var(--vermilion-bg); }
 /* Hero 两栏 + 配图 */
 .hero-cols { display: grid; grid-template-columns: 1fr 0.74fr; gap: 48px; align-items: center; }
 .hero-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 22px 54px -30px rgba(40,30,20,.55); }
@@ -1071,14 +1076,14 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     <form id="applyForm" onsubmit="return false;">
 
       <!-- 选择赛道 -->
-      <div style="margin-bottom:32px;">
+      <div class="form-block">
         <div class="section-label">选择赛道 <span class="req" style="color:var(--vermilion);">*</span></div>
         <div class="grid-2" style="gap:10px;" id="trackSelect"><!-- 赛道单选由 JS 注入 --></div>
         <p class="field-help" id="trackErr" style="margin-top:8px;">报名仅允许选择 1 个赛道，提交后不可更改。</p>
       </div>
 
       <!-- 队伍名称 -->
-      <div style="margin-bottom:32px;">
+      <div class="form-block">
         <div class="section-label">队伍名称</div>
         <div class="field">
           <label class="field-label">团队名称 <span class="req">*</span></label>
@@ -1088,7 +1093,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       </div>
 
       <!-- 队长信息 -->
-      <div style="margin-bottom:32px;">
+      <div class="form-block">
         <div class="section-label">队长信息</div>
         <div class="grid-2">
           <div class="field">
@@ -1122,21 +1127,21 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       </div>
 
       <!-- 队员信息 -->
-      <div style="margin-bottom:32px;">
-        <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--rule-soft);">
+      <div class="form-block">
+        <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
           <span class="section-label" style="border:none; margin:0; padding:0;">队员信息</span>
           <span class="label" style="text-transform:none; letter-spacing:.04em;">队长占 1 名 · 至多 4 名队员</span>
         </div>
         <p class="field-help" style="margin:-4px 0 12px;">每名队员填写后点击「确认添加」，确认后锁定；提交前可删除，提交后不可修改。</p>
         <div id="memberList"></div>
-        <button class="btn btn-ghost" id="addMember" type="button" style="margin-top:4px;">
+        <button class="btn add-member-btn" id="addMember" type="button">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> 添加队员
         </button>
       </div>
 
       <!-- 指导教师 / 专家 -->
-      <div style="margin-bottom:32px;">
-        <div class="meta-row" style="justify-content:space-between; margin-bottom:12px; padding-bottom:8px; border-bottom:1px solid var(--rule-soft);">
+      <div class="form-block">
+        <div class="meta-row" style="justify-content:space-between; margin-bottom:0;">
           <div>
             <span class="section-label" style="border:none; margin:0; padding:0;">指导教师 / 专家</span>
             <span class="label" style="text-transform:none; letter-spacing:.04em; margin-left:8px; color:var(--ink-faint);">选填 · 至多 1 名</span>
