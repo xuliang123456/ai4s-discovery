@@ -239,6 +239,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tcd-metas { display: flex; flex-direction: column; gap: 6px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.14); }
 .tcd-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: rgba(255,255,255,.74); }
 .tcd-meta i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.tcd-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 11px; }
+.tcd-mtag { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .02em; color: rgba(255,255,255,.85); background: rgba(255,255,255,.13); border: 1px solid rgba(255,255,255,.18); border-radius: 2px; padding: 3px 9px; white-space: nowrap; }
 .tcd-actions { display: flex; gap: 10px; max-height: 0; opacity: 0; overflow: hidden; transition: max-height .32s var(--ease), opacity .22s var(--ease), margin-top .32s var(--ease); }
 .track-card-dark:hover .tcd-actions { max-height: 60px; opacity: 1; margin-top: 15px; }
 .tcd-actions .btn { flex: 1; justify-content: center; padding: 9px 0; font-size: 13px; }
@@ -386,6 +388,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .hero-stat .k { font-family: var(--font-serif); font-size: 30px; font-weight: 600; color: #fff; }
 .hero-stat .k .u2 { font-size: 15px; color: rgba(255,255,255,.6); font-family: var(--font-sans); }
 .hero-stat .u { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 6px; letter-spacing: .04em; }
+.hero-status .hero-sep { width: 1px; height: 30px; background: rgba(255,255,255,.2); flex: none; }
 .stats-band { border-bottom: 1px solid var(--rule); background: var(--paper-cool); }
 .stats-band .wrap { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 24px; }
 .stats-cell { padding: 18px 22px; border-right: 1px solid var(--rule-soft); }
@@ -754,14 +757,15 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     <canvas id="heroKV" aria-hidden="true"></canvas>
     <div class="hero-veil" aria-hidden="true"></div>
     <div class="wrap hero-content">
-      <div class="eyebrow appear" style="margin-bottom:18px;">2026 · AI FOR SCIENCE · 全国挑战赛</div>
       <h1 class="hero-mega appear-2">书生国智<br><em>科探</em>挑战赛</h1>
-      <div class="hero-en appear-3">Intern Discovery Challenge</div>
       <p class="hero-sub appear-3">国芯 · 国模 · 国云 · 国智，四位一体。让 AI 智能体像科学家一样自主探索、提出并验证假说。</p>
       <div class="hero-status appear-3">
         <span class="hero-live"><span class="dot"></span>报名进行中</span>
+        <span class="hero-sep"></span>
         <span class="hero-stat"><span class="k"><span id="heroCountdown">35</span> <span class="u2">天</span></span><span class="u">距报名截止</span></span>
+        <span class="hero-sep"></span>
         <span class="hero-stat"><span class="k">60 <span class="u2">万</span></span><span class="u">奖金池</span></span>
+        <span class="hero-sep"></span>
         <span class="hero-stat"><span class="k">6</span><span class="u">大赛道</span></span>
       </div>
       <div class="meta-row appear-3" style="margin-top:26px; gap:12px;">
@@ -1411,7 +1415,7 @@ function renderTracks(){
   if(!grid) return;
   grid.innerHTML = TRACKS.map((t,i) => {
     const v = TRACK_VIS[i] || TRACK_VIS[0];
-    const metas = t.metas.map(m=>`<div class="tcd-meta"><i style="background:${v.dot};"></i>${m}</div>`).join('');
+    const tags = t.metas.map(m=>`<span class="tcd-mtag">${m}</span>`).join('');
     return `<div class="track-card-dark" onclick="location.hash='#/track/${i}'">
       <div class="tcd-bg" style="background:${v.bg};"></div>
       <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${v.scale||1}"></canvas>
@@ -1422,8 +1426,8 @@ function renderTracks(){
       </div>
       <div class="tcd-body">
         <h3 class="tcd-title">${t.title}</h3>
+        <div class="tcd-tags">${tags}</div>
         <p class="tcd-desc">${t.desc}</p>
-        <div class="tcd-metas">${metas}</div>
         <div class="tcd-actions">
           <a class="btn tcd-ghost" href="#/track/${i}" onclick="event.stopPropagation()">详情</a>
           <a class="btn btn-primary" href="#/apply" onclick="event.stopPropagation();setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
