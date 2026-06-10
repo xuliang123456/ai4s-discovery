@@ -598,6 +598,18 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 .alux-ribbon{ position:absolute; z-index:3; top:18px; right:-44px; width:170px; text-align:center; transform:rotate(45deg); padding:6px 0; font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; font-weight:600; background:linear-gradient(135deg,#f3dca0,#d8b569); color:#5a3e12; box-shadow:0 4px 12px rgba(0,0,0,.28); }
 .alux-ribbon-g{ background:linear-gradient(135deg,#7a5a24,#54390f); color:#f6e4b4; }
 @media (max-width:880px){ .awards-lux{ grid-template-columns:1fr; } }
+/* 更多激励 · 设计卡 */
+.incentive-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.incentive-card{ position:relative; display:flex; flex-direction:column; min-height:184px; padding:24px 24px 22px; border:1px solid var(--rule); border-radius:16px; background:var(--paper-cool); text-decoration:none; overflow:hidden; transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out); }
+.incentive-card:hover{ transform:translateY(-4px); box-shadow:0 24px 48px -30px rgba(30,34,55,.45); border-color:var(--ink-faint); }
+.incentive-card .ic-title{ font-family:'Noto Serif SC',serif; font-size:22px; font-weight:600; line-height:1.28; letter-spacing:.01em; color:var(--ink); }
+.incentive-card .ic-title .ic-mute{ color:var(--ink-faint); margin-left:.1em; }
+.incentive-card .ic-desc{ font-size:12.5px; color:var(--ink-mute); line-height:1.65; margin-top:11px; }
+.incentive-card .ic-more{ display:inline-flex; align-items:center; gap:11px; margin-top:auto; padding-top:22px; font-family:var(--font-mono); font-size:12px; letter-spacing:.1em; color:var(--ink-soft); }
+.incentive-card .ic-arrow{ width:34px; height:34px; border-radius:50%; background:var(--ink); color:var(--paper); display:grid; place-items:center; flex:none; transition:transform .3s var(--ease-out), background .3s var(--ease-out); }
+.incentive-card .ic-arrow svg{ width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.incentive-card:hover .ic-arrow{ transform:scale(1.12); background:var(--vermilion); color:#fff; }
+@media (max-width:880px){ .incentive-grid{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -745,46 +757,54 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <h2 class="section-hero" style="margin-top:14px;">赛事奖金池</h2>
       </div>
       <div class="awards-lux">
-        <!-- 旗舰 · 黑客松总冠军 -->
-        <article class="alux alux-dark alux-hero">
+        <!-- 总奖金 · 暗金卡 -->
+        <article class="alux alux-dark">
+          <span class="alux-starfield" aria-hidden="true"></span>
+          <svg class="alux-wm" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
+          <span class="alux-ribbon">奖金总额</span>
+          <span class="alux-eyebrow">总奖金高达</span>
+          <div class="alux-amount alux-gold-text alux-amount-sum">60<small>万元</small></div>
+          <p class="alux-desc">覆盖全部赛道奖项</p>
+        </article>
+        <!-- 黑客松总冠军 · 暗金卡 -->
+        <article class="alux alux-dark">
           <span class="alux-starfield" aria-hidden="true"></span>
           <svg class="alux-wm" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
           <span class="alux-ribbon">最高荣誉</span>
-          <span class="alux-eyebrow">Hackathon Champion</span>
-          <span class="alux-tag">黑客松总冠军 · 1 名</span>
+          <span class="alux-eyebrow">黑客松总冠军 · 1 名</span>
           <div class="alux-amount alux-gold-text">¥100,000</div>
-          <p class="alux-desc" style="max-width:340px;">跨赛道角逐，本届书生国智科探挑战赛的最高荣誉，授予全场综合表现登顶的队伍。</p>
-          <div class="alux-rule"></div>
-          <div class="alux-foot"><span class="alux-dot"></span>全场唯一 · 跨六大赛道角逐</div>
+          <p class="alux-desc">跨赛道角逐，全场唯一</p>
         </article>
-
-        <div class="alux-stack">
-          <!-- 一等奖 · 鎏金卡 -->
-          <article class="alux alux-gold">
-            <svg class="alux-wm alux-wm-g" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
-            <span class="alux-ribbon alux-ribbon-g">每赛道 1 名</span>
-            <span class="alux-eyebrow alux-eyebrow-g">First Prize · 一等奖</span>
-            <div class="alux-amount-g">¥50,000</div>
-            <p class="alux-desc alux-desc-g">各赛道最高荣誉，授予该赛道综合评定第一名的队伍。</p>
-          </article>
-          <!-- 总奖金 · 暗金卡 -->
-          <article class="alux alux-dark alux-sum">
-            <span class="alux-starfield" aria-hidden="true"></span>
-            <span class="alux-eyebrow">Total Prize Pool · 总奖金高达</span>
-            <div class="alux-amount alux-gold-text alux-amount-sum">60<small>万元</small></div>
-            <p class="alux-desc">覆盖各赛道一等奖与黑客松总冠军等全部奖项。</p>
-          </article>
-        </div>
+        <!-- 一等奖 · 鎏金卡 -->
+        <article class="alux alux-gold">
+          <svg class="alux-wm alux-wm-g" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
+          <span class="alux-ribbon alux-ribbon-g">每赛道 1 名</span>
+          <span class="alux-eyebrow alux-eyebrow-g">一等奖</span>
+          <div class="alux-amount-g">¥50,000</div>
+          <p class="alux-desc alux-desc-g">赛道综合评定第一名</p>
+        </article>
       </div>
 
       <!-- 更多激励 -->
       <div class="meta-row" style="margin:32px 0 14px;">
         <span class="section-label" style="border:none; margin:0; padding:0;">更多激励</span>
       </div>
-      <div class="grid-3" style="gap:12px;">
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">优先录用机会</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得组织单位的实习、全职、双聘等录用资格。</p></div>
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">重大攻关揭榜</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">优先获得深度参与组织单位重大任务攻关揭榜的机会。</p></div>
-        <div class="card"><h3 class="title-s" style="margin-bottom:6px;">加入浦江科学社区</h3><p style="font-size:13px; color:var(--ink-mute); line-height:1.6;">受邀加入浦江科学社区，参与各类高端交流活动。</p></div>
+      <div class="incentive-grid">
+        <a class="incentive-card" href="#/apply">
+          <div class="ic-title">优先录用<span class="ic-mute">机会</span></div>
+          <p class="ic-desc">实习 · 全职 · 双聘等录用资格</p>
+          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
+        </a>
+        <a class="incentive-card" href="#/">
+          <div class="ic-title">重大攻关<span class="ic-mute">揭榜</span></div>
+          <p class="ic-desc">深度参与组织单位重大任务攻关</p>
+          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
+        </a>
+        <a class="incentive-card" href="#/">
+          <div class="ic-title">加入浦江<span class="ic-mute">科学社区</span></div>
+          <p class="ic-desc">受邀参与各类高端学术交流活动</p>
+          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
+        </a>
       </div>
     </div>
   </section>
