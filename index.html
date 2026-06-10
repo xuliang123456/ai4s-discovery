@@ -244,6 +244,23 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tcd-actions .btn { flex: 1; justify-content: center; padding: 9px 0; font-size: 13px; }
 .tcd-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
 .tcd-ghost:hover { background: rgba(255,255,255,.13); border-color: #fff; }
+/* 报名页 · 赛道选择卡（复用 TRACK_VIS 单一数据源，与首页同步）*/
+.apply-track { position: relative; overflow: hidden; border-radius: 12px; min-height: 116px; cursor: pointer; display: block; isolation: isolate; border: 2px solid transparent; box-shadow: 0 14px 32px -26px rgba(18,14,38,.6); transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease); }
+.apply-track:hover { transform: translateY(-2px); box-shadow: 0 20px 44px -26px rgba(18,14,38,.7); }
+.apply-track .tcd-bg, .apply-track .tcd-cv, .apply-track .at-scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
+.apply-track .tcd-bg { z-index: 0; }
+.apply-track .tcd-cv { z-index: 1; }
+.apply-track .at-scrim { z-index: 2; background: linear-gradient(to top, rgba(10,8,20,.92) 0%, rgba(10,8,20,.6) 46%, rgba(10,8,20,.16) 100%); pointer-events: none; }
+.apply-track .at-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 16px; }
+.apply-track .at-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.apply-track .at-no { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; color: rgba(255,255,255,.9); text-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.apply-track .at-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .03em; padding: 2px 8px; border-radius: 20px; background: rgba(255,255,255,.18); color: #fff; }
+.apply-track .at-title { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: 16px; color: #fff; line-height: 1.3; }
+.apply-track .at-check { position: absolute; top: 12px; right: 12px; z-index: 4; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,.55); display: grid; place-items: center; background: rgba(10,8,20,.25); transition: background .2s var(--ease), border-color .2s var(--ease); }
+.apply-track .at-check svg { width: 13px; height: 13px; opacity: 0; transition: opacity .15s var(--ease); }
+.apply-track.sel { border-color: #fff; box-shadow: 0 0 0 3px rgba(21,84,168,.45), 0 18px 42px -22px rgba(18,14,38,.75); }
+.apply-track.sel .at-check { background: var(--vermilion); border-color: var(--vermilion); }
+.apply-track.sel .at-check svg { opacity: 1; }
 /* Hero 两栏 + 配图 */
 .hero-cols { display: grid; grid-template-columns: 1fr 0.74fr; gap: 48px; align-items: center; }
 .hero-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 22px 54px -30px rgba(40,30,20,.55); }
@@ -2061,32 +2078,26 @@ function renderApply(){
   const ts = document.getElementById('trackSelect');
   let selectedTrack = 0;
   function paintTrack(){
-    ts.querySelectorAll('.track-radio').forEach((x,i)=>{
-      const on = i === selectedTrack;
-      x.style.borderLeft = on ? '3px solid var(--vermilion)' : '';
-      x.style.background  = on ? 'var(--paper-warm)' : '';
-      const d = x.querySelector('.radio-dot');
-      d.style.boxShadow = on ? 'inset 0 0 0 4px var(--vermilion)' : '';
-      d.style.borderColor = on ? 'var(--vermilion)' : 'var(--rule)';
-    });
+    ts.querySelectorAll('.apply-track').forEach((x,i)=>{ x.classList.toggle('sel', i===selectedTrack); });
   }
   ts.innerHTML = TRACKS.map((t,i)=>{
-    const a = AUX[t.aux];
-    return `<label class="track-radio card" data-idx="${i}" style="cursor:pointer; display:flex; gap:12px; align-items:flex-start; padding:14px 16px;">
-      <span class="radio-dot" style="width:14px; height:14px; border-radius:50%; border:1px solid var(--rule); flex-shrink:0; margin-top:2px; transition:box-shadow var(--t-base) var(--ease), border-color var(--t-base) var(--ease);"></span>
-      <span>
-        <span style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
-          <span class="label" style="color:${a.c4};">${t.no}</span>
-          <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag}</span>
-        </span>
-        <span class="title-s" style="display:block; color:var(--ink); font-size:13px; line-height:1.4;">${t.title}</span>
-      </span>
+    const v = TRACK_VIS[i] || TRACK_VIS[0];
+    return `<label class="apply-track" data-idx="${i}">
+      <div class="tcd-bg" style="background:${v.bg};"></div>
+      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${(v.scale||1)*0.82}"></canvas>
+      <div class="at-scrim"></div>
+      <span class="at-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+      <div class="at-body">
+        <div class="at-top"><span class="at-no">${t.no}</span><span class="at-tag">${t.tag}</span></div>
+        <div class="at-title">${t.title}</div>
+      </div>
     </label>`;
   }).join('');
-  ts.querySelectorAll('.track-radio').forEach(el=>{
+  ts.querySelectorAll('.apply-track').forEach(el=>{
     el.addEventListener('click', ()=>{ selectedTrack = +el.dataset.idx; paintTrack(); });
   });
   paintTrack();
+  if(typeof initTrackMotifs==='function') initTrackMotifs();   // 复用首页动效引擎（同一数据源 → 自动同步）
   // 供赛道卡/详情页「报名」带入赛道
   window.__selectApplyTrack = (i)=>{ if(i>=0 && i<TRACKS.length){ selectedTrack = i; paintTrack(); } };
 
