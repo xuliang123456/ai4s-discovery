@@ -271,6 +271,31 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .stack-layer.sl-top .sl-tag { color: #fff; border-color: rgba(255,255,255,.55); }
 .stack-conn { width: 1px; height: 8px; background: var(--rule); margin: 0 auto; }
 @media (max-width: 880px){ .stack-layer { grid-template-columns: 40px 1fr; } .stack-layer .sl-tag { display: none; } }
+/* 平台能力 分组 */
+.plat-group { display: flex; align-items: baseline; gap: 13px; margin: 0 0 18px; }
+.plat-group .pg-no { font-family: var(--font-mono); font-size: 11px; letter-spacing: .14em; color: var(--vermilion); font-weight: 600; }
+.plat-group .pg-tt { font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--ink); white-space: nowrap; }
+.plat-group .pg-line { flex: 1; height: 1px; background: var(--rule); }
+/* 核心引擎 · 重色卡 */
+.engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 38px; }
+.engine-card { position: relative; overflow: hidden; padding: 26px 28px 28px; border-radius: 6px; background: linear-gradient(135deg, #14203c 0%, #1b2e54 56%, #1554a8 150%); border: 1px solid rgba(255,255,255,.09); box-shadow: 0 22px 54px -34px rgba(15,40,92,.85); }
+.engine-card .ec-glow { position: absolute; right: -46px; top: -46px; width: 188px; height: 188px; background: radial-gradient(circle, rgba(70,130,225,.42), transparent 70%); pointer-events: none; }
+.engine-card .ec-head { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; position: relative; }
+.engine-card .ec-ico { width: 44px; height: 44px; border-radius: 11px; background: rgba(255,255,255,.13); display: grid; place-items: center; color: #fff; flex: none; }
+.engine-card .ec-ico svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.engine-card .ec-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: rgba(255,255,255,.62); text-transform: uppercase; margin-bottom: 3px; }
+.engine-card .ec-name { font-family: var(--font-serif); font-size: 21px; font-weight: 600; color: #fff; line-height: 1.2; }
+.engine-card .ec-sub { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.92); margin-bottom: 9px; position: relative; }
+.engine-card .ec-desc { font-size: 13px; line-height: 1.78; color: rgba(255,255,255,.74); position: relative; }
+/* 平台能力 · 浅色卡 */
+.plat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.plat-card { padding: 21px 21px 23px; border: 1px solid var(--rule); border-top: 3px solid var(--vermilion); border-radius: 4px; background: var(--paper-cool); transition: transform .25s ease, box-shadow .25s ease; }
+.plat-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px -28px rgba(21,84,168,.7); }
+.plat-card .pc-head { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
+.plat-card .pc-name { font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.25; }
+.plat-card .pc-sub { font-size: 11.5px; color: var(--ink-mute); margin-top: 2px; }
+.plat-card .pc-desc { font-size: 13px; line-height: 1.72; color: var(--ink-soft); }
+@media (max-width: 880px){ .engine-grid, .plat-grid { grid-template-columns: 1fr; } }
 /* 全屏动效 Hero */
 .hero-full { position: relative; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.08); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; background: radial-gradient(125% 120% at 74% 16%, #213257 0%, #15203f 44%, #0b1124 100%); }
 #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
@@ -642,34 +667,46 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       </div>
 
       <!-- 平台能力 -->
-      <div class="meta-row" style="margin-bottom:14px;">
-        <span class="section-label" style="border:none; margin:0; padding:0;">科学发现平台 · 平台能力</span>
+      <div class="meta-row" style="margin-bottom:8px; margin-top:8px;">
+        <span class="section-label" style="border:none; margin:0; padding:0;">科学发现平台 · Intern Discovery</span>
       </div>
-      <div class="grid-3">
-        <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><span class="pill pill-primary">Intern-S1</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">书生科学多模态大模型</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">作为最先进的开源多模态推理模型，在具备强大通用任务能力的同时，于广泛的科学任务中也达到最先进性能，可与最先进的闭源商业模型相媲美。</p>
+      <p style="font-size:14px; color:var(--ink-soft); line-height:1.8; max-width:760px; margin-bottom:30px;">以书生科学多模态大模型为底座、智能体为内核，向上承载科研全流程的平台能力 —— 从问答研究、文献精读到工具聚合，构建可复用、可传播的标准化 AI 科研基础设施。</p>
+
+      <!-- 核心引擎 · 重色 -->
+      <div class="plat-group"><span class="pg-no">01</span><span class="pg-tt">核心引擎 · 模型与智能体</span><span class="pg-line"></span></div>
+      <div class="engine-grid">
+        <div class="engine-card">
+          <div class="ec-glow"></div>
+          <div class="ec-head">
+            <span class="ec-ico"><svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span>
+            <div><div class="ec-tag">Intern-S1 · Foundation Model</div><div class="ec-name">书生科学多模态大模型</div></div>
+          </div>
+          <div class="ec-desc">作为最先进的开源多模态推理模型，在具备强大通用任务能力的同时，于广泛的科学任务中也达到最先进性能，可与最先进的闭源商业模型相媲美。</div>
         </div>
-        <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16 8l-2.5 5.5L8 16l2.5-5.5L16 8Z"/></svg></span><span class="pill pill-primary">Intern·Agent</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">类人科学家的自主探索能力</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">自动化科研流程，生成实验构想、代码并调优；分析问题、查阅文献、调研反思，开展实验验证。</p>
+        <div class="engine-card">
+          <div class="ec-glow"></div>
+          <div class="ec-head">
+            <span class="ec-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M16 8l-2.5 5.5L8 16l2.5-5.5L16 8Z"/></svg></span>
+            <div><div class="ec-tag">Intern · Agent</div><div class="ec-name">类人科学家的自主探索</div></div>
+          </div>
+          <div class="ec-desc">自动化科研流程，生成实验构想、代码并调优；自主分析问题、查阅文献、调研反思，开展实验验证，像科学家一样提出并求证假说。</div>
         </div>
-        <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span><span class="pill pill-primary">科学研究助手</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">科研问答与深度思考</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">科研问答与深度思考，辅助解决学术难题、生成学术报告；自动化科研流程，生成实验构想、代码并调优。</p>
+      </div>
+
+      <!-- 平台能力 · 浅色 -->
+      <div class="plat-group"><span class="pg-no">02</span><span class="pg-tt">平台能力 · 科研全流程</span><span class="pg-line"></span></div>
+      <div class="plat-grid">
+        <div class="plat-card">
+          <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span><div><div class="pc-name">科学研究助手</div><div class="pc-sub">科研问答与深度思考</div></div></div>
+          <div class="pc-desc">科研问答与深度思考，辅助解决学术难题、生成学术报告；自动化科研流程，生成实验构想、代码并调优。</div>
         </div>
-        <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><span class="pill pill-primary">科研论文搜索</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">学术搜索与文献精读</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">针对赛事资料查阅需求推出学术搜索，一键检索论文、精读入库深度学习，查看引用网络高效梳理研究脉络。</p>
+        <div class="plat-card">
+          <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><div><div class="pc-name">科研论文搜索</div><div class="pc-sub">学术搜索与文献精读</div></div></div>
+          <div class="pc-desc">针对赛事资料查阅需求推出学术搜索，一键检索论文、精读入库深度学习，查看引用网络高效梳理研究脉络。</div>
         </div>
-        <div class="card-emphasis">
-          <div class="meta-row" style="margin-bottom:10px; gap:10px;"><span class="plat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="pill pill-primary">SCP 广场</span></div>
-          <h3 class="title-m" style="margin-bottom:8px;">科研要素的 API 化聚合</h3>
-          <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">链接数据、工具、智能体、专业模型、湿实验设备等科研要素并实现 API 化整合，提供六大学科 1600+ 科学发现工具 API，为跨领域科学发现提供标准化环境。</p>
+        <div class="plat-card">
+          <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><div><div class="pc-name">SCP 广场</div><div class="pc-sub">科研要素的 API 化聚合</div></div></div>
+          <div class="pc-desc">链接数据、工具、智能体、专业模型、湿实验设备等科研要素并实现 API 化整合，提供六大学科 1600+ 科学发现工具 API。</div>
         </div>
       </div>
     </div>
