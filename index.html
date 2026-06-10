@@ -563,6 +563,42 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 .icon-sm { width: 14px; height: 14px; }
 .icon-lg { width: 20px; height: 20px; }
 </style>
+<style id="awards-lux-style">
+/* ═══════════════ 赛事奖金 · 尊贵版（金/暗金双质感）═══════════════ */
+.awards-lux{ display:grid; grid-template-columns:1.22fr 1fr; gap:16px; }
+.awards-lux .alux-stack{ display:grid; grid-template-rows:auto auto; gap:16px; }
+.alux{ position:relative; overflow:hidden; border-radius:16px; padding:26px 28px; isolation:isolate; }
+.alux-eyebrow{ display:block; position:relative; z-index:2; font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#cdb27a; }
+.alux-tag{ display:block; position:relative; z-index:2; margin-top:7px; font-family:'Noto Serif SC',serif; font-size:17px; font-weight:600; color:#fff; }
+.alux-amount{ position:relative; z-index:2; font-family:var(--font-serif); font-size:54px; font-weight:600; line-height:1; margin:14px 0 12px; }
+.alux-amount small{ font-family:var(--font-sans); font-size:18px; font-weight:500; margin-left:4px; -webkit-text-fill-color:#cdb27a; }
+.alux-desc{ position:relative; z-index:2; font-size:13px; line-height:1.66; color:rgba(255,255,255,.72); }
+.alux-gold-text{ background:linear-gradient(100deg,#fbeec2 0%,#ecca7e 42%,#d7a951 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
+.alux-gold{ background:linear-gradient(135deg,#f6e7bb 0%,#ecd292 44%,#dcb568 100%); border:1px solid rgba(180,140,60,.35); box-shadow:0 20px 46px -28px rgba(150,110,40,.7); }
+.alux-eyebrow-g{ color:#8a6526; }
+.alux-amount-g{ font-family:var(--font-serif); font-size:46px; font-weight:600; line-height:1; color:#6e4d18; position:relative; z-index:2; margin:6px 0 10px; }
+.alux-desc-g{ color:#7a5b27; }
+.alux-dark{ background:linear-gradient(135deg,#161d33 0%,#1f2a4d 58%,#283766 100%); border:1px solid rgba(232,201,138,.22); box-shadow:0 24px 54px -30px rgba(10,16,40,.9); color:#fff; }
+.alux-dark::after{ content:''; position:absolute; z-index:1; right:-44px; top:-44px; width:210px; height:210px; border-radius:50%; background:radial-gradient(circle, rgba(232,201,138,.16), transparent 70%); pointer-events:none; }
+.alux-hero{ display:flex; flex-direction:column; }
+.alux-amount-sum{ font-size:46px; }
+.alux-rule{ position:relative; z-index:2; height:1px; background:linear-gradient(90deg,rgba(232,201,138,.55),transparent); margin-top:auto; margin-bottom:12px; }
+.alux-foot{ position:relative; z-index:2; display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:.04em; color:rgba(255,255,255,.66); }
+.alux-dot{ width:6px; height:6px; border-radius:50%; background:#e8c98a; animation:aluxPulse 2s var(--ease) infinite; }
+@keyframes aluxPulse{ 0%{box-shadow:0 0 0 0 rgba(232,201,138,.5);} 70%{box-shadow:0 0 0 7px rgba(232,201,138,0);} 100%{box-shadow:0 0 0 0 rgba(232,201,138,0);} }
+.alux-wm{ position:absolute; z-index:1; right:-18px; bottom:-30px; width:190px; height:190px; fill:rgba(255,255,255,.10); pointer-events:none; }
+.alux-wm-g{ fill:rgba(255,255,255,.34); right:-22px; bottom:-34px; width:176px; height:176px; }
+.alux-starfield{ position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.9;
+  background-image:
+    radial-gradient(1.4px 1.4px at 18% 24%, rgba(255,255,255,.55), transparent),
+    radial-gradient(1.2px 1.2px at 72% 38%, rgba(232,201,138,.55), transparent),
+    radial-gradient(1px 1px at 42% 70%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.3px 1.3px at 88% 76%, rgba(255,255,255,.35), transparent),
+    radial-gradient(1px 1px at 60% 14%, rgba(232,201,138,.5), transparent); }
+.alux-ribbon{ position:absolute; z-index:3; top:18px; right:-44px; width:170px; text-align:center; transform:rotate(45deg); padding:6px 0; font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; font-weight:600; background:linear-gradient(135deg,#f3dca0,#d8b569); color:#5a3e12; box-shadow:0 4px 12px rgba(0,0,0,.28); }
+.alux-ribbon-g{ background:linear-gradient(135deg,#7a5a24,#54390f); color:#f6e4b4; }
+@media (max-width:880px){ .awards-lux{ grid-template-columns:1fr; } }
+</style>
 </head>
 <body>
 
@@ -764,25 +800,36 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div class="eyebrow">Awards · 激励</div>
         <h2 class="section-hero" style="margin-top:14px;">赛事奖金池</h2>
       </div>
-      <div class="grid-3" style="gap:12px;">
-        <div class="card-emphasis">
-          <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">一等奖</span><span class="pill pill-warning">每赛道 1 名</span>
-          </div>
-          <div style="font-family:var(--font-serif); font-size:34px; font-weight:600; color:var(--vermilion); line-height:1; margin-top:14px;">¥50,000</div>
-          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">各赛道最高荣誉，授予该赛道综合评定第一名的队伍。</p>
-        </div>
-        <div class="card-emphasis">
-          <div class="meta-row" style="justify-content:space-between;">
-            <span class="title-m">黑客松总冠军</span><span class="pill pill-primary">1 名</span>
-          </div>
-          <div style="font-family:var(--font-serif); font-size:34px; font-weight:600; color:var(--vermilion); line-height:1; margin-top:14px;">¥100,000</div>
-          <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.6;">跨赛道角逐，本届书生国智科探挑战赛的最高荣誉。</p>
-        </div>
-        <div class="card" style="background:var(--paper-warm); border-left:3px solid var(--vermilion); display:flex; flex-direction:column; justify-content:center;">
-          <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:8px;">总奖金高达</div>
-          <div style="font-family:var(--font-serif); font-size:44px; font-weight:600; color:var(--ink); line-height:1;">60<span style="font-size:20px; color:var(--ink-mute); font-family:var(--font-sans); margin-left:2px;">万元</span></div>
-          <p style="font-size:13px; color:var(--ink-mute); margin-top:10px; line-height:1.6;">覆盖各赛道一等奖与黑客松总冠军等奖项。</p>
+      <div class="awards-lux">
+        <!-- 旗舰 · 黑客松总冠军 -->
+        <article class="alux alux-dark alux-hero">
+          <span class="alux-starfield" aria-hidden="true"></span>
+          <svg class="alux-wm" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
+          <span class="alux-ribbon">最高荣誉</span>
+          <span class="alux-eyebrow">Hackathon Champion</span>
+          <span class="alux-tag">黑客松总冠军 · 1 名</span>
+          <div class="alux-amount alux-gold-text">¥100,000</div>
+          <p class="alux-desc" style="max-width:340px;">跨赛道角逐，本届书生国智科探挑战赛的最高荣誉，授予全场综合表现登顶的队伍。</p>
+          <div class="alux-rule"></div>
+          <div class="alux-foot"><span class="alux-dot"></span>全场唯一 · 跨六大赛道角逐</div>
+        </article>
+
+        <div class="alux-stack">
+          <!-- 一等奖 · 鎏金卡 -->
+          <article class="alux alux-gold">
+            <svg class="alux-wm alux-wm-g" viewBox="0 0 100 100" aria-hidden="true"><polygon points="50,2 61,38 99,38 68,61 79,98 50,75 21,98 32,61 1,38 39,38"/></svg>
+            <span class="alux-ribbon alux-ribbon-g">每赛道 1 名</span>
+            <span class="alux-eyebrow alux-eyebrow-g">First Prize · 一等奖</span>
+            <div class="alux-amount-g">¥50,000</div>
+            <p class="alux-desc alux-desc-g">各赛道最高荣誉，授予该赛道综合评定第一名的队伍。</p>
+          </article>
+          <!-- 总奖金 · 暗金卡 -->
+          <article class="alux alux-dark alux-sum">
+            <span class="alux-starfield" aria-hidden="true"></span>
+            <span class="alux-eyebrow">Total Prize Pool · 总奖金高达</span>
+            <div class="alux-amount alux-gold-text alux-amount-sum">60<small>万元</small></div>
+            <p class="alux-desc">覆盖各赛道一等奖与黑客松总冠军等全部奖项。</p>
+          </article>
         </div>
       </div>
 
