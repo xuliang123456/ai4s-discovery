@@ -1200,7 +1200,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
     </div>
 
     <!-- Tab 导航 -->
-    <div class="tabs" id="manageTabs" style="margin:32px 0 28px; flex-wrap:wrap;">
+    <div class="tabs" id="manageTabs" style="display:flex; margin:32px 0 28px; flex-wrap:wrap;">
       <button class="tab" data-tab="overview" aria-selected="true">概览</button>
       <button class="tab" data-tab="team" aria-selected="false">队伍成员</button>
       <button class="tab" data-tab="resource" aria-selected="false">算力 & API</button>
@@ -1376,11 +1376,11 @@ const TRACKS = [
   { no:'赛道二', tag:'物质科学', en:'Chemistry', aux:'cyan', img:'track-matter.jpg',
     title:'偶联反应',
     desc:'聚焦偶联反应条件优化，在极少真实实验下用大模型、机器学习与化学知识设计高效优化策略，破解高通量实验的组合空间与预算瓶颈。',
-    metas:['Suzuki 数据集', 'Buchwald–Hartwig 数据集', '技术方案书 + 干实验报告'] },
+    metas:['技术方案书 + 干实验报告'] },
   { no:'赛道三', tag:'地球科学', en:'Earth Sciences', aux:'mint', img:'track-earth.jpg',
     title:'厄尔尼诺-南方涛动 (ENSO)',
     desc:'聚焦 ENSO 气候预测，超越单一指数传统，驱动 AI 对二维海温异常场精细化预报与机制解读，提升极端气候预测能力，服务防灾减灾。',
-    metas:['1850–2014 训练集', 'A / B 榜测试集', '二维 SSTA 场预测'] },
+    metas:['1850–2014 训练集', '二维 SSTA 场预测'] },
   { no:'赛道四', tag:'飞翔杯·量子计算', en:'Quantum Computing', aux:'violet', img:'track-quantum.jpg',
     title:'国产 GPU 创新计算与应用探索',
     desc:'聚焦量子线路模拟与跨场景应用探索，依托壁仞国产 GPU 平台，以 AI Agent 辅助开发，构建可运行、具创新价值的量子计算原型成果。',
@@ -1388,7 +1388,7 @@ const TRACKS = [
   { no:'赛道五', tag:'飞翔杯·模型与算子', en:'Model & Operator', aux:'cyan', img:'track-operator.jpg',
     title:'基于 Agent 的模型和算子开发',
     desc:'聚焦 AI4S 关键算子与科学计算模型的工程实现，依托壁仞 BR106 国产 GPU，以 AI Agent 辅助开发范式探索人机协同的高效开发路径。',
-    metas:['Spectral Convolution 必选题', 'PINN / GNN / FNO 进阶', 'Agent 交互日志'] },
+    metas:['PINN / GNN / FNO 进阶', 'Agent 交互日志'] },
   { no:'赛道六', tag:'自由赛道', en:'AI for Social Science', aux:'vermilion', img:'track-free.jpg',
     title:'科艺融合 · 科研智慧提炼',
     desc:'聚焦「科艺融合 × AI4SS」，面向人文、艺术、社科、教育、传媒、商业等多元领域，将各领域方法论与智慧提炼为标准化 Skills / Agent。',
