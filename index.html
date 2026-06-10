@@ -1199,7 +1199,7 @@ const AUX = {
 /* 赛道卡 · 深色科学氛围卡（每赛道一种科学 motif + 学科深色渐变）*/
 const TRACK_VIS = [
   { motif:'dna',     pal:'life',     scale:.7,  accent:'#e7b8d6', dot:'#e7b8d6', bg:'radial-gradient(125% 125% at 74% 14%, #a4528d 0%, #6a2f5a 46%, #3a1734 100%)' },
-  { motif:'crystal', pal:'matter',   scale:.56, accent:'#9bdbe0', dot:'#d8b46a', bg:'radial-gradient(125% 125% at 74% 14%, #2f8f9c 0%, #1d5f6e 46%, #0f3540 100%)' },
+  { motif:'crystal', pal:'matter',   scale:.46, accent:'#9bdbe0', dot:'#d8b46a', bg:'radial-gradient(125% 125% at 74% 14%, #2f8f9c 0%, #1d5f6e 46%, #0f3540 100%)' },
   { motif:'globe',   pal:'earth',    scale:.72, accent:'#a6e0c6', dot:'#a6e0c6', bg:'radial-gradient(125% 125% at 72% 14%, #2f9a78 0%, #1c6b52 46%, #0f3a2c 100%)' },
   { motif:'quantum', pal:'quantum',  scale:.72, accent:'#cdb8f0', dot:'#cdb8f0', bg:'radial-gradient(125% 125% at 74% 14%, #7a54bf 0%, #4a2f8a 46%, #281a52 100%)' },
   { motif:'neural',  pal:'operator', scale:1,   accent:'#9fc4e6', dot:'#9fc4e6', bg:'radial-gradient(125% 125% at 74% 14%, #3a6fae 0%, #244e86 46%, #142f4e 100%)' },
@@ -1341,14 +1341,13 @@ function initTrackMotifs(){
     ctx.globalAlpha=1; sphere(ctx,pts[0].x,pts[0].y,3.4,pal.b,pal.bHi); sphere(ctx,pts[N].x,pts[N].y,3.4,pal.b,pal.bHi);
   }
   function dna(ctx,W,H,t,pal,o){
-    // 水平 DNA 双螺旋：侧视 → 两条正弦主链交错，碱基对为竖直哑铃杆 + 两端球（球径随深度变化）
+    // 水平 DNA 双螺旋：侧视 → 两条正弦主链交错，碱基对为竖直杆（圆头），不含端点球体
     const cx=o.cx,cy=o.cy,halfW=o.R*2.2,x0=cx-halfW,x1=cx+halfW,amp=o.R*0.62,turns=2.6,N=30,ph0=t*0.018;
     for(let i=0;i<=N;i++){ const f=i/N, x=x0+(x1-x0)*f, ph=f*turns*6.2832+ph0;
-      const s=Math.sin(ph), depth=(Math.cos(ph)+1)/2;          // depth 0..1，前方更大更亮
+      const s=Math.sin(ph), depth=(Math.cos(ph)+1)/2;          // depth 0..1，前方更亮更粗
       const y1=cy-amp*s, y2=cy+amp*s;                          // 上 / 下两条主链
-      ctx.globalAlpha=.34+.5*depth; ctx.strokeStyle=pal.rung; ctx.lineWidth=1.6+1.6*depth; ctx.lineCap='round';
-      ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y2); ctx.stroke();
-      const r=2+5*depth; sphere(ctx,x,y1,r,pal.a,pal.aHi); sphere(ctx,x,y2,r,pal.b,pal.bHi); }
+      ctx.globalAlpha=.34+.5*depth; ctx.strokeStyle=pal.rung; ctx.lineWidth=2+2.4*depth; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(x,y1); ctx.lineTo(x,y2); ctx.stroke(); }
     ctx.globalAlpha=1;
   }
   const MOTIF={crystal,globe,helix,protein,dna,quantum,neural,bloom};
