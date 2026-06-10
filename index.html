@@ -390,6 +390,21 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .td-prose strong { color: var(--ink); font-weight: 600; }
 .td-prose code { font-family: var(--font-mono); font-size: 12.5px; background: var(--paper-warm); padding: 1px 5px; border-radius: 3px; color: var(--vermilion); }
 .td-code { font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; background: #0f1830; color: #d8e1f2; padding: 16px 18px; border-radius: 6px; overflow-x: auto; margin: 14px 0 18px; white-space: pre; -webkit-overflow-scrolling: touch; }
+.td-codewrap { position: relative; margin: 14px 0 18px; border-radius: 8px; overflow: hidden; background: #0f1830; border: 1px solid rgba(255,255,255,.08); }
+.td-codewrap .td-code { margin: 0; border-radius: 0; border: none; }
+.td-cbar { display: flex; align-items: center; justify-content: space-between; padding: 7px 10px 7px 14px; background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.08); }
+.td-cbar .cb-lang { font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; color: #7e8aa8; text-transform: uppercase; }
+.td-cbar .cb-copy { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11px; color: #aebbd6; background: transparent; border: 1px solid rgba(255,255,255,.18); border-radius: 5px; padding: 4px 11px; cursor: pointer; transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease); }
+.td-cbar .cb-copy:hover { background: rgba(255,255,255,.1); color: #fff; border-color: rgba(255,255,255,.42); }
+.td-cbar .cb-copy svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.td-cmore { display: block; width: 100%; text-align: center; font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; color: #aebbd6; background: rgba(255,255,255,.05); border: none; border-top: 1px solid rgba(255,255,255,.08); padding: 8px; cursor: pointer; transition: background .18s var(--ease), color .18s var(--ease); }
+.td-cmore:hover { background: rgba(255,255,255,.1); color: #fff; }
+.td-cmore svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -1px; margin-left: 4px; transition: transform .2s var(--ease); display: inline-block; }
+.td-cmore.open svg { transform: rotate(180deg); }
+.org-slot { border: 1.5px dashed var(--rule); border-radius: 8px; padding: 18px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; color: var(--ink-faint); background: transparent; min-height: 82px; transition: border-color .2s var(--ease), color .2s var(--ease); }
+.org-slot svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; }
+.org-slot span { font-size: 12px; letter-spacing: .06em; }
+.org-slot:hover { border-color: var(--vermilion); color: var(--vermilion); }
 /* 赛道详情 · 表格 */
 .td-table-wrap { overflow-x: auto; margin: 12px 0 18px; border: 1px solid var(--rule); border-radius: 4px; }
 .td-table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -984,6 +999,15 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">承办单位</div><div class="title-s" style="color:var(--ink);">Intern Science · 科学发现平台</div></div>
         <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">协办单位</div><div class="title-s" style="color:var(--ink);">壁仞科技 · 浦江科学社区</div></div>
         <div class="card" style="text-align:center; padding:20px;"><div class="label" style="margin-bottom:8px;">支持单位</div><div class="title-s" style="color:var(--ink);">国产算力创新联盟</div></div>
+      </div>
+      <div style="max-width:880px; margin:22px auto 0;">
+        <div class="label" style="text-align:center; margin-bottom:13px; color:var(--ink-mute);">协办单位 · 持续招募中</div>
+        <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px;">
+          <div class="org-slot"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>虚位以待</span></div>
+          <div class="org-slot"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>虚位以待</span></div>
+          <div class="org-slot"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>虚位以待</span></div>
+          <div class="org-slot"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>虚位以待</span></div>
+        </div>
       </div>
       <p style="text-align:center; font-size:12px; color:var(--ink-faint); margin-top:24px; font-style:italic;">本届赛事算力由壁仞科技提供支持，开放周期 7.1 – 7.15，敬请期待。</p>
     </div>
@@ -1857,6 +1881,53 @@ function renderTrackDetail(idx){
     </div>`;
   wireTabs(root);
   initTrackMotifs();
+  wireCodeBlocks(root);
+}
+
+/* 全局 toast 提示 */
+function showToast(msg){
+  document.querySelectorAll('.claim-toast').forEach(function(t){t.remove();});
+  var t=document.createElement('div'); t.className='claim-toast';
+  t.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="#1554a8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'+msg;
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.transition='opacity .3s'; t.style.opacity='0'; setTimeout(function(){t.remove();},300); }, 1600);
+}
+/* 代码块 · 复制 + 最多 4 行折叠/展开 */
+function wireCodeBlocks(root){
+  root.querySelectorAll('pre.td-code').forEach(function(pre){
+    if(pre.__wired) return; pre.__wired=1;
+    var code = pre.textContent.replace(/\n+$/,'');
+    var lines = code.split('\n').length;
+    var wrap = document.createElement('div'); wrap.className='td-codewrap';
+    pre.parentNode.insertBefore(wrap, pre);
+    var bar = document.createElement('div'); bar.className='td-cbar';
+    bar.innerHTML='<span class="cb-lang">Python</span><button class="cb-copy" type="button"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>复制</button>';
+    wrap.appendChild(bar); wrap.appendChild(pre);
+    bar.querySelector('.cb-copy').addEventListener('click', function(e){
+      e.stopPropagation();
+      try{ if(navigator.clipboard) navigator.clipboard.writeText(code);
+        else { var ta=document.createElement('textarea'); ta.value=code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+      }catch(err){}
+      showToast('已复制到剪贴板');
+    });
+    if(lines>4){
+      var cs=getComputedStyle(pre);
+      var lh=parseFloat(cs.lineHeight); if(!lh||isNaN(lh)) lh=(parseFloat(cs.fontSize)||12.5)*1.7;
+      var padTop=parseFloat(cs.paddingTop)||16;
+      var collapsedH=Math.round(lh*4+padTop);
+      pre.style.maxHeight=collapsedH+'px'; pre.style.overflowY='hidden';
+      var more=document.createElement('button'); more.className='td-cmore'; more.type='button';
+      var lbl='\u5c55\u5f00\u5168\u90e8 '+lines+' \u884c';
+      var caret='<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>';
+      more.innerHTML=lbl+caret;
+      wrap.appendChild(more);
+      var open=false;
+      more.addEventListener('click', function(e){ e.stopPropagation(); open=!open;
+        if(open){ pre.style.maxHeight='none'; more.classList.add('open'); more.innerHTML='\u6536\u8d77'+caret; }
+        else { pre.style.maxHeight=collapsedH+'px'; more.classList.remove('open'); more.innerHTML=lbl+caret; pre.scrollTop=0; wrap.scrollIntoView({block:'nearest'}); }
+      });
+    }
+  });
 }
 
 /* 赛程时间线 · 真实阶段 */
@@ -2097,7 +2168,7 @@ function renderApply(){
         <div class="grid-2" style="gap:10px;">
           <div class="field" style="margin:0;"><input class="input" data-rule="name" placeholder="姓名 *"></div>
           <div class="field" style="margin:0;"><input class="input" data-rule="org" placeholder="所属机构 / 高校 *"></div>
-          <div class="field" style="margin:0;"><input class="input adv-contact" placeholder="联系方式（选填）"></div>
+          <div class="field" style="margin:0;"><input class="input adv-contact" data-rule="contact" placeholder="手机号 / 邮箱 *"></div>
         </div>
         <button class="btn confirm" type="button" style="margin-top:12px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg> 确认添加</button>
       </div>
