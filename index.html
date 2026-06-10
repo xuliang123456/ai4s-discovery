@@ -222,6 +222,27 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tc-img { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s var(--ease); }
 .track-card:hover .tc-img { transform: scale(1.07); }
 .tc-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(28,22,16,.62), rgba(28,22,16,.08) 52%, rgba(28,22,16,.10)); }
+/* 赛道卡 · 深色科学氛围卡（canvas motif，替换原图片卡）*/
+.track-card-dark { position: relative; overflow: hidden; border-radius: 14px; min-height: 332px; color: #fff; isolation: isolate; display: flex; box-shadow: 0 22px 54px -32px rgba(18,14,38,.66); transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
+.track-card-dark:hover { transform: translateY(-3px); box-shadow: 0 30px 64px -30px rgba(18,14,38,.72); }
+.track-card-dark .tcd-bg, .track-card-dark .tcd-cv, .track-card-dark .tcd-scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
+.track-card-dark .tcd-bg { z-index: 0; }
+.track-card-dark .tcd-cv { z-index: 1; }
+.track-card-dark .tcd-scrim { z-index: 2; background: linear-gradient(to top, rgba(10,8,20,.93) 0%, rgba(10,8,20,.8) 28%, rgba(10,8,20,.34) 56%, rgba(10,8,20,.12) 100%); pointer-events: none; }
+.track-card-dark .tcd-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 4; }
+.tcd-main { position: relative; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; flex: 1; padding: 18px 20px 20px; text-decoration: none; color: inherit; }
+.tcd-top { display: flex; align-items: center; justify-content: space-between; }
+.tcd-no { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.85); text-shadow: 0 1px 4px rgba(0,0,0,.45); }
+.tcd-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; background: rgba(255,255,255,.16); color: #fff; }
+.tcd-en { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.62); margin-bottom: 6px; }
+.tcd-title { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: 19px; line-height: 1.35; margin-bottom: 9px; }
+.tcd-desc { font-size: 12.5px; line-height: 1.66; color: rgba(255,255,255,.78); margin-bottom: 12px; }
+.tcd-metas { display: flex; flex-direction: column; gap: 6px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.14); }
+.tcd-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: rgba(255,255,255,.74); }
+.tcd-meta i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.tcd-actions { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; background: rgba(12,9,22,.48); pointer-events: none; transition: opacity .25s var(--ease); }
+.track-card-dark:hover .tcd-actions { opacity: 1; pointer-events: auto; }
+.tcd-actions .btn { padding: 8px 18px; }
 /* Hero 两栏 + 配图 */
 .hero-cols { display: grid; grid-template-columns: 1fr 0.74fr; gap: 48px; align-items: center; }
 .hero-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 22px 54px -30px rgba(40,30,20,.55); }
@@ -234,7 +255,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .media-figure .mf-img { height: 320px; background-size: cover; background-position: center; }
 @media (max-width: 880px){ .media-cols { grid-template-columns: 1fr; gap: 24px; } .media-figure .mf-img { height: 220px; } }
 /* 全屏动效 Hero */
-.hero-full { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule-soft); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; }
+.hero-full { position: relative; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.08); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; background: radial-gradient(125% 120% at 74% 16%, #213257 0%, #15203f 44%, #0b1124 100%); }
 #heroCanvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 /* Hero 背景方案轮播（演示用 · 左右滑动）*/
 .hero-track { position: absolute; inset: 0; display: flex; width: 100%; height: 100%; transition: transform .55s cubic-bezier(.7,0,.2,1); will-change: transform; }
@@ -249,7 +270,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .hero-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--rule); border: none; cursor: pointer; padding: 0; transition: background .25s, width .25s; }
 .hero-dot.on { background: var(--vermilion); width: 18px; border-radius: 4px; }
 @media (max-width: 640px){ .hero-arrow { width: 36px; height: 36px; } .hero-arrow-l { left: 8px; } .hero-arrow-r { right: 8px; } }
-.hero-veil { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 66% 92% at 24% 46%, var(--paper) 6%, rgba(0,0,0,0) 62%); }
+.hero-veil { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, rgba(8,11,24,.66) 0%, rgba(8,11,24,.30) 40%, rgba(8,11,24,0) 70%), radial-gradient(120% 120% at 50% 122%, rgba(6,9,20,.62), rgba(6,9,20,0) 55%); }
 .hero-content { position: relative; z-index: 2; width: 100%; text-align: left; }
 .hero-mega { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: clamp(46px, 7.6vw, 88px); line-height: 1.04; letter-spacing: .01em; color: var(--ink); }
 .hero-mega em { color: var(--vermilion); font-style: normal; }
@@ -257,6 +278,29 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .hero-sub { font-size: 16px; color: var(--ink-soft); max-width: 540px; line-height: 1.8; margin-top: 22px; }
 .hero-scroll { margin-top: 38px; font-family: var(--font-mono); font-size: 11px; letter-spacing: .18em; color: var(--ink-faint); text-transform: uppercase; display: inline-flex; align-items: center; gap: 8px; }
 .hero-scroll::before { content: ''; width: 26px; height: 1px; background: var(--ink-faint); }
+/* ── Hero · 深色键视觉覆盖（始终深色 · 含会议/赛事元素）── */
+.hero-full .eyebrow { color: #8fb6ec; }
+.hero-full .eyebrow::before, .hero-full .eyebrow::after { background: #8fb6ec; opacity: .7; }
+.hero-full .hero-mega { color: #fff; }
+.hero-full .hero-mega em { color: #7fb0ec; }
+.hero-full .hero-en { color: rgba(255,255,255,.5); }
+.hero-full .hero-sub { color: rgba(255,255,255,.82); }
+.hero-full .hero-scroll { color: rgba(255,255,255,.5); }
+.hero-full .hero-scroll::before { background: rgba(255,255,255,.4); }
+.hero-full .hero-arrow { background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); color: #fff; }
+.hero-full .hero-arrow:hover { background: rgba(255,255,255,.16); }
+.hero-full .hero-scheme-name { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.16); color: rgba(255,255,255,.72); }
+.hero-full .hero-dot { background: rgba(255,255,255,.3); }
+.hero-full .hero-dot.on { background: #7fb0ec; }
+/* 会议 / 赛事 元信息芯片 */
+.hero-badges { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .04em; color: rgba(255,255,255,.82); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 30px; padding: 6px 13px; backdrop-filter: blur(6px); }
+.hero-badge svg { width: 13px; height: 13px; stroke: #8fb6ec; fill: none; stroke-width: 1.8; flex-shrink: 0; }
+.hero-badge b { color: #fff; font-weight: 600; }
+/* 主办单位条 */
+.hero-orgs { margin-top: 30px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: rgba(255,255,255,.46); }
+.hero-orgs .sep { width: 1px; height: 11px; background: rgba(255,255,255,.22); }
+.hero-orgs b { color: rgba(255,255,255,.72); font-weight: 500; }
 .stats-band { border-bottom: 1px solid var(--rule); background: var(--paper-cool); }
 .stats-band .wrap { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 24px; }
 .stats-cell { padding: 18px 22px; border-right: 1px solid var(--rule-soft); }
@@ -504,43 +548,27 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       <div class="hero-dots" id="heroDots"></div>
     </div>
     <div class="wrap hero-content">
-      <div class="eyebrow appear" style="margin-bottom:22px;">AI for Science · 上海人工智能实验室 × 壁仞科技</div>
+      <div class="eyebrow appear" style="margin-bottom:20px;">2026 · AI for Science · 全国挑战赛</div>
       <h1 class="hero-mega appear-2">书生国智<br><em>科探</em>挑战赛</h1>
       <div class="hero-en appear-3">Intern Discovery Challenge</div>
       <p class="hero-sub appear-3">国芯 · 国模 · 国云 · 国智，四位一体。让 AI 智能体像科学家一样自主探索、提出并验证假说。</p>
-      <div class="meta-row appear-3" style="margin-top:30px; gap:12px;">
-        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
-        <a class="btn btn-lg" href="#/#tracks">了解六大赛道</a>
+      <div class="hero-badges appear-3">
+        <span class="hero-badge"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>报名 <b>即日起 – 7.15</b></span>
+        <span class="hero-badge"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0Z"/><path d="M6 6H3.5v2A3 3 0 0 0 6 13M18 6h2.5v2A3 3 0 0 1 18 13"/></svg>奖金池 <b>60 万元</b></span>
+        <span class="hero-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>6 大赛道 · 线上 + 线下</span>
+        <span class="hero-badge"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5ZM3 8v6M21 8v6M7 11v5c0 1.6 5 1.6 10 0v-5"/></svg>书生科学发现平台 · SCP</span>
       </div>
-      <div class="hero-scroll appear-3">向下滚动了解赛事</div>
+      <div class="meta-row appear-3" style="margin-top:26px; gap:12px;">
+        <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
+        <a class="btn btn-lg" href="#/#tracks" style="background:rgba(255,255,255,.06); color:#fff; border-color:rgba(255,255,255,.28);">了解六大赛道</a>
+      </div>
+      <div class="hero-orgs appear-3">
+        <span>主办 <b>上海人工智能实验室</b></span><span class="sep"></span>
+        <span>联合 <b>壁仞科技</b></span><span class="sep"></span>
+        <span>协办 <b>浦江科学社区</b></span>
+      </div>
     </div>
   </section>
-
-  <!-- ───────── 关键数据条 ───────── -->
-  <div class="stats-band">
-    <div class="wrap">
-      <div class="stats-cell">
-        <div class="label" style="margin-bottom:6px;">赛事奖金池</div>
-        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; color:var(--vermilion); line-height:1;">60<span style="font-size:15px; color:var(--ink-mute); font-family:var(--font-sans);"> 万元</span></div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">总奖金高达</div>
-      </div>
-      <div class="stats-cell">
-        <div class="label" style="margin-bottom:6px;">参赛赛道</div>
-        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">6 <span style="font-size:14px; color:var(--ink-mute); font-family:var(--font-sans);">大赛道</span></div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">生命 · 物质 · 地球 · 量子 · 算子 · 自由</div>
-      </div>
-      <div class="stats-cell">
-        <div class="label" style="margin-bottom:6px;">报名时间</div>
-        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">即日起</div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">— 7 月 15 日截止</div>
-      </div>
-      <div class="stats-cell">
-        <div class="label" style="margin-bottom:6px;">组队要求</div>
-        <div style="font-family:var(--font-serif); font-size:30px; font-weight:600; line-height:1; color:var(--ink);">≤ 5 <span style="font-size:14px; color:var(--ink-mute); font-family:var(--font-sans);">人</span></div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">队长 1 名 + 队员至多 4 名</div>
-      </div>
-    </div>
-  </div>
 
   <!-- ───────── 板块导航 · 首屏下方，滚动置顶悬浮 ───────── -->
   <nav class="section-nav" id="sectionNav" aria-label="页面板块导航">
@@ -1122,35 +1150,138 @@ const AUX = {
   magenta: { c1:'var(--aux-magenta-1)', c3:'var(--aux-magenta-3)', c4:'var(--aux-magenta-4)' },
   vermilion:{ c1:'var(--vermilion-1)',  c3:'var(--vermilion-5)',   c4:'var(--vermilion-6)' },
 };
+/* 赛道卡 · 深色科学氛围卡（每赛道一种科学 motif + 学科深色渐变）*/
+const TRACK_VIS = [
+  { motif:'helix',   pal:'life',     accent:'#e7b8d6', dot:'#e7b8d6', bg:'radial-gradient(125% 125% at 74% 14%, #a4528d 0%, #6a2f5a 46%, #3a1734 100%)' },
+  { motif:'crystal', pal:'matter',   accent:'#9bdbe0', dot:'#d8b46a', bg:'radial-gradient(125% 125% at 74% 14%, #2f8f9c 0%, #1d5f6e 46%, #0f3540 100%)' },
+  { motif:'globe',   pal:'earth',    accent:'#a6e0c6', dot:'#a6e0c6', bg:'radial-gradient(125% 125% at 72% 14%, #2f9a78 0%, #1c6b52 46%, #0f3a2c 100%)' },
+  { motif:'quantum', pal:'quantum',  accent:'#cdb8f0', dot:'#cdb8f0', bg:'radial-gradient(125% 125% at 74% 14%, #7a54bf 0%, #4a2f8a 46%, #281a52 100%)' },
+  { motif:'neural',  pal:'operator', accent:'#9fc4e6', dot:'#9fc4e6', bg:'radial-gradient(125% 125% at 74% 14%, #3a6fae 0%, #244e86 46%, #142f4e 100%)' },
+  { motif:'orbit',   pal:'free',     accent:'#bcd0ff', dot:'#e8c98a', bg:'radial-gradient(125% 125% at 74% 14%, #5560b5 0%, #333a86 46%, #1e2052 100%)' },
+];
 function renderTracks(){
   const grid = document.getElementById('trackGrid');
   if(!grid) return;
   grid.innerHTML = TRACKS.map((t,i) => {
-    const a = AUX[t.aux];
-    return `<div class="card track-card" style="display:flex; flex-direction:column; gap:0;">
-      <div class="tc-figure">
-        <div class="tc-img" style="background-image:url('${IMG}${t.img}');"></div>
-        <div class="tc-scrim"></div>
-        <div style="position:absolute; top:0; left:0; right:0; height:3px; background:${a.c4};"></div>
-        <div style="position:absolute; left:0; right:0; bottom:0; padding:11px 14px; display:flex; justify-content:space-between; align-items:center;">
-          <span class="label" style="color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.4);">${t.no}</span>
-          <span class="pill" style="background:rgba(255,255,255,.94); color:${a.c4};">${t.tag}</span>
+    const v = TRACK_VIS[i] || TRACK_VIS[0];
+    const metas = t.metas.map(m=>`<div class="tcd-meta"><i style="background:${v.dot};"></i>${m}</div>`).join('');
+    return `<div class="track-card-dark">
+      <div class="tcd-bg" style="background:${v.bg};"></div>
+      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}"></canvas>
+      <div class="tcd-scrim"></div>
+      <div class="tcd-accent" style="background:${v.accent};"></div>
+      <a class="tcd-main" href="#/track/${i}">
+        <div class="tcd-top">
+          <span class="tcd-no">${t.no}</span>
+          <span class="tcd-tag">${t.tag}</span>
         </div>
-        <div class="tc-actions">
-          <a class="btn btn-primary" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
-          <a class="btn" href="#/track/${i}" style="background:#fff; border-color:#fff;">详情</a>
-        </div>
-      </div>
-      <a href="#/track/${i}" style="text-decoration:none; padding:16px; display:flex; flex-direction:column; flex:1;">
-        <div class="label" style="font-size:10px; letter-spacing:.16em; color:var(--ink-faint); margin-bottom:6px;">${t.en}</div>
-        <h3 class="title-m" style="margin-bottom:10px; line-height:1.4; color:var(--ink);">${t.title}</h3>
-        <p style="font-size:13px; color:var(--ink-soft); line-height:1.7; margin-bottom:14px; flex:1;">${t.desc}</p>
-        <div style="display:flex; flex-direction:column; gap:6px; padding-top:12px; border-top:1px solid var(--rule-soft);">
-          ${t.metas.map(m=>`<div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--ink-mute);"><span style="width:5px; height:5px; border-radius:50%; background:${a.c3}; flex-shrink:0;"></span>${m}</div>`).join('')}
+        <div>
+          <div class="tcd-en">${t.en}</div>
+          <h3 class="tcd-title">${t.title}</h3>
+          <p class="tcd-desc">${t.desc}</p>
+          <div class="tcd-metas">${metas}</div>
         </div>
       </a>
+      <div class="tcd-actions">
+        <a class="btn btn-primary" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
+        <a class="btn" href="#/track/${i}" style="background:#fff; border-color:#fff;">详情</a>
+      </div>
     </div>`;
   }).join('');
+  initTrackMotifs();
+}
+
+/* 赛道卡 · 科学 motif 渲染引擎（canvas · 球体着色 · 6 种科学元素）*/
+function initTrackMotifs(){
+  const PAL = {
+    life:     { a:'#e7b8d6', aHi:'#f9e6f2', b:'#c98fb5', bHi:'#eed2e3', rung:'rgba(255,236,247,.72)' },
+    matter:   { a:'#d8b46a', aHi:'#f3dca0', b:'#9bdbe0', bHi:'#d6f2f4', bond:'rgba(255,255,255,.85)' },
+    earth:    { base:'#2f8f6e', hi:'#a6e0c6', line:'rgba(214,245,230,.9)', dot:'#e8c98a', dotHi:'#f7e4b2' },
+    quantum:  { line:'rgba(216,200,244,.9)', gate:'#cdb8f0', gateHi:'#efe6fc', dot:'#ffffff' },
+    operator: { node:'#9fc4e6', nodeHi:'#dcebf9', edge:'rgba(200,222,247,.85)', sig:'#e8c98a' },
+    free:     { core:'#e8c98a', coreHi:'#f9e6bd', ring:'rgba(210,220,250,.82)', e:'#bcd0ff', eHi:'#e6eeff' },
+  };
+  function sphere(ctx,x,y,r,base,hi){ if(r<=0) return;
+    const g=ctx.createRadialGradient(x-r*0.32,y-r*0.36,r*0.12,x,y,r);
+    g.addColorStop(0,hi); g.addColorStop(.5,base); g.addColorStop(1,'rgba(8,6,16,.55)');
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,6.2832); ctx.fill(); }
+
+  const CP=[], CB=[];
+  for(let xi=-1;xi<=1;xi++) for(let yi=-1;yi<=1;yi++) for(let zi=-1;zi<=1;zi++) CP.push({x:xi,y:yi,z:zi,r:(xi||yi||zi)?1:1.3});
+  for(let i=0;i<CP.length;i++) for(let j=i+1;j<CP.length;j++){ const dx=CP[i].x-CP[j].x,dy=CP[i].y-CP[j].y,dz=CP[i].z-CP[j].z; if(dx*dx+dy*dy+dz*dz===1) CB.push([i,j]); }
+  function crystal(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,S=o.R, ay=t*0.006, ax=Math.sin(t*0.0035)*0.4;
+    const pr=CP.map((p,i)=>{ let X=p.x*Math.cos(ay)+p.z*Math.sin(ay), Z=-p.x*Math.sin(ay)+p.z*Math.cos(ay);
+      let Y=p.y*Math.cos(ax)-Z*Math.sin(ax); Z=p.y*Math.sin(ax)+Z*Math.cos(ax);
+      const pe=1/(1+Z*0.18); return { sx:cx+X*S*pe, sy:cy+Y*S*pe, z:Z, r:6.5*p.r*pe, i }; });
+    ctx.lineWidth=1; ctx.strokeStyle=pal.bond;
+    CB.forEach(([a,b])=>{ const za=(pr[a].z+pr[b].z)/2; ctx.globalAlpha=0.08+0.10*((za+1.7)/3.4); ctx.beginPath(); ctx.moveTo(pr[a].sx,pr[a].sy); ctx.lineTo(pr[b].sx,pr[b].sy); ctx.stroke(); });
+    ctx.globalAlpha=1; pr.slice().sort((p,q)=>p.z-q.z).forEach(p=>{ const odd=p.i%2; sphere(ctx,p.sx,p.sy,p.r, odd?pal.b:pal.a, odd?pal.bHi:pal.aHi); });
+  }
+  function globe(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,R=o.R; sphere(ctx,cx,cy,R,pal.base,pal.hi);
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,6.2832); ctx.clip(); ctx.strokeStyle=pal.line; ctx.lineWidth=1; const rot=t*0.01;
+    for(let k=0;k<6;k++){ const ph=rot+k/6*Math.PI; ctx.globalAlpha=.16+.22*Math.abs(Math.sin(ph)); ctx.beginPath(); ctx.ellipse(cx,cy,Math.max(0.5,Math.abs(R*Math.cos(ph))),R,0,0,6.2832); ctx.stroke(); }
+    ctx.globalAlpha=.28; for(let k=-2;k<=2;k++){ const yy=cy+R*k/2.6, rr=R*Math.sqrt(Math.max(0,1-(k/2.6)**2)); ctx.beginPath(); ctx.ellipse(cx,yy,rr,Math.max(1,rr*0.16),0,0,6.2832); ctx.stroke(); }
+    ctx.restore();
+    const phi=-0.4,R1=R*1.5,R2=R*0.5; ctx.globalAlpha=.3; ctx.strokeStyle=pal.line; ctx.beginPath(); ctx.ellipse(cx,cy,R1,R2,phi,0,6.2832); ctx.stroke();
+    const oa=t*0.022,Xe=R1*Math.cos(oa),Ye=R2*Math.sin(oa); const ox=cx+Math.cos(phi)*Xe-Math.sin(phi)*Ye, oy=cy+Math.sin(phi)*Xe+Math.cos(phi)*Ye;
+    ctx.globalAlpha=1; sphere(ctx,ox,oy,5,pal.dot,pal.dotHi);
+  }
+  function helix(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,amp=o.R*0.8,span=o.R*1.95,turns=2.3,N=46,p1=[],p2=[];
+    for(let i=0;i<=N;i++){ const f=i/N,yy=cy-span/2+span*f, ph=f*turns*6.2832+t*0.02;
+      p1.push({x:cx+Math.sin(ph)*amp,y:yy,z:Math.cos(ph)}); p2.push({x:cx+Math.sin(ph+Math.PI)*amp,y:yy,z:Math.cos(ph+Math.PI)}); }
+    for(let i=0;i<=N;i+=3){ const a=p1[i],b=p2[i]; ctx.globalAlpha=.14+.18*((a.z+1)/2); ctx.strokeStyle=pal.rung; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+    ctx.globalAlpha=1; [[p1,pal.a,pal.aHi],[p2,pal.b,pal.bHi]].forEach(([pts,base,hi])=>{ pts.forEach((p,i)=>{ if(i%2) return; sphere(ctx,p.x,p.y,2.6+2.2*((p.z+1)/2),base,hi); }); });
+  }
+  function quantum(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,half=o.R*1.5,x0=cx-half,x1=cx+half,n=3,gap=o.R*0.62,ys=[];
+    ctx.strokeStyle=pal.line; ctx.lineWidth=1.2; ctx.globalAlpha=.42;
+    for(let q=0;q<n;q++){ const y=cy+(q-(n-1)/2)*gap; ys.push(y); ctx.beginPath(); ctx.moveTo(x0,y); ctx.lineTo(x1,y); ctx.stroke(); }
+    const cols=[0.26,0.52,0.78].map(f=>x0+(x1-x0)*f);
+    ctx.globalAlpha=.8; ctx.strokeStyle=pal.gate; ctx.beginPath(); ctx.moveTo(cols[1],ys[0]); ctx.lineTo(cols[1],ys[1]); ctx.stroke();
+    ctx.fillStyle=pal.dot; ctx.beginPath(); ctx.arc(cols[1],ys[0],3.2,0,6.2832); ctx.fill();
+    ctx.font='600 12px "JetBrains Mono",monospace'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    function gate(x,y,txt){ const s=22; ctx.globalAlpha=1; ctx.fillStyle='rgba(20,14,34,.62)'; ctx.strokeStyle=pal.gate; ctx.lineWidth=1.4; ctx.beginPath(); ctx.rect(x-s/2,y-s/2,s,s); ctx.fill(); ctx.stroke(); ctx.fillStyle=pal.gateHi; ctx.fillText(txt,x,y+0.5); }
+    gate(cols[0],ys[0],'H'); gate(cols[1],ys[1],'X'); gate(cols[2],ys[2],'H');
+    const px=x0+((t*1.3)%(x1-x0)); ctx.fillStyle=pal.dot; ys.forEach(y=>{ ctx.globalAlpha=.9; ctx.beginPath(); ctx.arc(px,y,2.2,0,6.2832); ctx.fill(); });
+    ctx.globalAlpha=1;
+  }
+  function neural(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,RW=o.R*2.2,RH=o.R*1.5,cols=4,rows=[3,4,4,3],layers=[];
+    for(let c=0;c<cols;c++){ const x=cx-RW/2+RW*c/(cols-1),cnt=rows[c],arr=[]; for(let i=0;i<cnt;i++) arr.push({x,y:cy-RH/2+RH*(i+0.5)/cnt,ph:i*1.3+c}); layers.push(arr); }
+    ctx.strokeStyle=pal.edge; ctx.lineWidth=1;
+    for(let c=0;c<cols-1;c++) for(const a of layers[c]) for(const b of layers[c+1]){ ctx.globalAlpha=.1; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+    ctx.fillStyle=pal.sig;
+    for(let k=0;k<8;k++){ const c=Math.floor(t*0.02+k*1.7)%(cols-1), tt=(t*0.02+k*1.7)%1, a=layers[c][(k*3)%layers[c].length], b=layers[c+1][(k*5)%layers[c+1].length]; ctx.globalAlpha=.85; ctx.beginPath(); ctx.arc(a.x+(b.x-a.x)*tt,a.y+(b.y-a.y)*tt,2.3,0,6.2832); ctx.fill(); }
+    ctx.globalAlpha=1; layers.forEach((col,ci)=>col.forEach(nd=>{ const pulse=0.5+0.5*Math.sin(t*0.04+nd.ph); sphere(ctx,nd.x,nd.y,4.2+pulse*1.4,(ci===0||ci===cols-1)?pal.sig:pal.node,pal.nodeHi); }));
+  }
+  function orbit(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,R=o.R*1.35,rings=[0,2.09,-2.09];
+    ctx.strokeStyle=pal.ring; ctx.lineWidth=1;
+    rings.forEach(rot=>{ ctx.globalAlpha=.4; ctx.beginPath(); ctx.ellipse(cx,cy,R,R*0.4,rot,0,6.2832); ctx.stroke(); });
+    rings.forEach((rot,i)=>{ const a=t*0.03+i*2.1,X=R*Math.cos(a),Y=R*0.4*Math.sin(a); const ex=cx+Math.cos(rot)*X-Math.sin(rot)*Y, ey=cy+Math.sin(rot)*X+Math.cos(rot)*Y; ctx.globalAlpha=1; sphere(ctx,ex,ey,3.8,pal.e,pal.eHi); });
+    const pulse=4+Math.sin(t*0.06)*1.6; ctx.globalAlpha=.18; ctx.fillStyle=pal.core; ctx.beginPath(); ctx.arc(cx,cy,pulse*2.4,0,6.2832); ctx.fill();
+    ctx.globalAlpha=1; sphere(ctx,cx,cy,8,pal.core,pal.coreHi);
+  }
+  const MOTIF={crystal,globe,helix,quantum,neural,orbit};
+
+  document.querySelectorAll('#trackGrid .tcd-cv').forEach(cv=>{
+    if(cv.__init) return; cv.__init=1;
+    const ctx=cv.getContext('2d'); let W=0,H=0,DPR=1,t=0;
+    const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal] };
+    function fit(){ DPR=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; if(!W||!H) return; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
+    function frame(){
+      if(cv.offsetParent===null){ requestAnimationFrame(frame); return; }  // 页面隐藏时不绘制
+      if(!W){ fit(); if(!W){ requestAnimationFrame(frame); return; } }
+      t++; ctx.clearRect(0,0,W,H);
+      const o={ cx:W*0.5, cy:H*0.34, R:Math.min(W,H)*0.27 };
+      (MOTIF[st.motif]||crystal)(ctx,W,H,t,st.pal,o);
+      requestAnimationFrame(frame);
+    }
+    fit(); frame(); window.addEventListener('resize',fit);
+  });
 }
 
 /* ═══════════════ 赛道详情页（/track/:idx · PRD §6–§12）═══════════════ */
@@ -2103,8 +2234,8 @@ function initHeroCanvas(){
   const cvs = [...track.querySelectorAll('.hero-slide canvas')];
   const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   let COL = {};
-  function recolor(){ COL = { ink:css('--ink')||'#1a2332', verm:css('--vermilion')||'#1554a8', paper:css('--paper')||'#fbfaf7',
-    aux:[css('--aux-magenta-4'),css('--aux-cyan-4'),css('--aux-mint-4'),css('--aux-violet-4'),css('--aux-violet-4'),css('--vermilion')] }; }
+  function recolor(){ COL = { ink:'#aeb9d4', verm:'#5b93dd', paper:'#0e1426',
+    aux:['#d98fc0','#5fc6d0','#5fd0a0','#a98fe0','#a98fe0','#6aa6e8'] }; }
   recolor();
 
   /* 通用：canvas 尺寸管理 */
