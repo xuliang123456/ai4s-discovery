@@ -239,7 +239,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tcd-metas { display: flex; flex-direction: column; gap: 6px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.14); }
 .tcd-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: rgba(255,255,255,.74); }
 .tcd-meta i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.tcd-actions { display: flex; gap: 10px; margin-top: 15px; }
+.tcd-actions { display: flex; gap: 10px; max-height: 0; opacity: 0; overflow: hidden; transition: max-height .32s var(--ease), opacity .22s var(--ease), margin-top .32s var(--ease); }
+.track-card-dark:hover .tcd-actions { max-height: 60px; opacity: 1; margin-top: 15px; }
 .tcd-actions .btn { flex: 1; justify-content: center; padding: 9px 0; font-size: 13px; }
 .tcd-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
 .tcd-ghost:hover { background: rgba(255,255,255,.13); border-color: #fff; }
@@ -994,35 +995,10 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       </div>
     </div>
 
-    <!-- 关键数据条 -->
-    <div class="grid-4" style="gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft); border-radius:2px; overflow:hidden; margin:28px 0 32px;">
-      <div style="background:var(--paper); padding:16px 18px;">
-        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">当前阶段</div>
-        <div class="title-l" style="color:var(--vermilion);">报名及初赛</div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">截止 2026.2.28</div>
-      </div>
-      <div style="background:var(--paper); padding:16px 18px;">
-        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">A 榜最高分</div>
-        <div class="title-l">0.7421</div>
-        <div style="font-size:12px; color:var(--success); margin-top:4px;">↑ 较上次 +0.018</div>
-      </div>
-      <div style="background:var(--paper); padding:16px 18px;">
-        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">提交次数</div>
-        <div class="title-l">7 <span style="font-size:13px; color:var(--ink-faint); font-weight:400;">/ 日限 5</span></div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">今日剩余 3 次</div>
-      </div>
-      <div style="background:var(--paper); padding:16px 18px;">
-        <div class="label" style="text-transform:none; letter-spacing:.04em; margin-bottom:6px;">团队规模</div>
-        <div class="title-l">4 <span style="font-size:13px; color:var(--ink-faint); font-weight:400;">/ 5 人</span></div>
-        <div style="font-size:12px; color:var(--ink-mute); margin-top:4px;">含队长 1 人</div>
-      </div>
-    </div>
-
     <!-- Tab 导航 -->
-    <div class="tabs" id="manageTabs" style="margin-bottom:28px; flex-wrap:wrap;">
+    <div class="tabs" id="manageTabs" style="margin:32px 0 28px; flex-wrap:wrap;">
       <button class="tab" data-tab="overview" aria-selected="true">概览</button>
       <button class="tab" data-tab="team" aria-selected="false">队伍成员</button>
-      <button class="tab" data-tab="submit" aria-selected="false">作品提交</button>
       <button class="tab" data-tab="resource" aria-selected="false">算力 & API</button>
     </div>
 
@@ -1227,12 +1203,12 @@ const AUX = {
 };
 /* 赛道卡 · 深色科学氛围卡（每赛道一种科学 motif + 学科深色渐变）*/
 const TRACK_VIS = [
-  { motif:'helix',   pal:'life',     accent:'#e7b8d6', dot:'#e7b8d6', bg:'radial-gradient(125% 125% at 74% 14%, #a4528d 0%, #6a2f5a 46%, #3a1734 100%)' },
-  { motif:'crystal', pal:'matter',   accent:'#9bdbe0', dot:'#d8b46a', bg:'radial-gradient(125% 125% at 74% 14%, #2f8f9c 0%, #1d5f6e 46%, #0f3540 100%)' },
-  { motif:'globe',   pal:'earth',    accent:'#a6e0c6', dot:'#a6e0c6', bg:'radial-gradient(125% 125% at 72% 14%, #2f9a78 0%, #1c6b52 46%, #0f3a2c 100%)' },
-  { motif:'quantum', pal:'quantum',  accent:'#cdb8f0', dot:'#cdb8f0', bg:'radial-gradient(125% 125% at 74% 14%, #7a54bf 0%, #4a2f8a 46%, #281a52 100%)' },
-  { motif:'neural',  pal:'operator', accent:'#9fc4e6', dot:'#9fc4e6', bg:'radial-gradient(125% 125% at 74% 14%, #3a6fae 0%, #244e86 46%, #142f4e 100%)' },
-  { motif:'bloom',   pal:'free',     accent:'#bcd0ff', dot:'#e8c98a', bg:'radial-gradient(125% 125% at 74% 14%, #5560b5 0%, #333a86 46%, #1e2052 100%)' },
+  { motif:'protein', pal:'life',     scale:.72, accent:'#e7b8d6', dot:'#e7b8d6', bg:'radial-gradient(125% 125% at 74% 14%, #a4528d 0%, #6a2f5a 46%, #3a1734 100%)' },
+  { motif:'crystal', pal:'matter',   scale:.72, accent:'#9bdbe0', dot:'#d8b46a', bg:'radial-gradient(125% 125% at 74% 14%, #2f8f9c 0%, #1d5f6e 46%, #0f3540 100%)' },
+  { motif:'globe',   pal:'earth',    scale:.72, accent:'#a6e0c6', dot:'#a6e0c6', bg:'radial-gradient(125% 125% at 72% 14%, #2f9a78 0%, #1c6b52 46%, #0f3a2c 100%)' },
+  { motif:'quantum', pal:'quantum',  scale:.72, accent:'#cdb8f0', dot:'#cdb8f0', bg:'radial-gradient(125% 125% at 74% 14%, #7a54bf 0%, #4a2f8a 46%, #281a52 100%)' },
+  { motif:'neural',  pal:'operator', scale:1,   accent:'#9fc4e6', dot:'#9fc4e6', bg:'radial-gradient(125% 125% at 74% 14%, #3a6fae 0%, #244e86 46%, #142f4e 100%)' },
+  { motif:'bloom',   pal:'free',     scale:.72, accent:'#bcd0ff', dot:'#e8c98a', bg:'radial-gradient(125% 125% at 74% 14%, #5560b5 0%, #333a86 46%, #1e2052 100%)' },
 ];
 function renderTracks(){
   const grid = document.getElementById('trackGrid');
@@ -1242,7 +1218,7 @@ function renderTracks(){
     const metas = t.metas.map(m=>`<div class="tcd-meta"><i style="background:${v.dot};"></i>${m}</div>`).join('');
     return `<div class="track-card-dark" onclick="location.hash='#/track/${i}'">
       <div class="tcd-bg" style="background:${v.bg};"></div>
-      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}"></canvas>
+      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${v.scale||1}"></canvas>
       <div class="tcd-scrim"></div>
       <div class="tcd-top">
         <span class="tcd-no">${t.no}</span>
@@ -1355,18 +1331,33 @@ function initTrackMotifs(){
     const pulse=4+Math.sin(t*0.06)*1.6; ctx.globalAlpha=.18; ctx.fillStyle=pal.core; ctx.beginPath(); ctx.arc(cx,cy,pulse*2.4,0,6.2832); ctx.fill();
     ctx.globalAlpha=1; sphere(ctx,cx,cy,8,pal.core,pal.coreHi);
   }
-  const MOTIF={crystal,globe,helix,quantum,neural,bloom};
+  function protein(ctx,W,H,t,pal,o){
+    // 蛋白质 α-螺旋缎带：单条实心带状螺旋（纺锤包络），区别于 DNA 双链
+    const cx=o.cx,cy=o.cy,base=o.R*0.62,span=o.R*2.3,turns=4.2,N=150,rot=t*0.016,pts=[];
+    for(let i=0;i<=N;i++){ const f=i/N, env=0.45+0.55*Math.sin(f*Math.PI); // 中间粗两端收（蛋白结构域感）
+      const yy=cy-span/2+span*f, ph=f*turns*6.2832+rot;
+      pts.push({x:cx+Math.cos(ph)*base*env, y:yy, z:Math.sin(ph), env}); }
+    const wid=o.R*0.2;
+    ctx.lineJoin='round';
+    for(let i=0;i<pts.length-1;i++){ const a=pts[i],b=pts[i+1], za=(a.z+1)/2, zb=(b.z+1)/2;
+      const wa=wid*(0.35+0.65*za)*a.env, wb=wid*(0.35+0.65*zb)*b.env;
+      ctx.globalAlpha=.26+.62*za; ctx.fillStyle=za>0.52?pal.aHi:pal.a;
+      ctx.beginPath(); ctx.moveTo(a.x-wa,a.y); ctx.lineTo(a.x+wa,a.y); ctx.lineTo(b.x+wb,b.y); ctx.lineTo(b.x-wb,b.y); ctx.closePath(); ctx.fill(); }
+    // 螺旋两端的端帽小球（N/C 端）
+    ctx.globalAlpha=1; sphere(ctx,pts[0].x,pts[0].y,3.4,pal.b,pal.bHi); sphere(ctx,pts[N].x,pts[N].y,3.4,pal.b,pal.bHi);
+  }
+  const MOTIF={crystal,globe,helix,protein,quantum,neural,bloom};
 
   document.querySelectorAll('#trackGrid .tcd-cv').forEach(cv=>{
     if(cv.__init) return; cv.__init=1;
     const ctx=cv.getContext('2d'); let W=0,H=0,DPR=1,t=0;
-    const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal] };
+    const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal], scale:parseFloat(cv.dataset.scale)||1 };
     function fit(){ DPR=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; if(!W||!H) return; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
     function frame(){
       if(cv.offsetParent===null){ requestAnimationFrame(frame); return; }  // 页面隐藏时不绘制
       if(!W){ fit(); if(!W){ requestAnimationFrame(frame); return; } }
       t++; ctx.clearRect(0,0,W,H);
-      const o={ cx:W*0.5, cy:H*0.34, R:Math.min(W,H)*0.27 };
+      const o={ cx:W*0.5, cy:H*0.30, R:Math.min(W,H)*0.27*st.scale };
       (MOTIF[st.motif]||crystal)(ctx,W,H,t,st.pal,o);
       requestAnimationFrame(frame);
     }
@@ -2011,6 +2002,8 @@ const TEAM = [
   { name:'周屿',   role:'工程',  org:'上海人工智能实验室', email:'zhou.yu@pjlab.org.cn', tag:'' },
   { name:'陈牧',   role:'数据',  org:'同济大学 · 海洋学院',   email:'chen.mu@tongji.edu.cn', tag:'' },
 ];
+/* 演示数据 · 指导专家 */
+const ADVISOR = { name:'王立群', title:'教授', role:'指导专家', org:'复旦大学', email:'wang.lq@fudan.edu.cn' };
 /* 演示数据 · 提交记录 */
 const SUBMITS = [
   { id:'#0007', file:'enso_v7_sa_ensemble.zip', size:'48.2 MB', when:'2026-02-14 22:10', board:'A 榜', score:'0.7421', state:'success', stateText:'评测完成' },
@@ -2085,7 +2078,7 @@ const manageTabRenderers = {
   team(){
     return `
     <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin-bottom:14px;">
-      <span class="section-label" style="border:none; margin:0; padding:0;">队伍成员 · ${TEAM.length} / 5 人</span>
+      <span class="section-label" style="border:none; margin:0; padding:0;">队伍成员 · ${TEAM.length} / 5 人 · 指导专家 1 名</span>
       <button class="btn btn-ghost" type="button" style="padding:6px 10px;"><svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> 邀请成员</button>
     </div>
     <div class="card" style="padding:0; overflow:hidden;">
@@ -2101,59 +2094,19 @@ const manageTabRenderers = {
               ? '<span style="font-size:12px; color:var(--ink-faint);">—</span>'
               : '<button class="btn btn-ghost" type="button" style="padding:3px 8px; font-size:12px; color:var(--error);">移除</button>'}</td>
           </tr>`).join('')}
+          <tr>
+            <td>${ADVISOR.name} <span style="font-size:11px; color:var(--ink-mute);">${ADVISOR.title}</span></td>
+            <td><span class="pill pill-warning">${ADVISOR.role}</span></td>
+            <td>${ADVISOR.org}</td>
+            <td style="font-family:var(--font-mono); font-size:11px; color:var(--ink-mute);">${ADVISOR.email}</td>
+            <td style="text-align:right;"><span style="font-size:12px; color:var(--ink-faint);">—</span></td>
+          </tr>
         </tbody>
       </table>
     </div>
     <p class="field-help" style="margin-top:10px;">团队至多 5 名成员（含队长）。成员一经确认参与，将共享赛事提交与资源额度。</p>`;
   },
 
-  /* ── 作品提交 ── */
-  submit(){
-    return `
-    <div class="grid-2" style="gap:14px; align-items:start; margin-bottom:14px;">
-      <!-- 初评材料 dropzone -->
-      <div>
-        <div class="section-label">初评材料</div>
-        <div class="dropzone" data-drop="materials">
-          <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-mute); width:26px; height:26px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
-          <div style="font-size:13px; color:var(--ink-soft); margin-top:8px;">拖拽 <strong>Proposal / 复现材料</strong> 到此处，或<span style="color:var(--vermilion);">点击上传</span></div>
-          <div class="dropzone-hint">支持 PDF / Markdown / ZIP，单文件 ≤ 100 MB</div>
-        </div>
-      </div>
-      <!-- 作品上传 dropzone -->
-      <div>
-        <div class="section-label">智能体作品</div>
-        <div class="dropzone" data-drop="work">
-          <svg class="icon" viewBox="0 0 24 24" style="color:var(--ink-mute); width:26px; height:26px;"><path d="M20 6 9 17l-5-5"/></svg>
-          <div style="font-size:13px; color:var(--ink-soft); margin-top:8px;">上传 <strong>AI 智能体作品包</strong>（需含模型实现方案描述）</div>
-          <div class="dropzone-hint">.zip 打包，A 榜每日上限 5 次 · 今日剩余 3 次</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 提交记录 -->
-    <div class="meta-row" style="justify-content:space-between; align-items:flex-end; margin:24px 0 12px;">
-      <span class="section-label" style="border:none; margin:0; padding:0;">提交记录 · A 榜</span>
-      <span class="label" style="text-transform:none; letter-spacing:.04em;">最高分 0.7421</span>
-    </div>
-    <div class="card" style="padding:0; overflow:hidden;">
-      <table class="table">
-        <thead><tr><th>编号</th><th>文件</th><th>大小</th><th>提交时间</th><th>榜单</th><th>得分</th><th style="text-align:right;">状态</th></tr></thead>
-        <tbody>
-          ${SUBMITS.map(s=>`<tr>
-            <td style="font-family:var(--font-mono); font-size:11px;">${s.id}</td>
-            <td style="font-family:var(--font-mono); font-size:11px; color:var(--ink-soft);">${s.file}</td>
-            <td>${s.size}</td>
-            <td style="font-size:11px; color:var(--ink-mute);">${s.when}</td>
-            <td>${s.board}</td>
-            <td style="font-family:var(--font-mono); font-weight:600; color:var(--ink);">${s.score}</td>
-            <td style="text-align:right;"><span class="pill pill-success">${s.stateText}</span></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>
-    <p class="field-help" style="margin-top:10px;">提交的作品必须是 AI 智能体，需包含对产出 Proposal 的 AI scientist 实现方案的描述。B 榜将在初评截止后统一评测。</p>`;
-  },
 
   /* ── 算力 & API ── */
   resource(){
