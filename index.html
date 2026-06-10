@@ -223,15 +223,14 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .track-card:hover .tc-img { transform: scale(1.07); }
 .tc-scrim { position: absolute; inset: 0; background: linear-gradient(to top, rgba(28,22,16,.62), rgba(28,22,16,.08) 52%, rgba(28,22,16,.10)); }
 /* 赛道卡 · 深色科学氛围卡（canvas motif，替换原图片卡）*/
-.track-card-dark { position: relative; overflow: hidden; border-radius: 14px; min-height: 332px; color: #fff; isolation: isolate; display: flex; box-shadow: 0 22px 54px -32px rgba(18,14,38,.66); transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
+.track-card-dark { position: relative; overflow: hidden; border-radius: 14px; min-height: 360px; color: #fff; isolation: isolate; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 22px 54px -32px rgba(18,14,38,.66); transition: transform var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease); }
 .track-card-dark:hover { transform: translateY(-3px); box-shadow: 0 30px 64px -30px rgba(18,14,38,.72); }
 .track-card-dark .tcd-bg, .track-card-dark .tcd-cv, .track-card-dark .tcd-scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
 .track-card-dark .tcd-bg { z-index: 0; }
 .track-card-dark .tcd-cv { z-index: 1; }
-.track-card-dark .tcd-scrim { z-index: 2; background: linear-gradient(to top, rgba(10,8,20,.93) 0%, rgba(10,8,20,.8) 28%, rgba(10,8,20,.34) 56%, rgba(10,8,20,.12) 100%); pointer-events: none; }
-.track-card-dark .tcd-accent { position: absolute; top: 0; left: 0; right: 0; height: 3px; z-index: 4; }
-.tcd-main { position: relative; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; flex: 1; padding: 18px 20px 20px; text-decoration: none; color: inherit; }
-.tcd-top { display: flex; align-items: center; justify-content: space-between; }
+.track-card-dark .tcd-scrim { z-index: 2; background: linear-gradient(to top, rgba(10,8,20,.94) 0%, rgba(10,8,20,.86) 30%, rgba(10,8,20,.2) 62%, rgba(10,8,20,0) 100%); pointer-events: none; }
+.tcd-top { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; padding: 16px 20px 0; }
+.tcd-body { position: relative; z-index: 3; margin-top: auto; padding: 0 20px 18px; }
 .tcd-no { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.85); text-shadow: 0 1px 4px rgba(0,0,0,.45); }
 .tcd-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .04em; padding: 3px 9px; border-radius: 20px; background: rgba(255,255,255,.16); color: #fff; }
 .tcd-en { font-family: var(--font-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.62); margin-bottom: 6px; }
@@ -240,9 +239,10 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tcd-metas { display: flex; flex-direction: column; gap: 6px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.14); }
 .tcd-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: rgba(255,255,255,.74); }
 .tcd-meta i { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.tcd-actions { position: absolute; inset: 0; z-index: 5; display: flex; align-items: center; justify-content: center; gap: 10px; opacity: 0; background: rgba(12,9,22,.48); pointer-events: none; transition: opacity .25s var(--ease); }
-.track-card-dark:hover .tcd-actions { opacity: 1; pointer-events: auto; }
-.tcd-actions .btn { padding: 8px 18px; }
+.tcd-actions { display: flex; gap: 10px; margin-top: 15px; }
+.tcd-actions .btn { flex: 1; justify-content: center; padding: 9px 0; font-size: 13px; }
+.tcd-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
+.tcd-ghost:hover { background: rgba(255,255,255,.13); border-color: #fff; }
 /* Hero 两栏 + 配图 */
 .hero-cols { display: grid; grid-template-columns: 1fr 0.74fr; gap: 48px; align-items: center; }
 .hero-figure { position: relative; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; box-shadow: 0 22px 54px -30px rgba(40,30,20,.55); }
@@ -343,6 +343,16 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .hero-orgs { margin-top: 30px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: rgba(255,255,255,.46); }
 .hero-orgs .sep { width: 1px; height: 11px; background: rgba(255,255,255,.22); }
 .hero-orgs b { color: rgba(255,255,255,.72); font-weight: 500; }
+/* 单一科学主视觉 canvas + 赛事实时状态条 */
+#heroKV { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.hero-status { display: flex; align-items: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
+.hero-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: #7fe0bc; }
+.hero-live .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d39a; animation: heroPulse 1.8s var(--ease) infinite; }
+@keyframes heroPulse { 0%{ box-shadow: 0 0 0 0 rgba(52,211,154,.55); } 70%{ box-shadow: 0 0 0 8px rgba(52,211,154,0); } 100%{ box-shadow: 0 0 0 0 rgba(52,211,154,0); } }
+.hero-stat { display: flex; flex-direction: column; line-height: 1; }
+.hero-stat .k { font-family: var(--font-serif); font-size: 30px; font-weight: 600; color: #fff; }
+.hero-stat .k .u2 { font-size: 15px; color: rgba(255,255,255,.6); font-family: var(--font-sans); }
+.hero-stat .u { font-size: 11px; color: rgba(255,255,255,.55); margin-top: 6px; letter-spacing: .04em; }
 .stats-band { border-bottom: 1px solid var(--rule); background: var(--paper-cool); }
 .stats-band .wrap { display: grid; grid-template-columns: repeat(4, 1fr); padding: 0 24px; }
 .stats-cell { padding: 18px 22px; border-right: 1px solid var(--rule-soft); }
@@ -576,29 +586,18 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 
   <!-- ───────── HERO · 全屏动效 ───────── -->
   <section class="hero-full">
-    <div class="hero-track" id="heroTrack" aria-hidden="true">
-      <div class="hero-slide"><canvas></canvas></div>
-      <div class="hero-slide"><canvas></canvas></div>
-      <div class="hero-slide"><canvas></canvas></div>
-      <div class="hero-slide"><canvas></canvas></div>
-    </div>
+    <canvas id="heroKV" aria-hidden="true"></canvas>
     <div class="hero-veil" aria-hidden="true"></div>
-    <button class="hero-arrow hero-arrow-l" id="heroPrev" type="button" aria-label="上一个方案">‹</button>
-    <button class="hero-arrow hero-arrow-r" id="heroNext" type="button" aria-label="下一个方案">›</button>
-    <div class="hero-switch">
-      <span class="hero-scheme-name" id="heroSchemeName"></span>
-      <div class="hero-dots" id="heroDots"></div>
-    </div>
     <div class="wrap hero-content">
-      <div class="eyebrow appear" style="margin-bottom:20px;">2026 · AI for Science · 全国挑战赛</div>
+      <div class="eyebrow appear" style="margin-bottom:18px;">2026 · AI FOR SCIENCE · 全国挑战赛</div>
       <h1 class="hero-mega appear-2">书生国智<br><em>科探</em>挑战赛</h1>
       <div class="hero-en appear-3">Intern Discovery Challenge</div>
       <p class="hero-sub appear-3">国芯 · 国模 · 国云 · 国智，四位一体。让 AI 智能体像科学家一样自主探索、提出并验证假说。</p>
-      <div class="hero-badges appear-3">
-        <span class="hero-badge"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg>报名 <b>即日起 – 7.15</b></span>
-        <span class="hero-badge"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M6 4h12v4a6 6 0 0 1-12 0Z"/><path d="M6 6H3.5v2A3 3 0 0 0 6 13M18 6h2.5v2A3 3 0 0 1 18 13"/></svg>奖金池 <b>60 万元</b></span>
-        <span class="hero-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>6 大赛道 · 线上 + 线下</span>
-        <span class="hero-badge"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5ZM3 8v6M21 8v6M7 11v5c0 1.6 5 1.6 10 0v-5"/></svg>书生科学发现平台 · SCP</span>
+      <div class="hero-status appear-3">
+        <span class="hero-live"><span class="dot"></span>报名进行中</span>
+        <span class="hero-stat"><span class="k"><span id="heroCountdown">35</span> <span class="u2">天</span></span><span class="u">距报名截止</span></span>
+        <span class="hero-stat"><span class="k">60 <span class="u2">万</span></span><span class="u">奖金池</span></span>
+        <span class="hero-stat"><span class="k">6</span><span class="u">大赛道</span></span>
       </div>
       <div class="meta-row appear-3" style="margin-top:26px; gap:12px;">
         <a class="btn btn-primary btn-lg" href="#/apply">立即报名</a>
@@ -1233,7 +1232,7 @@ const TRACK_VIS = [
   { motif:'globe',   pal:'earth',    accent:'#a6e0c6', dot:'#a6e0c6', bg:'radial-gradient(125% 125% at 72% 14%, #2f9a78 0%, #1c6b52 46%, #0f3a2c 100%)' },
   { motif:'quantum', pal:'quantum',  accent:'#cdb8f0', dot:'#cdb8f0', bg:'radial-gradient(125% 125% at 74% 14%, #7a54bf 0%, #4a2f8a 46%, #281a52 100%)' },
   { motif:'neural',  pal:'operator', accent:'#9fc4e6', dot:'#9fc4e6', bg:'radial-gradient(125% 125% at 74% 14%, #3a6fae 0%, #244e86 46%, #142f4e 100%)' },
-  { motif:'orbit',   pal:'free',     accent:'#bcd0ff', dot:'#e8c98a', bg:'radial-gradient(125% 125% at 74% 14%, #5560b5 0%, #333a86 46%, #1e2052 100%)' },
+  { motif:'bloom',   pal:'free',     accent:'#bcd0ff', dot:'#e8c98a', bg:'radial-gradient(125% 125% at 74% 14%, #5560b5 0%, #333a86 46%, #1e2052 100%)' },
 ];
 function renderTracks(){
   const grid = document.getElementById('trackGrid');
@@ -1241,26 +1240,23 @@ function renderTracks(){
   grid.innerHTML = TRACKS.map((t,i) => {
     const v = TRACK_VIS[i] || TRACK_VIS[0];
     const metas = t.metas.map(m=>`<div class="tcd-meta"><i style="background:${v.dot};"></i>${m}</div>`).join('');
-    return `<div class="track-card-dark">
+    return `<div class="track-card-dark" onclick="location.hash='#/track/${i}'">
       <div class="tcd-bg" style="background:${v.bg};"></div>
       <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}"></canvas>
       <div class="tcd-scrim"></div>
-      <div class="tcd-accent" style="background:${v.accent};"></div>
-      <a class="tcd-main" href="#/track/${i}">
-        <div class="tcd-top">
-          <span class="tcd-no">${t.no}</span>
-          <span class="tcd-tag">${t.tag}</span>
+      <div class="tcd-top">
+        <span class="tcd-no">${t.no}</span>
+        <span class="tcd-tag">${t.tag}</span>
+      </div>
+      <div class="tcd-body">
+        <div class="tcd-en">${t.en}</div>
+        <h3 class="tcd-title">${t.title}</h3>
+        <p class="tcd-desc">${t.desc}</p>
+        <div class="tcd-metas">${metas}</div>
+        <div class="tcd-actions">
+          <a class="btn tcd-ghost" href="#/track/${i}" onclick="event.stopPropagation()">详情</a>
+          <a class="btn btn-primary" href="#/apply" onclick="event.stopPropagation();setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
         </div>
-        <div>
-          <div class="tcd-en">${t.en}</div>
-          <h3 class="tcd-title">${t.title}</h3>
-          <p class="tcd-desc">${t.desc}</p>
-          <div class="tcd-metas">${metas}</div>
-        </div>
-      </a>
-      <div class="tcd-actions">
-        <a class="btn btn-primary" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
-        <a class="btn" href="#/track/${i}" style="background:#fff; border-color:#fff;">详情</a>
       </div>
     </div>`;
   }).join('');
@@ -1275,7 +1271,7 @@ function initTrackMotifs(){
     earth:    { base:'#2f8f6e', hi:'#a6e0c6', line:'rgba(214,245,230,.9)', dot:'#e8c98a', dotHi:'#f7e4b2' },
     quantum:  { line:'rgba(216,200,244,.9)', gate:'#cdb8f0', gateHi:'#efe6fc', dot:'#ffffff' },
     operator: { node:'#9fc4e6', nodeHi:'#dcebf9', edge:'rgba(200,222,247,.85)', sig:'#e8c98a' },
-    free:     { core:'#e8c98a', coreHi:'#f9e6bd', ring:'rgba(210,220,250,.82)', e:'#bcd0ff', eHi:'#e6eeff' },
+    free:     { core:'#e8c98a', coreHi:'#f9e6bd', ring:'rgba(210,220,250,.82)', e:'#bcd0ff', eHi:'#e6eeff', c0:'rgba(232,201,138,.95)', c1:'rgba(170,196,255,.55)' },
   };
   function sphere(ctx,x,y,r,base,hi){ if(r<=0) return;
     const g=ctx.createRadialGradient(x-r*0.32,y-r*0.36,r*0.12,x,y,r);
@@ -1299,17 +1295,35 @@ function initTrackMotifs(){
     ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,6.2832); ctx.clip(); ctx.strokeStyle=pal.line; ctx.lineWidth=1; const rot=t*0.01;
     for(let k=0;k<6;k++){ const ph=rot+k/6*Math.PI; ctx.globalAlpha=.16+.22*Math.abs(Math.sin(ph)); ctx.beginPath(); ctx.ellipse(cx,cy,Math.max(0.5,Math.abs(R*Math.cos(ph))),R,0,0,6.2832); ctx.stroke(); }
     ctx.globalAlpha=.28; for(let k=-2;k<=2;k++){ const yy=cy+R*k/2.6, rr=R*Math.sqrt(Math.max(0,1-(k/2.6)**2)); ctx.beginPath(); ctx.ellipse(cx,yy,rr,Math.max(1,rr*0.16),0,0,6.2832); ctx.stroke(); }
-    ctx.restore();
-    const phi=-0.4,R1=R*1.5,R2=R*0.5; ctx.globalAlpha=.3; ctx.strokeStyle=pal.line; ctx.beginPath(); ctx.ellipse(cx,cy,R1,R2,phi,0,6.2832); ctx.stroke();
-    const oa=t*0.022,Xe=R1*Math.cos(oa),Ye=R2*Math.sin(oa); const ox=cx+Math.cos(phi)*Xe-Math.sin(phi)*Ye, oy=cy+Math.sin(phi)*Xe+Math.cos(phi)*Ye;
-    ctx.globalAlpha=1; sphere(ctx,ox,oy,5,pal.dot,pal.dotHi);
+    ctx.restore(); ctx.globalAlpha=1;
   }
   function helix(ctx,W,H,t,pal,o){
-    const cx=o.cx,cy=o.cy,amp=o.R*0.8,span=o.R*1.95,turns=2.3,N=46,p1=[],p2=[];
-    for(let i=0;i<=N;i++){ const f=i/N,yy=cy-span/2+span*f, ph=f*turns*6.2832+t*0.02;
+    const cx=o.cx,cy=o.cy,amp=o.R*0.92,span=o.R*2.5,turns=2.4,N=84,p1=[],p2=[];
+    for(let i=0;i<=N;i++){ const f=i/N,yy=cy-span/2+span*f, ph=f*turns*6.2832+t*0.018;
       p1.push({x:cx+Math.sin(ph)*amp,y:yy,z:Math.cos(ph)}); p2.push({x:cx+Math.sin(ph+Math.PI)*amp,y:yy,z:Math.cos(ph+Math.PI)}); }
-    for(let i=0;i<=N;i+=3){ const a=p1[i],b=p2[i]; ctx.globalAlpha=.14+.18*((a.z+1)/2); ctx.strokeStyle=pal.rung; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
-    ctx.globalAlpha=1; [[p1,pal.a,pal.aHi],[p2,pal.b,pal.bHi]].forEach(([pts,base,hi])=>{ pts.forEach((p,i)=>{ if(i%2) return; sphere(ctx,p.x,p.y,2.6+2.2*((p.z+1)/2),base,hi); }); });
+    // 碱基对横档（在两条主链之间，按深度淡入淡出）
+    for(let i=3;i<N-1;i+=4){ const a=p1[i],b=p2[i],za=(a.z+b.z)/2; ctx.globalAlpha=.16+.22*((za+1)/2); ctx.strokeStyle=pal.rung; ctx.lineWidth=1.4; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+    // 两条连续发光主链缎带（按 z 深度变粗变亮，立体 DNA 感，无离散点）
+    function ribbon(pts,base,hi){ ctx.lineCap='round'; ctx.lineJoin='round';
+      for(let i=0;i<pts.length-1;i++){ const a=pts[i],b=pts[i+1],zz=((a.z+b.z)/2+1)/2;
+        ctx.globalAlpha=.32+.6*zz; ctx.strokeStyle=zz>0.5?hi:base; ctx.lineWidth=2.2+3*zz;
+        ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } }
+    ribbon(p2,pal.b,pal.bHi); ribbon(p1,pal.a,pal.aHi); ctx.globalAlpha=1;
+  }
+  function bloom(ctx,W,H,t,pal,o){
+    const cx=o.cx,cy=o.cy,R=o.R*1.5;
+    ctx.save(); ctx.translate(cx,cy); ctx.globalCompositeOperation='lighter';
+    const petals=7;
+    for(let layer=0;layer<3;layer++){ const lr=R*(0.5+layer*0.3), rot=t*0.005*(layer%2?-1.3:1)+layer*0.55, w=lr*0.36;
+      for(let i=0;i<petals;i++){ ctx.save(); ctx.rotate(rot+i/petals*6.2832);
+        const g=ctx.createLinearGradient(0,0,0,-lr); g.addColorStop(0,pal.c0); g.addColorStop(1,pal.c1);
+        ctx.fillStyle=g; ctx.globalAlpha=.09+.045*layer;
+        ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(w,-lr*0.52,0,-lr); ctx.quadraticCurveTo(-w,-lr*0.52,0,0); ctx.fill();
+        ctx.restore(); } }
+    const pulse=0.5+0.5*Math.sin(t*0.04), cg=ctx.createRadialGradient(0,0,0,0,0,R*0.62);
+    cg.addColorStop(0,pal.coreHi); cg.addColorStop(.5,'rgba(232,201,138,.5)'); cg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.globalAlpha=.45+.3*pulse; ctx.fillStyle=cg; ctx.beginPath(); ctx.arc(0,0,R*0.62,0,6.2832); ctx.fill();
+    ctx.restore(); ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
   }
   function quantum(ctx,W,H,t,pal,o){
     const cx=o.cx,cy=o.cy,half=o.R*1.5,x0=cx-half,x1=cx+half,n=3,gap=o.R*0.62,ys=[];
@@ -1341,7 +1355,7 @@ function initTrackMotifs(){
     const pulse=4+Math.sin(t*0.06)*1.6; ctx.globalAlpha=.18; ctx.fillStyle=pal.core; ctx.beginPath(); ctx.arc(cx,cy,pulse*2.4,0,6.2832); ctx.fill();
     ctx.globalAlpha=1; sphere(ctx,cx,cy,8,pal.core,pal.coreHi);
   }
-  const MOTIF={crystal,globe,helix,quantum,neural,orbit};
+  const MOTIF={crystal,globe,helix,quantum,neural,bloom};
 
   document.querySelectorAll('#trackGrid .tcd-cv').forEach(cv=>{
     if(cv.__init) return; cv.__init=1;
@@ -2303,147 +2317,69 @@ function router(){
 }
 window.addEventListener('hashchange', router);
 
-/* ═══════════════ 全屏 Hero 粒子星座动效（Canvas · 鼠标可交互 · 主题自适应）═══════════════ */
+/* ═══════════════ 全屏 Hero · 六学科环绕赛事核（Canvas · 鼠标可交互 · 始终深色）═══════════════ */
 function initHeroCanvas(){
   const sec = document.querySelector('.hero-full'); if(!sec) return;
-  const track = document.getElementById('heroTrack');
-  const cvs = [...track.querySelectorAll('.hero-slide canvas')];
-  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-  let COL = {};
-  function recolor(){ COL = { ink:'#aeb9d4', verm:'#5b93dd', paper:'#0e1426',
-    aux:['#d98fc0','#5fc6d0','#5fd0a0','#a98fe0','#a98fe0','#6aa6e8'] }; }
-  recolor();
+  const cv = document.getElementById('heroKV'); if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const INK = '#9fb0d0', CORE = '#8fb6ec';
+  const DISC = [
+    { name:'生命科学',   motif:'helix',   c:'#e58fc4' },
+    { name:'物质科学',   motif:'crystal', c:'#5fc6d0' },
+    { name:'地球科学',   motif:'globe',   c:'#5fd0a0' },
+    { name:'量子计算',   motif:'quantum', c:'#b69bef' },
+    { name:'模型与算子', motif:'neural',  c:'#7fb0ec' },
+    { name:'自由赛道',   motif:'orbit',   c:'#e8c98a' },
+  ];
+  let W=0,H=0,DPR=1,raf=null,t=0,rot=0,parts=[],rings=[0,0.33,0.66],mouse={x:-9999,y:-9999},hover=-1;
 
-  /* 通用：canvas 尺寸管理 */
-  function fit(cv){
-    const ctx = cv.getContext('2d');
-    let W=0,H=0,DPR=1;
-    function resize(){ DPR=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; if(!W||!H)return; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
-    return { ctx, resize, dim:()=>[W,H] };
-  }
+  function fit(){ DPR=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; if(!W||!H) return;
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+    const n=Math.round(Math.min(72,Math.max(28,W*H/24000)));
+    parts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,r:Math.random()*1.4+.5})); }
+  function rr(x,y,w,h,r){ ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath(); }
+  function sphere(x,y,r,base,hi){ if(r<=0)return; const g=ctx.createRadialGradient(x-r*0.32,y-r*0.36,r*0.12,x,y,r); g.addColorStop(0,hi); g.addColorStop(.5,base); g.addColorStop(1,'rgba(8,10,22,.55)'); ctx.fillStyle=g; ctx.beginPath();ctx.arc(x,y,r,0,6.2832);ctx.fill(); }
+  function glyph(m,x,y,s,c){ ctx.save(); ctx.translate(x,y); ctx.strokeStyle=c; ctx.fillStyle=c; ctx.lineWidth=1.5; ctx.lineJoin='round';
+    if(m==='crystal'){ const p=[[0,-s],[-s*0.88,s*0.52],[s*0.88,s*0.52],[0,-s*0.1]]; ctx.globalAlpha=.55; for(let i=0;i<p.length;i++)for(let j=i+1;j<p.length;j++){ctx.beginPath();ctx.moveTo(p[i][0],p[i][1]);ctx.lineTo(p[j][0],p[j][1]);ctx.stroke();} ctx.globalAlpha=1; p.forEach(a=>{ctx.beginPath();ctx.arc(a[0],a[1],2,0,6.2832);ctx.fill();}); }
+    else if(m==='helix'){ for(let k=0;k<2;k++){ ctx.globalAlpha=.9; ctx.beginPath(); for(let i=0;i<=14;i++){const f=i/14,yy=-s+2*s*f,xx=Math.sin(f*6.2832+k*Math.PI)*s*0.62; i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.stroke(); } ctx.globalAlpha=.5; for(let i=2;i<=12;i+=3){const f=i/14,yy=-s+2*s*f,x1=Math.sin(f*6.2832)*s*0.62,x2=Math.sin(f*6.2832+Math.PI)*s*0.62; ctx.beginPath();ctx.moveTo(x1,yy);ctx.lineTo(x2,yy);ctx.stroke();} }
+    else if(m==='globe'){ ctx.globalAlpha=.9; ctx.beginPath();ctx.arc(0,0,s,0,6.2832);ctx.stroke(); ctx.globalAlpha=.6; ctx.beginPath();ctx.ellipse(0,0,s*0.45,s,0,0,6.2832);ctx.stroke(); ctx.beginPath();ctx.ellipse(0,0,s,s*0.42,0,0,6.2832);ctx.stroke(); }
+    else if(m==='quantum'){ ctx.globalAlpha=.55; for(let q=-1;q<=1;q++){ctx.beginPath();ctx.moveTo(-s,q*s*0.58);ctx.lineTo(s,q*s*0.58);ctx.stroke();} ctx.globalAlpha=1; ctx.strokeRect(-s*0.26,-s*0.58-s*0.26,s*0.52,s*0.52); ctx.beginPath();ctx.arc(0,s*0.58,2,0,6.2832);ctx.fill(); }
+    else if(m==='neural'){ const L=[[-s,-s*0.5],[-s,s*0.5],[0,-s*0.72],[0,0],[0,s*0.72],[s,-s*0.42],[s,s*0.42]]; ctx.globalAlpha=.42; [[0,2],[0,3],[1,3],[1,4],[2,5],[3,5],[3,6],[4,6]].forEach(function(e){var a=e[0],b=e[1];ctx.beginPath();ctx.moveTo(L[a][0],L[a][1]);ctx.lineTo(L[b][0],L[b][1]);ctx.stroke();}); ctx.globalAlpha=1; L.forEach(p=>{ctx.beginPath();ctx.arc(p[0],p[1],1.8,0,6.2832);ctx.fill();}); }
+    else if(m==='orbit'){ ctx.globalAlpha=.62; for(let k=0;k<3;k++){ctx.save();ctx.rotate(k*Math.PI/3);ctx.beginPath();ctx.ellipse(0,0,s,s*0.4,0,0,6.2832);ctx.stroke();ctx.restore();} ctx.globalAlpha=1; ctx.beginPath();ctx.arc(0,0,2.4,0,6.2832);ctx.fill(); }
+    ctx.restore(); }
+  function label(x,y,txt,c){ ctx.font='600 13px "PingFang SC","Microsoft YaHei",sans-serif'; const tw=ctx.measureText(txt).width,h=26,w=tw+22; let lx=x+16,ly=y-h/2; if(lx+w>W-8)lx=x-16-w; if(ly<8)ly=8; if(ly+h>H-8)ly=H-8-h; ctx.globalAlpha=1; ctx.fillStyle=c; rr(lx,ly,w,h,4); ctx.fill(); ctx.fillStyle='#fff'; ctx.textBaseline='middle'; ctx.textAlign='left'; ctx.fillText(txt,lx+11,ly+h/2+0.5); }
 
-  /* 方案 0 · 星座轨道（粒子 + 6 学科轨道核 + 悬停标签）*/
-  function schemeConstellation(cv, isActive){
-    const NAMES=['生命科学','物质科学','地球科学','量子计算','模型与算子','自由赛道'];
-    const {ctx,resize,dim}=fit(cv); let raf=null,parts=[],nodes=[],rot=0,tick=0,mouse={x:-9999,y:-9999},hoverIdx=-1,hoverCore=false;
-    function build(){ const [W,H]=dim(); const n=Math.round(Math.min(90,Math.max(30,W*H/16000)));
-      parts=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.26,vy:(Math.random()-.5)*.26,r:Math.random()*1.7+.7}));
-      const cx=W*0.71,cy=H*0.47,Rx=Math.min(W*0.30,280),Ry=Rx*0.82;
-      nodes=NAMES.map((name,i)=>({name,c:COL.aux[i],idx:i,ang0:i/6*Math.PI*2,x:0,y:0})); nodes._cx=cx;nodes._cy=cy;nodes._Rx=Rx;nodes._Ry=Ry; }
-    function rr(x,y,w,h,r){ ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath(); }
-    function label(x,y,t,c){ const [W,H]=dim(); ctx.font='600 13px "PingFang SC","Microsoft YaHei",sans-serif'; const tw=ctx.measureText(t).width,h=26,w=tw+22; let lx=x+18,ly=y-h/2; if(lx+w>W-8)lx=x-18-w; if(ly<8)ly=8; if(ly+h>H-8)ly=H-8-h; ctx.globalAlpha=1;ctx.fillStyle=c;rr(lx,ly,w,h,3);ctx.fill(); ctx.fillStyle='#fff';ctx.textBaseline='middle';ctx.textAlign='left';ctx.fillText(t,lx+11,ly+h/2+0.5); }
-    function frame(){ const [W,H]=dim(); if(!W){resize();raf=requestAnimationFrame(frame);return;} tick++;
-      const cx=nodes._cx,cy=nodes._cy,Rx=nodes._Rx,Ry=nodes._Ry;
-      nodes.forEach(nd=>{const a=nd.ang0+rot;nd.x=cx+Math.cos(a)*Rx;nd.y=cy+Math.sin(a)*Ry;});
-      hoverIdx=-1;hoverCore=false;let best=26*26;
-      for(const nd of nodes){const dx=nd.x-mouse.x,dy=nd.y-mouse.y,d2=dx*dx+dy*dy;if(d2<best){best=d2;hoverIdx=nd.idx;}}
-      {const dx=cx-mouse.x,dy=cy-mouse.y;if(dx*dx+dy*dy<900){hoverCore=true;hoverIdx=-1;}}
-      const paused=hoverIdx>=0||hoverCore; sec.style.cursor=paused?'pointer':'';
-      ctx.clearRect(0,0,W,H);
-      for(let i=0;i<parts.length;i++){const p=parts[i]; if(!paused){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;}
-        for(let j=i+1;j<parts.length;j++){const q=parts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.hypot(dx,dy);if(d<114){ctx.globalAlpha=(1-d/114)*0.12;ctx.strokeStyle=COL.ink;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}}
-        if(!paused){const mdx=p.x-mouse.x,mdy=p.y-mouse.y,md=Math.hypot(mdx,mdy);if(md<150){ctx.globalAlpha=(1-md/150)*0.5;ctx.strokeStyle=COL.verm;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(mouse.x,mouse.y);ctx.stroke();p.x-=mdx/md*0.5;p.y-=mdy/md*0.5;}}}
-      ctx.globalAlpha=.45;ctx.fillStyle=COL.ink;parts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.2832);ctx.fill();});
-      ctx.globalAlpha=.18;ctx.strokeStyle=COL.ink;ctx.lineWidth=1;ctx.setLineDash([2,5]);ctx.beginPath();ctx.ellipse(cx,cy,Rx,Ry,0,0,6.2832);ctx.stroke();ctx.setLineDash([]);
-      nodes.forEach(nd=>{ctx.globalAlpha=(nd.idx===hoverIdx)?.5:.12;ctx.strokeStyle=(nd.idx===hoverIdx)?nd.c:COL.ink;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nd.x,nd.y);ctx.stroke();});
-      const pulse=4+Math.sin(tick*0.05)*1.4;
-      ctx.globalAlpha=hoverCore?.22:.14;ctx.fillStyle=COL.verm;ctx.beginPath();ctx.arc(cx,cy,(hoverCore?6:pulse)*3.4,0,6.2832);ctx.fill();
-      ctx.globalAlpha=1;ctx.fillStyle=COL.verm;ctx.beginPath();ctx.arc(cx,cy,hoverCore?7:4.5,0,6.2832);ctx.fill();
-      ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx,cy,hoverCore?2.6:1.6,0,6.2832);ctx.fill();
-      if(hoverCore){ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,10.5,0,6.2832);ctx.stroke();}
-      nodes.forEach(nd=>{const on=nd.idx===hoverIdx,sz=on?7.5:5;ctx.globalAlpha=on?.28:.16;ctx.fillStyle=nd.c;ctx.beginPath();ctx.arc(nd.x,nd.y,sz*(on?3.4:3),0,6.2832);ctx.fill();ctx.globalAlpha=1;ctx.fillStyle=nd.c;ctx.beginPath();ctx.arc(nd.x,nd.y,sz,0,6.2832);ctx.fill();if(on){ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.arc(nd.x,nd.y,sz+3,0,6.2832);ctx.stroke();}});
-      if(hoverIdx>=0)label(nodes[hoverIdx].x,nodes[hoverIdx].y,nodes[hoverIdx].name,nodes[hoverIdx].c); else if(hoverCore)label(cx,cy,'Intern Discovery',COL.verm);
-      ctx.globalAlpha=1; if(!paused)rot+=0.0022; raf=requestAnimationFrame(frame); }
-    sec.addEventListener('mousemove',e=>{ if(!isActive()){mouse.x=mouse.y=-9999;return;} const r=cv.getBoundingClientRect();mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;});
-    sec.addEventListener('mouseleave',()=>{mouse.x=mouse.y=-9999;});
-    sec.addEventListener('click',()=>{ if(!isActive())return; if(hoverIdx>=0)location.hash='#/track/'+hoverIdx; else if(hoverCore)location.hash='#/#about'; });
-    return { start(){resize();build();if(!raf)frame();}, stop(){if(raf)cancelAnimationFrame(raf);raf=null;}, resize(){resize();build();} };
-  }
+  function frame(){ if(!W){ fit(); if(!W){ raf=requestAnimationFrame(frame); return; } }
+    t++; ctx.clearRect(0,0,W,H);
+    const cx=W*0.70, cy=H*0.50, Rx=Math.min(W*0.27,250), Ry=Rx*0.46;
+    const nodes=DISC.map((d,i)=>{ const a=i/6*6.2832+rot, dep=(Math.sin(a)+1)/2; return { d,i, x:cx+Math.cos(a)*Rx, y:cy+Math.sin(a)*Ry, dep, scale:0.72+0.5*dep }; });
+    hover=-1; let best=30*30; for(const nd of nodes){ const dx=nd.x-mouse.x,dy=nd.y-mouse.y,d2=dx*dx+dy*dy; if(d2<best){best=d2;hover=nd.i;} }
+    const paused = hover>=0; sec.style.cursor = paused?'pointer':'';
+    if(!paused) parts.forEach(p=>{ p.x+=p.vx;p.y+=p.vy; if(p.x<0||p.x>W)p.vx*=-1; if(p.y<0||p.y>H)p.vy*=-1; });
+    ctx.globalAlpha=.32; ctx.fillStyle=INK; parts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.2832);ctx.fill();});
+    rings.forEach((r0,i)=>{ const tt=(r0+t*0.0016)%1, R=tt*Math.min(W,H)*0.62; ctx.globalAlpha=(1-tt)*0.16; ctx.strokeStyle=i%2?CORE:INK; ctx.lineWidth=1; ctx.beginPath();ctx.arc(cx,cy,R,0,6.2832);ctx.stroke(); });
+    ctx.globalAlpha=.16; ctx.strokeStyle=INK; ctx.lineWidth=1; ctx.setLineDash([2,5]); ctx.beginPath(); ctx.ellipse(cx,cy,Rx,Ry,0,0,6.2832); ctx.stroke(); ctx.setLineDash([]);
+    nodes.forEach(nd=>{ ctx.globalAlpha=nd.i===hover?.55:.12+.14*nd.dep; ctx.strokeStyle=nd.i===hover?nd.d.c:INK; ctx.lineWidth=1; ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nd.x,nd.y);ctx.stroke(); });
+    const pulse=4+Math.sin(t*0.05)*1.6; ctx.globalAlpha=.16; ctx.fillStyle=CORE; ctx.beginPath();ctx.arc(cx,cy,pulse*3.4,0,6.2832);ctx.fill();
+    ctx.globalAlpha=.42; ctx.strokeStyle=CORE; ctx.lineWidth=1.2; ctx.beginPath(); for(let k=0;k<6;k++){ const a=rot*0.6+k/6*6.2832, hx=cx+Math.cos(a)*16, hy=cy+Math.sin(a)*16; k?ctx.lineTo(hx,hy):ctx.moveTo(hx,hy);} ctx.closePath(); ctx.stroke();
+    ctx.globalAlpha=1; sphere(cx,cy,9,CORE,'#eaf2ff'); ctx.fillStyle='#fff'; ctx.beginPath();ctx.arc(cx,cy,2.4,0,6.2832);ctx.fill();
+    nodes.slice().sort((a,b)=>a.dep-b.dep).forEach(nd=>{ const on=nd.i===hover, R=15*nd.scale*(on?1.16:1);
+      const g=ctx.createRadialGradient(nd.x,nd.y,1,nd.x,nd.y,R*1.9); g.addColorStop(0,nd.d.c); g.addColorStop(1,'rgba(0,0,0,0)'); ctx.globalAlpha=on?.42:.24; ctx.fillStyle=g; ctx.beginPath();ctx.arc(nd.x,nd.y,R*1.9,0,6.2832);ctx.fill();
+      ctx.globalAlpha=.92; ctx.fillStyle='rgba(13,17,33,.66)'; ctx.beginPath();ctx.arc(nd.x,nd.y,R,0,6.2832);ctx.fill();
+      ctx.globalAlpha=1; ctx.strokeStyle=nd.d.c; ctx.lineWidth=1.6; ctx.beginPath();ctx.arc(nd.x,nd.y,R,0,6.2832);ctx.stroke();
+      glyph(nd.d.motif,nd.x,nd.y,R*0.52,nd.d.c);
+      if(on){ ctx.globalAlpha=1; ctx.strokeStyle='#fff'; ctx.lineWidth=2; ctx.beginPath();ctx.arc(nd.x,nd.y,R+4,0,6.2832);ctx.stroke(); } });
+    if(hover>=0){ const nd=nodes[hover]; label(nd.x,nd.y,nd.d.name,nd.d.c); }
+    ctx.globalAlpha=1; if(!paused) rot+=0.004; raf=requestAnimationFrame(frame); }
 
-  /* 方案 1 · 神经脉冲网络（分层节点 + 信号沿连线流动）*/
-  function schemeNeural(cv){
-    const {ctx,resize,dim}=fit(cv); let raf=null,layers=[],signals=[],tick=0;
-    function build(){ const [W,H]=dim(); const cols=5, marginX=W*0.12, marginY=H*0.18; layers=[];
-      for(let c=0;c<cols;c++){ const cnt=[4,6,7,6,4][c]; const x=marginX+(W-2*marginX)*c/(cols-1); const arr=[];
-        for(let i=0;i<cnt;i++){ const y=marginY+(H-2*marginY)*(i+0.5)/cnt; arr.push({x,y,ph:Math.random()*6.283}); } layers.push(arr); }
-      signals=[]; for(let k=0;k<26;k++) signals.push({c:(Math.random()*(cols-1))|0, t:Math.random(), spd:0.004+Math.random()*0.006, a:(Math.random()*[4,6,7,6,4][0])|0}); }
-    function frame(){ const [W,H]=dim(); if(!W){resize();raf=requestAnimationFrame(frame);return;} tick++;
-      ctx.clearRect(0,0,W,H);
-      // edges
-      ctx.strokeStyle=COL.ink; ctx.lineWidth=1;
-      for(let c=0;c<layers.length-1;c++) for(const a of layers[c]) for(const b of layers[c+1]){ ctx.globalAlpha=0.05; ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke(); }
-      // signals traveling along random edges
-      ctx.fillStyle=COL.verm;
-      signals.forEach(s=>{ s.t+=s.spd; if(s.t>=1){ s.t=0; s.c=(s.c+1)%(layers.length-1); s.a=(Math.random()*layers[s.c].length)|0; s.b=(Math.random()*layers[s.c+1].length)|0; }
-        if(s.b==null) s.b=(Math.random()*layers[s.c+1].length)|0;
-        const a=layers[s.c][s.a], b=layers[s.c+1][s.b]; if(!a||!b)return;
-        const x=a.x+(b.x-a.x)*s.t, y=a.y+(b.y-a.y)*s.t;
-        ctx.globalAlpha=0.32; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(x,y); ctx.lineWidth=1.4; ctx.strokeStyle=COL.verm; ctx.stroke();
-        ctx.globalAlpha=0.9; ctx.beginPath(); ctx.arc(x,y,2.4,0,6.2832); ctx.fill(); });
-      // nodes
-      layers.forEach((col,ci)=>col.forEach(nd=>{ const pulse=0.5+0.5*Math.sin(tick*0.04+nd.ph); ctx.globalAlpha=.10+pulse*0.12; ctx.fillStyle=COL.verm; ctx.beginPath();ctx.arc(nd.x,nd.y,11,0,6.2832);ctx.fill();
-        ctx.globalAlpha=.85; ctx.fillStyle=(ci===0||ci===layers.length-1)?COL.verm:COL.ink; ctx.beginPath();ctx.arc(nd.x,nd.y,3.4,0,6.2832);ctx.fill(); }));
-      ctx.globalAlpha=1; raf=requestAnimationFrame(frame); }
-    return { start(){resize();build();if(!raf)frame();}, stop(){if(raf)cancelAnimationFrame(raf);raf=null;}, resize(){resize();build();} };
-  }
-
-  /* 方案 2 · 流场曲线（粒子沿平滑矢量场漂移，留拖尾）*/
-  function schemeFlow(cv){
-    const {ctx,resize,dim}=fit(cv); let raf=null,ps=[],tick=0;
-    function field(x,y,W,H){ return Math.sin(x/W*3.1+Math.cos(y/H*2.3)) * 2.2 + Math.cos(y/H*2.7) * 1.3 + tick*0.0006; }
-    function build(){ const [W,H]=dim(); const n=Math.round(Math.min(420,Math.max(150,W*H/3200))); ps=Array.from({length:n},()=>{const x=Math.random()*W,y=Math.random()*H;return{x,y,px:x,py:y,life:40+Math.random()*120};}); }
-    function frame(){ const [W,H]=dim(); if(!W){resize();raf=requestAnimationFrame(frame);return;} tick++;
-      // 拖尾：用纸色低透明度覆盖，旧线渐隐
-      ctx.globalAlpha=0.085; ctx.fillStyle=COL.paper||'#fbfaf7'; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1;
-      ctx.lineCap='round';
-      ps.forEach((p,i)=>{ const a=field(p.x,p.y,W,H); p.px=p.x;p.py=p.y; p.x+=Math.cos(a)*1.5; p.y+=Math.sin(a)*1.5; p.life--;
-        if(p.life<=0||p.x<0||p.x>W||p.y<0||p.y>H){ p.x=Math.random()*W; p.y=Math.random()*H; p.px=p.x; p.py=p.y; p.life=40+Math.random()*120; return; }
-        const accent=i%7===0; ctx.globalAlpha=accent?0.55:0.22; ctx.strokeStyle=accent?COL.verm:COL.ink; ctx.lineWidth=accent?1.4:1;
-        ctx.beginPath(); ctx.moveTo(p.px,p.py); ctx.lineTo(p.x,p.y); ctx.stroke(); });
-      ctx.globalAlpha=1; raf=requestAnimationFrame(frame); }
-    return { start(){resize();const[W,H]=dim();if(W){ctx.fillStyle=COL.paper||'#fbfaf7';ctx.fillRect(0,0,W,H);}build();if(!raf)frame();}, stop(){if(raf)cancelAnimationFrame(raf);raf=null;}, resize(){resize();const[W,H]=dim();if(W){ctx.fillStyle=COL.paper||'#fbfaf7';ctx.fillRect(0,0,W,H);}build();} };
-  }
-
-  /* 方案 3 · 同心发现波（中心脉冲扩散环 + 旋转刻度 + 漂浮粒子）*/
-  function schemeRipple(cv){
-    const {ctx,resize,dim}=fit(cv); let raf=null,rings=[],dots=[],tick=0,rot=0;
-    function build(){ const [W,H]=dim(); rings=[]; for(let i=0;i<5;i++) rings.push(i/5);
-      const n=Math.round(Math.min(70,Math.max(24,W*H/22000))); dots=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.2,vy:(Math.random()-.5)*.2,r:Math.random()*1.6+.6})); }
-    function frame(){ const [W,H]=dim(); if(!W){resize();raf=requestAnimationFrame(frame);return;} tick++; rot+=0.003;
-      ctx.clearRect(0,0,W,H); const cx=W*0.68,cy=H*0.5, maxR=Math.min(W,H)*0.62;
-      // floating dots
-      ctx.fillStyle=COL.ink; dots.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.globalAlpha=.32;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.2832);ctx.fill();});
-      // expanding rings
-      rings.forEach((r0,i)=>{ const t=(r0+tick*0.0016)%1; const R=t*maxR; ctx.globalAlpha=(1-t)*0.5*0.6+0.04; ctx.strokeStyle=i%2?COL.verm:COL.ink; ctx.lineWidth=i%2?1.4:1; ctx.beginPath();ctx.arc(cx,cy,R,0,6.2832);ctx.stroke(); });
-      // rotating ticks ring
-      ctx.globalAlpha=.5; ctx.strokeStyle=COL.ink; ctx.lineWidth=1; const tickR=maxR*0.52;
-      for(let k=0;k<48;k++){ const a=rot+k/48*6.2832; const r1=tickR, r2=tickR+(k%4===0?9:4); ctx.globalAlpha=k%4===0?.28:.12; ctx.beginPath();ctx.moveTo(cx+Math.cos(a)*r1,cy+Math.sin(a)*r1);ctx.lineTo(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2);ctx.stroke(); }
-      // core
-      const pulse=4+Math.sin(tick*0.06)*2; ctx.globalAlpha=.16;ctx.fillStyle=COL.verm;ctx.beginPath();ctx.arc(cx,cy,pulse*3,0,6.2832);ctx.fill();
-      ctx.globalAlpha=1;ctx.fillStyle=COL.verm;ctx.beginPath();ctx.arc(cx,cy,5,0,6.2832);ctx.fill(); ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(cx,cy,1.8,0,6.2832);ctx.fill();
-      ctx.globalAlpha=1; raf=requestAnimationFrame(frame); }
-    return { start(){resize();build();if(!raf)frame();}, stop(){if(raf)cancelAnimationFrame(raf);raf=null;}, resize(){resize();build();} };
-  }
-
-  const NAMES = ['星座轨道','神经脉冲网络','流场曲线','同心发现波'];
-  let idx = 0, on = false;
-  const insts = [schemeConstellation(cvs[0], ()=>idx===0), schemeNeural(cvs[1]), schemeFlow(cvs[2]), schemeRipple(cvs[3])];
-  const nameEl = document.getElementById('heroSchemeName');
-  const dotsEl = document.getElementById('heroDots');
-  insts.forEach((_,i)=>{ const b=document.createElement('button'); b.className='hero-dot'+(i===0?' on':''); b.type='button'; b.setAttribute('aria-label','方案'+(i+1)); b.onclick=()=>go(i); dotsEl.appendChild(b); });
-  function paintUI(){ nameEl.textContent='方案 '+(idx+1)+' / '+insts.length+' · '+NAMES[idx]; [...dotsEl.children].forEach((d,i)=>d.classList.toggle('on',i===idx)); }
-  function go(n){ idx=(n+insts.length)%insts.length; track.style.transform='translateX(-'+(idx*100)+'%)';
-    insts.forEach((ins,i)=>{ if(i===idx && on) ins.start(); else ins.stop(); }); paintUI(); }
-  document.getElementById('heroPrev').onclick=()=>go(idx-1);
-  document.getElementById('heroNext').onclick=()=>go(idx+1);
-  // 触摸滑动
-  let sx=null; track.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
-  track.addEventListener('touchend',e=>{ if(sx==null)return; const dx=e.changedTouches[0].clientX-sx; if(Math.abs(dx)>45) go(idx+(dx<0?1:-1)); sx=null; });
-  window.addEventListener('resize',()=>insts.forEach((ins,i)=>{ if(i===idx) ins.resize(); }));
-  window.__recolorHero = ()=>{ recolor(); insts.forEach(ins=>ins.resize&&ins.resize()); };
-  window.__heroStart = ()=>{ on=true; insts[idx].start(); };
-  window.__heroStop  = ()=>{ on=false; insts.forEach(ins=>ins.stop()); };
-  paintUI();
+  sec.addEventListener('mousemove',e=>{ const r=cv.getBoundingClientRect(); mouse.x=e.clientX-r.left; mouse.y=e.clientY-r.top; });
+  sec.addEventListener('mouseleave',()=>{ mouse.x=mouse.y=-9999; });
+  sec.addEventListener('click',()=>{ if(hover>=0) location.hash='#/track/'+hover; });
+  window.addEventListener('resize',fit);
+  window.__recolorHero = ()=>{};
+  window.__heroStart = ()=>{ if(!raf){ fit(); frame(); } };
+  window.__heroStop  = ()=>{ if(raf){ cancelAnimationFrame(raf); raf=null; } };
+  (function(){ const el=document.getElementById('heroCountdown'); if(!el) return; const dl=new Date(2026,6,15), now=new Date(); el.textContent=Math.max(0,Math.ceil((dl-now)/86400000)); })();
 }
 
 /* ═══════════════ 板块导航 · 滚动高亮（scrollspy）═══════════════ */
