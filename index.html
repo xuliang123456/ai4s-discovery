@@ -565,8 +565,8 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 </style>
 <style id="awards-lux-style">
 /* ═══════════════ 赛事奖金 · 尊贵版（金/暗金双质感）═══════════════ */
-.awards-lux{ display:grid; grid-template-columns:1.22fr 1fr; gap:16px; }
-.awards-lux .alux-stack{ display:grid; grid-template-rows:auto auto; gap:16px; }
+.awards-lux{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:stretch; }
+.awards-lux .alux-stack{ display:contents; }
 .alux{ position:relative; overflow:hidden; border-radius:16px; padding:26px 28px; isolation:isolate; }
 .alux-eyebrow{ display:block; position:relative; z-index:2; font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:#cdb27a; }
 .alux-tag{ display:block; position:relative; z-index:2; margin-top:7px; font-family:'Noto Serif SC',serif; font-size:17px; font-weight:600; color:#fff; }
