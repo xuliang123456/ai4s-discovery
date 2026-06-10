@@ -598,18 +598,32 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 .alux-ribbon{ position:absolute; z-index:3; top:18px; right:-44px; width:170px; text-align:center; transform:rotate(45deg); padding:6px 0; font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; font-weight:600; background:linear-gradient(135deg,#f3dca0,#d8b569); color:#5a3e12; box-shadow:0 4px 12px rgba(0,0,0,.28); }
 .alux-ribbon-g{ background:linear-gradient(135deg,#7a5a24,#54390f); color:#f6e4b4; }
 @media (max-width:880px){ .awards-lux{ grid-template-columns:1fr; } }
-/* 更多激励 · 设计卡 */
+/* 更多激励 · 标题（形式感）*/
+.incentive-head{ display:flex; align-items:center; gap:14px; margin:42px 0 20px; }
+.incentive-head .ih-mark{ position:relative; width:22px; height:22px; flex:none; border-radius:6px; background:linear-gradient(135deg,var(--vermilion),var(--vermilion-deep)); box-shadow:0 6px 16px -6px var(--vermilion); }
+.incentive-head .ih-mark::after{ content:''; position:absolute; inset:6px; border:1.5px solid rgba(255,255,255,.85); border-radius:3px; }
+.incentive-head .ih-title{ font-family:'Noto Serif SC',serif; font-size:24px; font-weight:600; letter-spacing:.03em; color:var(--ink); line-height:1; }
+.incentive-head .ih-title em{ font-style:normal; color:var(--vermilion); }
+.incentive-head .ih-sub{ font-size:13px; color:var(--ink-mute); white-space:nowrap; }
+.incentive-head .ih-line{ flex:1; height:1px; background:linear-gradient(90deg,var(--rule),transparent); }
+/* 更多激励 · 拟物图标卡 */
 .incentive-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-.incentive-card{ position:relative; display:flex; flex-direction:column; min-height:184px; padding:24px 24px 22px; border:1px solid var(--rule); border-radius:16px; background:var(--paper-cool); text-decoration:none; overflow:hidden; transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out); }
-.incentive-card:hover{ transform:translateY(-4px); box-shadow:0 24px 48px -30px rgba(30,34,55,.45); border-color:var(--ink-faint); }
-.incentive-card .ic-title{ font-family:'Noto Serif SC',serif; font-size:22px; font-weight:600; line-height:1.28; letter-spacing:.01em; color:var(--ink); }
+.incentive-card{ position:relative; display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:128px; padding:22px 24px; border:1px solid var(--rule); border-radius:18px; background:var(--paper-cool); overflow:hidden; transition:transform .3s var(--ease-out), box-shadow .3s var(--ease-out), border-color .3s var(--ease-out); }
+.incentive-card:hover{ transform:translateY(-4px); box-shadow:0 24px 48px -30px rgba(30,34,55,.4); border-color:var(--ink-faint); }
+.incentive-card .ic-left{ min-width:0; }
+.incentive-card .ic-title{ font-family:'Noto Serif SC',serif; font-size:21px; font-weight:600; line-height:1.3; letter-spacing:.01em; color:var(--ink); }
 .incentive-card .ic-title .ic-mute{ color:var(--ink-faint); margin-left:.1em; }
-.incentive-card .ic-desc{ font-size:12.5px; color:var(--ink-mute); line-height:1.65; margin-top:11px; }
-.incentive-card .ic-more{ display:inline-flex; align-items:center; gap:11px; margin-top:auto; padding-top:22px; font-family:var(--font-mono); font-size:12px; letter-spacing:.1em; color:var(--ink-soft); }
-.incentive-card .ic-arrow{ width:34px; height:34px; border-radius:50%; background:var(--ink); color:var(--paper); display:grid; place-items:center; flex:none; transition:transform .3s var(--ease-out), background .3s var(--ease-out); }
-.incentive-card .ic-arrow svg{ width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
-.incentive-card:hover .ic-arrow{ transform:scale(1.12); background:var(--vermilion); color:#fff; }
-@media (max-width:880px){ .incentive-grid{ grid-template-columns:1fr; } }
+.incentive-card .ic-desc{ font-size:12.5px; color:var(--ink-mute); line-height:1.6; margin-top:10px; }
+.incentive-card .ic-art{ position:relative; width:88px; height:88px; flex:none; }
+.incentive-card .ic-tile{ position:absolute; inset:0; border-radius:22px; background:linear-gradient(145deg,#ffffff,#e9ecf2); box-shadow:7px 7px 16px rgba(40,45,70,.13), -6px -6px 14px rgba(255,255,255,.95); display:grid; place-items:center; transition:transform .35s var(--ease-out); }
+.incentive-card .ic-tile svg{ width:38px; height:38px; stroke:var(--ink-soft); fill:none; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.incentive-card .ic-chip{ position:absolute; z-index:2; width:32px; height:32px; right:-9px; top:-9px; border-radius:50%; background:#fff; box-shadow:3px 3px 9px rgba(40,45,70,.16), -2px -2px 6px rgba(255,255,255,.95); display:grid; place-items:center; transition:transform .35s var(--ease-out); }
+.incentive-card .ic-chip svg{ width:15px; height:15px; stroke:var(--vermilion); fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+.incentive-card:hover .ic-tile{ transform:translateY(-3px) rotate(-4deg); }
+.incentive-card:hover .ic-chip{ transform:translate(3px,-3px) scale(1.06); }
+[data-theme="dark"] .incentive-card .ic-tile, [data-theme="cool"] .incentive-card .ic-tile{ background:linear-gradient(145deg,var(--paper-warm),var(--paper-cool)); box-shadow:7px 7px 16px rgba(0,0,0,.4), -6px -6px 14px rgba(255,255,255,.04); }
+[data-theme="dark"] .incentive-card .ic-chip, [data-theme="cool"] .incentive-card .ic-chip{ background:var(--paper-warm); box-shadow:3px 3px 9px rgba(0,0,0,.45), -2px -2px 6px rgba(255,255,255,.05); }
+@media (max-width:880px){ .incentive-grid{ grid-template-columns:1fr; } .incentive-head .ih-sub{ display:none; } }
 </style>
 </head>
 <body>
@@ -786,25 +800,43 @@ section[id], .section[id] { scroll-margin-top: 116px; }
       </div>
 
       <!-- 更多激励 -->
-      <div class="meta-row" style="margin:32px 0 14px;">
-        <span class="section-label" style="border:none; margin:0; padding:0;">更多激励</span>
+      <div class="incentive-head">
+        <span class="ih-mark" aria-hidden="true"></span>
+        <h3 class="ih-title">更多<em>激励</em></h3>
+        <span class="ih-sub">报名即享 · 多重成长权益</span>
+        <span class="ih-line"></span>
       </div>
       <div class="incentive-grid">
-        <a class="incentive-card" href="#/apply">
-          <div class="ic-title">优先录用<span class="ic-mute">机会</span></div>
-          <p class="ic-desc">实习 · 全职 · 双聘等录用资格</p>
-          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
-        </a>
-        <a class="incentive-card" href="#/">
-          <div class="ic-title">重大攻关<span class="ic-mute">揭榜</span></div>
-          <p class="ic-desc">深度参与组织单位重大任务攻关</p>
-          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
-        </a>
-        <a class="incentive-card" href="#/">
-          <div class="ic-title">加入浦江<span class="ic-mute">科学社区</span></div>
-          <p class="ic-desc">受邀参与各类高端学术交流活动</p>
-          <span class="ic-more"><span class="ic-arrow"><svg viewBox="0 0 24 24"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="9 7 17 7 17 15"/></svg></span>了解更多</span>
-        </a>
+        <div class="incentive-card">
+          <div class="ic-left">
+            <div class="ic-title">优先录用<span class="ic-mute">机会</span></div>
+            <p class="ic-desc">实习 · 全职 · 双聘等录用资格</p>
+          </div>
+          <div class="ic-art">
+            <span class="ic-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></span>
+            <span class="ic-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5.5A2.5 2.5 0 0 1 10.5 3h3A2.5 2.5 0 0 1 16 5.5V7"/><path d="M3 12.5h18"/></svg></span>
+          </div>
+        </div>
+        <div class="incentive-card">
+          <div class="ic-left">
+            <div class="ic-title">重大攻关<span class="ic-mute">揭榜</span></div>
+            <p class="ic-desc">深度参与组织单位重大任务攻关</p>
+          </div>
+          <div class="ic-art">
+            <span class="ic-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg></span>
+            <span class="ic-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="M9 14.2 7.5 21 12 18.4 16.5 21 15 14.2"/></svg></span>
+          </div>
+        </div>
+        <div class="incentive-card">
+          <div class="ic-left">
+            <div class="ic-title">加入浦江<span class="ic-mute">科学社区</span></div>
+            <p class="ic-desc">受邀参与各类高端学术交流活动</p>
+          </div>
+          <div class="ic-art">
+            <span class="ic-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span>
+            <span class="ic-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
