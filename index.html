@@ -250,8 +250,8 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .apply-track .tcd-bg, .apply-track .tcd-cv, .apply-track .at-scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
 .apply-track .tcd-bg { z-index: 0; }
 .apply-track .tcd-cv { z-index: 1; }
-.apply-track .at-scrim { z-index: 2; background: linear-gradient(to top, rgba(10,8,20,.92) 0%, rgba(10,8,20,.6) 46%, rgba(10,8,20,.16) 100%); pointer-events: none; }
-.apply-track .at-body { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px 16px; }
+.apply-track .at-scrim { z-index: 2; background: linear-gradient(105deg, rgba(10,8,20,.92) 0%, rgba(10,8,20,.52) 48%, rgba(10,8,20,.04) 100%); pointer-events: none; }
+.apply-track .at-body { position: absolute; left: 0; top: 0; z-index: 3; padding: 16px 18px; }
 .apply-track .at-top { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
 .apply-track .at-no { font-family: var(--font-mono); font-size: 11px; font-weight: 600; letter-spacing: .14em; color: rgba(255,255,255,.9); text-shadow: 0 1px 4px rgba(0,0,0,.4); }
 .apply-track .at-tag { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .03em; padding: 2px 8px; border-radius: 2px; background: rgba(255,255,255,.18); color: #fff; }
@@ -1556,13 +1556,14 @@ function initTrackMotifs(){
   document.querySelectorAll('.tcd-cv').forEach(cv=>{
     if(cv.__init) return; cv.__init=1;
     const ctx=cv.getContext('2d'); let W=0,H=0,DPR=1,t=0;
-    const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal], scale:parseFloat(cv.dataset.scale)||1 };
+    const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal], scale:parseFloat(cv.dataset.scale)||1,
+               cxf:parseFloat(cv.dataset.cx)||0.5, cyf:parseFloat(cv.dataset.cy)||0.30, rmul:parseFloat(cv.dataset.rmul)||1 };
     function fit(){ DPR=Math.min(window.devicePixelRatio||1,2); W=cv.clientWidth; H=cv.clientHeight; if(!W||!H) return; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0); }
     function frame(){
       if(cv.offsetParent===null){ requestAnimationFrame(frame); return; }  // 页面隐藏时不绘制
       if(!W){ fit(); if(!W){ requestAnimationFrame(frame); return; } }
       t++; ctx.clearRect(0,0,W,H);
-      const o={ cx:W*0.5, cy:H*0.30, R:Math.min(W,H)*0.27*st.scale };
+      const o={ cx:W*st.cxf, cy:H*st.cyf, R:Math.min(W,H)*0.27*st.scale*st.rmul };
       (MOTIF[st.motif]||crystal)(ctx,W,H,t,st.pal,o);
       requestAnimationFrame(frame);
     }
@@ -2089,7 +2090,7 @@ function renderApply(){
     const v = TRACK_VIS[i] || TRACK_VIS[0];
     return `<label class="apply-track" data-idx="${i}">
       <div class="tcd-bg" style="background:${v.bg};"></div>
-      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${(v.scale||1)*0.82}"></canvas>
+      <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${(v.scale||1)*0.82}" data-cx="0.68" data-cy="0.5" data-rmul="1.7"></canvas>
       <div class="at-scrim"></div>
       <span class="at-check"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
       <div class="at-body">
