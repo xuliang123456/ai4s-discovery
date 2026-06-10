@@ -279,7 +279,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .plat-group .pg-line { flex: 1; height: 1px; background: var(--rule); }
 /* 核心引擎 · 重色卡 */
 .engine-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 38px; }
-.engine-card { position: relative; overflow: hidden; padding: 26px 28px 28px; border-radius: 6px; background: linear-gradient(135deg, #14203c 0%, #1b2e54 56%, #1554a8 150%); border: 1px solid rgba(255,255,255,.09); box-shadow: 0 22px 54px -34px rgba(15,40,92,.85); }
+.engine-card { position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 26px 28px 28px; border-radius: 6px; background: linear-gradient(135deg, #14203c 0%, #1b2e54 56%, #1554a8 150%); border: 1px solid rgba(255,255,255,.09); box-shadow: 0 22px 54px -34px rgba(15,40,92,.85); }
 .engine-card .ec-glow { position: absolute; right: -46px; top: -46px; width: 188px; height: 188px; background: radial-gradient(circle, rgba(70,130,225,.42), transparent 70%); pointer-events: none; }
 .engine-card .ec-head { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; position: relative; }
 .engine-card .ec-ico { width: 44px; height: 44px; border-radius: 11px; background: rgba(255,255,255,.13); display: grid; place-items: center; color: #fff; flex: none; }
@@ -287,15 +287,24 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .engine-card .ec-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .12em; color: rgba(255,255,255,.62); text-transform: uppercase; margin-bottom: 3px; }
 .engine-card .ec-name { font-family: var(--font-serif); font-size: 21px; font-weight: 600; color: #fff; line-height: 1.2; }
 .engine-card .ec-sub { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.92); margin-bottom: 9px; position: relative; }
-.engine-card .ec-desc { font-size: 13px; line-height: 1.78; color: rgba(255,255,255,.74); position: relative; }
+.engine-card .ec-desc { font-size: 13px; line-height: 1.78; color: rgba(255,255,255,.74); position: relative; margin-bottom: 20px; }
+.engine-card .ec-actions { margin-top: auto; display: flex; align-items: center; gap: 11px; flex-wrap: wrap; position: relative; }
+.ec-btn { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: #fff; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.34); border-radius: 6px; padding: 9px 20px; text-decoration: none; transition: background .2s var(--ease), border-color .2s var(--ease); }
+.ec-btn:hover { background: rgba(255,255,255,.22); border-color: #fff; }
+.ec-chip { width: 39px; height: 39px; border-radius: 6px; border: 1px solid rgba(255,255,255,.28); display: grid; place-items: center; color: rgba(255,255,255,.86); text-decoration: none; transition: background .2s var(--ease), border-color .2s var(--ease); }
+.ec-chip:hover { background: rgba(255,255,255,.15); border-color: #fff; }
+.ec-chip svg { width: 19px; height: 19px; }
 /* 平台能力 · 浅色卡 */
 .plat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.plat-card { padding: 21px 21px 23px; border: 1px solid var(--rule); border-top: 3px solid var(--vermilion); border-radius: 4px; background: var(--paper-cool); transition: transform .25s ease, box-shadow .25s ease; }
+.plat-card { padding: 21px 21px 23px; border: 1px solid var(--rule); border-top: 3px solid var(--vermilion); border-radius: 4px; background: var(--paper-cool); display: flex; flex-direction: column; transition: transform .25s ease, box-shadow .25s ease; }
 .plat-card:hover { transform: translateY(-3px); box-shadow: 0 16px 38px -28px rgba(21,84,168,.7); }
 .plat-card .pc-head { display: flex; align-items: center; gap: 11px; margin-bottom: 13px; }
 .plat-card .pc-name { font-family: var(--font-serif); font-size: 16px; font-weight: 600; color: var(--ink); line-height: 1.25; }
 .plat-card .pc-sub { font-size: 11.5px; color: var(--ink-mute); margin-top: 2px; }
-.plat-card .pc-desc { font-size: 13px; line-height: 1.72; color: var(--ink-soft); }
+.plat-card .pc-desc { font-size: 13px; line-height: 1.72; color: var(--ink-soft); margin-bottom: 16px; }
+.pc-btn { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 500; color: var(--vermilion); background: var(--vermilion-bg); border: 1px solid transparent; border-radius: 6px; padding: 8px 15px; text-decoration: none; transition: background .2s var(--ease), color .2s var(--ease); }
+.pc-btn:hover { background: var(--vermilion); color: #fff; }
+.pc-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 @media (max-width: 880px){ .engine-grid, .plat-grid { grid-template-columns: 1fr; } }
 /* 全屏动效 Hero */
 .hero-full { position: relative; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,.08); height: calc(100vh - 56px); min-height: 560px; max-height: 880px; display: grid; grid-template-columns: minmax(0, 1fr); align-items: center; background: radial-gradient(125% 120% at 74% 16%, #213257 0%, #15203f 44%, #0b1124 100%); }
@@ -681,6 +690,12 @@ section[id], .section[id] { scroll-margin-top: 116px; }
             <div><div class="ec-tag">Intern-S1 · Foundation Model</div><div class="ec-name">书生科学多模态大模型</div></div>
           </div>
           <div class="ec-desc">作为最先进的开源多模态推理模型，在具备强大通用任务能力的同时，于广泛的科学任务中也达到最先进性能，可与最先进的闭源商业模型相媲美。</div>
+          <div class="ec-actions">
+            <a class="ec-btn" href="#" target="_blank" rel="noopener">立即体验</a>
+            <a class="ec-chip" href="https://github.com/InternLM" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 2-.4 3-.4s2.1.1 3 .4c2.3-1.6 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a class="ec-chip" href="https://huggingface.co/internlm" target="_blank" rel="noopener" aria-label="Hugging Face"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="13" r="8.5"/><circle cx="9" cy="11.5" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="11.5" r="1" fill="currentColor" stroke="none"/><path d="M8.5 15.4c1 1.1 5 1.1 6 0" stroke-linecap="round"/></svg></a>
+            <a class="ec-chip" href="https://modelscope.cn" target="_blank" rel="noopener" aria-label="ModelScope"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></a>
+          </div>
         </div>
         <div class="engine-card">
           <div class="ec-glow"></div>
@@ -689,6 +704,10 @@ section[id], .section[id] { scroll-margin-top: 116px; }
             <div><div class="ec-tag">Intern · Agent</div><div class="ec-name">类人科学家的自主探索</div></div>
           </div>
           <div class="ec-desc">自动化科研流程，生成实验构想、代码并调优；自主分析问题、查阅文献、调研反思，开展实验验证，像科学家一样提出并求证假说。</div>
+          <div class="ec-actions">
+            <a class="ec-chip" href="https://github.com/InternLM" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2.9-.3 2-.4 3-.4s2.1.1 3 .4c2.3-1.6 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg></a>
+            <a class="ec-btn" href="#" target="_blank" rel="noopener">立即体验</a>
+          </div>
         </div>
       </div>
 
@@ -698,14 +717,17 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <div class="plat-card">
           <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-4-1L3 21l1.1-4A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5Z"/></svg></span><div><div class="pc-name">科学研究助手</div><div class="pc-sub">科研问答与深度思考</div></div></div>
           <div class="pc-desc">科研问答与深度思考，辅助解决学术难题、生成学术报告；自动化科研流程，生成实验构想、代码并调优。</div>
+          <a class="pc-btn" href="#" target="_blank" rel="noopener">立即体验 <svg viewBox="0 0 24 24"><path d="M5 12h13M12 6l6 6-6 6"/></svg></a>
         </div>
         <div class="plat-card">
           <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><div><div class="pc-name">科研论文搜索</div><div class="pc-sub">学术搜索与文献精读</div></div></div>
           <div class="pc-desc">针对赛事资料查阅需求推出学术搜索，一键检索论文、精读入库深度学习，查看引用网络高效梳理研究脉络。</div>
+          <a class="pc-btn" href="#" target="_blank" rel="noopener">立即体验 <svg viewBox="0 0 24 24"><path d="M5 12h13M12 6l6 6-6 6"/></svg></a>
         </div>
         <div class="plat-card">
           <div class="pc-head"><span class="plat-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><div><div class="pc-name">SCP 广场</div><div class="pc-sub">科研要素的 API 化聚合</div></div></div>
           <div class="pc-desc">链接数据、工具、智能体、专业模型、湿实验设备等科研要素并实现 API 化整合，提供六大学科 1600+ 科学发现工具 API。</div>
+          <a class="pc-btn" href="#" target="_blank" rel="noopener">立即体验 <svg viewBox="0 0 24 24"><path d="M5 12h13M12 6l6 6-6 6"/></svg></a>
         </div>
       </div>
     </div>
