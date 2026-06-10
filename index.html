@@ -672,6 +672,14 @@ section[id], .section[id] { scroll-margin-top: 116px; }
 .claim-toast svg{ width:16px; height:16px; }
 @media (max-width:640px){ .claim-modal{ padding:24px 18px 18px; } .claim-foot{ flex-direction:column-reverse; } .claim-confirm,.claim-goto{ width:100%; } }
 </style>
+<style id="td-hero-dark-style">
+/* 赛道详情首图 · 深色渐变+动效（复用首页 TRACK_VIS）*/
+.td-hero-dark{ position:relative; overflow:hidden; isolation:isolate; border-bottom:1px solid rgba(255,255,255,.08); }
+.td-hero-dark .td-hero-bg{ position:absolute; inset:0; z-index:0; }
+.td-hero-dark .td-hero-cv{ position:absolute; top:0; right:0; bottom:0; width:56%; z-index:1; display:block; }
+.td-hero-dark .td-hero-scrim{ position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(100deg, rgba(10,8,20,.64) 0%, rgba(10,8,20,.34) 44%, rgba(10,8,20,0) 74%), linear-gradient(to top, rgba(10,8,20,.5), rgba(10,8,20,0) 42%); }
+@media (max-width:760px){ .td-hero-dark .td-hero-cv{ width:100%; opacity:.5; } }
+</style>
 </head>
 <body>
 
@@ -1501,7 +1509,7 @@ function initTrackMotifs(){
   }
   const MOTIF={crystal,globe,helix,protein,dna,quantum,neural,bloom};
 
-  document.querySelectorAll('#trackGrid .tcd-cv').forEach(cv=>{
+  document.querySelectorAll('.tcd-cv').forEach(cv=>{
     if(cv.__init) return; cv.__init=1;
     const ctx=cv.getContext('2d'); let W=0,H=0,DPR=1,t=0;
     const st={ motif:cv.dataset.motif, pal:PAL[cv.dataset.pal], scale:parseFloat(cv.dataset.scale)||1 };
@@ -1680,6 +1688,7 @@ function renderTrackDetail(idx){
   if(!root) return;
   idx = Math.max(0, Math.min(TRACKS.length-1, idx|0));
   const t = TRACKS[idx], a = AUX[t.aux];
+  const v = TRACK_VIS[idx] || TRACK_VIS[0];
   const tpl = document.getElementById('td-' + TRACK_SLUGS[idx]);
 
   const ICO = {
@@ -1813,23 +1822,24 @@ function renderTrackDetail(idx){
   }).join('');
 
   root.innerHTML = `
-    <section class="td-hero">
-      <div class="td-hero-img" style="background-image:url('${IMG}${t.img}');"></div>
-      <div class="td-hero-veil"></div>
-      <div class="wrap" style="position:relative; padding:46px 24px 40px;">
+    <section class="td-hero td-hero-dark">
+      <div class="td-hero-bg" style="background:${v.bg};"></div>
+      <canvas class="tcd-cv td-hero-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${v.scale||1}"></canvas>
+      <div class="td-hero-scrim"></div>
+      <div class="wrap" style="position:relative; z-index:3; padding:54px 24px 48px;">
         <div class="meta-row" style="margin-bottom:16px;">
-          <a href="#/" class="label" style="text-decoration:none; color:var(--ink-mute);">首页</a>
-          <span class="label" style="color:var(--ink-faint);">/</span>
-          <a href="#/#tracks" class="label" style="text-decoration:none; color:var(--ink-mute);">赛道介绍</a>
-          <span class="label" style="color:var(--ink-faint);">/</span>
-          <span class="label">${t.no}</span>
+          <a href="#/" class="label" style="text-decoration:none; color:rgba(255,255,255,.7);">首页</a>
+          <span class="label" style="color:rgba(255,255,255,.45);">/</span>
+          <a href="#/#tracks" class="label" style="text-decoration:none; color:rgba(255,255,255,.7);">赛道介绍</a>
+          <span class="label" style="color:rgba(255,255,255,.45);">/</span>
+          <span class="label" style="color:rgba(255,255,255,.9);">${t.no}</span>
         </div>
         <span class="pill" style="background:${a.c1}; color:${a.c4};">${t.tag} · ${t.en}</span>
-        <h1 class="section-hero" style="font-size:clamp(28px,4.4vw,42px); margin:14px 0 12px;">${t.title}</h1>
-        <p style="font-size:14px; color:var(--ink-soft); line-height:1.85; max-width:700px;">${t.desc}</p>
+        <h1 class="section-hero" style="font-size:clamp(28px,4.4vw,42px); margin:14px 0 12px; color:#fff;">${t.title}</h1>
+        <p style="font-size:14px; color:rgba(255,255,255,.84); line-height:1.85; max-width:640px;">${t.desc}</p>
         <div class="meta-row" style="gap:12px; margin-top:26px;">
           <a class="btn btn-primary btn-lg" href="#/apply" onclick="setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${idx}),60)">立即报名 · 带入本赛道</a>
-          <a class="btn btn-lg" href="#/#tracks">返回赛道列表</a>
+          <a class="btn btn-lg" href="#/#tracks" style="background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.3);">返回赛道列表</a>
         </div>
       </div>
     </section>
@@ -1846,6 +1856,7 @@ function renderTrackDetail(idx){
       </div>
     </div>`;
   wireTabs(root);
+  initTrackMotifs();
 }
 
 /* 赛程时间线 · 真实阶段 */
