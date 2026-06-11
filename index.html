@@ -385,7 +385,7 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .hero-orgs b { color: rgba(255,255,255,.72); font-weight: 500; }
 /* 单一科学主视觉 canvas + 赛事实时状态条 */
 #heroKV { position: absolute; inset: 0; width: 100%; height: 100%; display: none; z-index: 1; }
-.hero-full .hero-bg { position: absolute; inset: 0; z-index: 0; background: url('https://xuliang123456.github.io/ai4s-discovery/assets/hero.jpg') center center / cover no-repeat; }
+.hero-full .hero-bg { position: absolute; inset: 0; z-index: 0; background: url('https://xuliang123456.github.io/ai4s-discovery/assets/hero.jpg') center center / cover no-repeat; transform: scale(1.12); will-change: transform; }
 .hero-status { display: flex; align-items: center; gap: 24px; margin-top: 24px; flex-wrap: wrap; }
 .hero-live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: #7fe0bc; }
 .hero-live .dot { width: 8px; height: 8px; border-radius: 50%; background: #34d39a; animation: heroPulse 1.8s var(--ease) infinite; }
@@ -561,8 +561,16 @@ select.input { cursor: pointer; appearance: none; background-image: url("data:im
 .appear-2 { animation: slideUp var(--t-mid) var(--ease) .06s both; }
 .appear-3 { animation: slideUp var(--t-mid) var(--ease) .12s both; }
 
+/* ── 滚动揭示动效（丝滑入场 · 用 translate 独立属性，不与 hover 的 transform 冲突）── */
+html { scroll-behavior: smooth; }
+[data-reveal] { opacity: 0; translate: 0 36px; transition: opacity .85s var(--ease-out), translate .85s var(--ease-out); transition-delay: var(--rd, 0s); }
+[data-reveal].in { opacity: 1; translate: 0 0; }
+[data-reveal-fade] { opacity: 0; transition: opacity 1s var(--ease-out); transition-delay: var(--rd, 0s); }
+[data-reveal-fade].in { opacity: 1; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  [data-reveal], [data-reveal-fade] { opacity: 1 !important; translate: none !important; }
 }
 
 /* ═══════════════ 主题切换按钮（§1.1.3）═══════════════ */
@@ -2015,7 +2023,37 @@ function renderFaq(){
   });
 }
 
-function renderHome(){ renderTracks(); renderTimeline(); renderFaq(); const rp=document.getElementById('homeResPack'); if(rp) rp.innerHTML=resourcePackHTML(['apikey','gpu']); }
+function renderHome(){ renderTracks(); renderTimeline(); renderFaq(); const rp=document.getElementById('homeResPack'); if(rp) rp.innerHTML=resourcePackHTML(['apikey','gpu']); initReveal(); }
+
+/* 滚动揭示：进入视口时丝滑上浮淡入，组内错峰 */
+function initReveal(){
+  const home = document.querySelector('.page[data-route="home"]');
+  if(!home || home.__revealed) return; home.__revealed = true;
+  if(!('IntersectionObserver' in window)){ home.querySelectorAll('[data-reveal],[data-reveal-fade]').forEach(el=>el.classList.add('in')); return; }
+  const obs = new IntersectionObserver((ents,o)=>{
+    ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); o.unobserve(e.target); } });
+  }, { threshold:0.12, rootMargin:'0px 0px -7% 0px' });
+  const mark = (el, d, fade)=>{ if(!el) return; el.setAttribute(fade?'data-reveal-fade':'data-reveal',''); if(d) el.style.setProperty('--rd', d+'ms'); obs.observe(el); };
+  // 各区块标题淡入
+  home.querySelectorAll('.section .section-head').forEach(el=>mark(el,0,true));
+  // 成组错峰上浮
+  const groups = [
+    ['.media-cols > *', 90],
+    ['.stack-layer', 80],
+    ['#trackGrid > .track-card-dark', 75],
+    ['.res-split > .engine-card, .res-split .plat-col > .plat-card', 90],
+    ['#homeResPack .res-card', 110],
+    ['#timeline > *', 70],
+    ['#faqList > *', 60],
+    ['.awards-lux > *', 100],
+    ['#more-incentives .incentive-card', 90],
+    ['#orgs .card', 70],
+    ['.org-slot', 60],
+  ];
+  groups.forEach(([sel,step])=>{ [...home.querySelectorAll(sel)].forEach((el,i)=>mark(el, i*step)); });
+  // 兜底：5s 后强制显示任何仍未触发的元素
+  setTimeout(()=>home.querySelectorAll('[data-reveal]:not(.in),[data-reveal-fade]:not(.in)').forEach(el=>{ const r=el.getBoundingClientRect(); if(r.top < innerHeight*1.2) el.classList.add('in'); }), 5000);
+}
 
 /* ═══════════════ 报名表单页 (/apply) ═══════════════ */
 function renderApply(){
@@ -2662,7 +2700,23 @@ const CLAIM_DATA = {
     document.addEventListener('keydown', onKey);
   };
 })();
-window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas(); initSectionSpy(); router(); });
+/* Hero 视差：背景缓移、文案上浮淡出，制造纵深 */
+function initHeroParallax(){
+  const hero = document.querySelector('.hero-full'); if(!hero) return;
+  const bg = hero.querySelector('.hero-bg'), content = hero.querySelector('.hero-content');
+  if(content) content.style.willChange = 'transform, opacity';
+  let ticking = false;
+  function update(){
+    ticking = false;
+    const y = window.scrollY || window.pageYOffset, h = hero.offsetHeight;
+    if(y > h + 40) return;
+    if(bg) bg.style.transform = 'scale(1.12) translateY(' + (y * 0.06) + 'px)';
+    if(content){ content.style.transform = 'translateY(' + (y * -0.1) + 'px)'; content.style.opacity = String(Math.max(0, 1 - y / (h * 0.85))); }
+  }
+  window.addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(update); } }, {passive:true});
+  update();
+}
+window.addEventListener('DOMContentLoaded', ()=>{ renderHome(); initHeroCanvas(); initSectionSpy(); initHeroParallax(); router(); });
 </script>
 <div id="td-store" hidden>
 <template id="td-life_science"><h2>赛事简介</h2>
