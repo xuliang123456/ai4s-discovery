@@ -246,6 +246,37 @@ html { scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
 .tcd-actions .btn { flex: 1; justify-content: center; padding: 9px 0; font-size: 13px; }
 .tcd-ghost { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.42); }
 .tcd-ghost:hover { background: rgba(255,255,255,.13); border-color: #fff; }
+/* 赛道介绍 · 倾斜展开式卡廊（tilted carousel）*/
+.ta-wrap { overflow: hidden; padding: 14px 0; }
+.track-accordion { display: flex; gap: 10px; height: 440px; }
+.ta-card { position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 2px; cursor: pointer; isolation: isolate; box-shadow: 0 22px 54px -32px rgba(18,14,38,.6); transition: flex-grow .55s var(--ease-out); }
+.ta-card { flex-grow: 1; }
+.track-accordion:hover .ta-card { flex-grow: .62; }
+.track-accordion .ta-card:hover { flex-grow: 3.8; }
+.ta-card .tcd-bg, .ta-card .tcd-cv, .ta-card .ta-scrim { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ta-card .tcd-bg { z-index: 0; }
+.ta-card .tcd-cv { z-index: 1; }
+.ta-card .ta-scrim { z-index: 2; pointer-events: none; background: linear-gradient(to top, rgba(10,8,20,.95) 0%, rgba(10,8,20,.72) 30%, rgba(10,8,20,.2) 68%, rgba(10,8,20,.04) 100%); }
+.ta-content { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; padding: 20px 20px 22px; }
+.ta-no { font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .16em; color: rgba(255,255,255,.92); text-shadow: 0 1px 5px rgba(0,0,0,.5); white-space: nowrap; }
+.ta-tag { align-self: flex-start; font-family: var(--font-mono); font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 2px; background: rgba(255,255,255,.18); color: #fff; margin-bottom: 9px; white-space: nowrap; }
+.ta-title { font-family: 'Noto Serif SC', serif; font-weight: 600; font-size: 19px; line-height: 1.3; color: #fff; }
+.ta-extra { overflow: hidden; max-height: 0; opacity: 0; margin-top: 0; transition: max-height .55s var(--ease-out), opacity .4s var(--ease-out), margin-top .55s var(--ease-out); }
+.track-accordion .ta-card:hover .ta-extra { max-height: 260px; opacity: 1; margin-top: 13px; }
+.ta-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 11px; }
+.ta-desc { font-size: 12.5px; line-height: 1.62; color: rgba(255,255,255,.8); margin-bottom: 13px; max-width: 380px; }
+.ta-actions { display: flex; gap: 10px; }
+.ta-actions .btn { padding: 8px 18px; }
+/* 倾斜：仅桌面端，整廊 skew，内容/动效反向 skew 保持正立，背景渐变随廊倾斜成平行四边形 */
+@media (min-width: 881px) {
+  .track-accordion { transform: skewX(-6deg); margin: 0 -26px; }
+  .track-accordion .ta-content, .track-accordion .ta-card .tcd-cv { transform: skewX(6deg); }
+}
+@media (max-width: 880px) {
+  .track-accordion { flex-direction: column; height: auto; }
+  .ta-card { flex: none; height: 188px; }
+  .ta-extra { max-height: 260px; opacity: 1; margin-top: 12px; }
+}
 /* 报名页 · 赛道选择卡（复用 TRACK_VIS 单一数据源，与首页同步）*/
 .apply-track { position: relative; overflow: hidden; border-radius: 2px; min-height: 116px; cursor: pointer; display: block; isolation: isolate; border: 2px solid transparent; box-shadow: 0 14px 32px -26px rgba(18,14,38,.6); transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease); }
 .apply-track:hover { transform: translateY(-2px); box-shadow: 0 20px 44px -26px rgba(18,14,38,.7); }
@@ -859,7 +890,7 @@ section[id], .section[id] { scroll-margin-top: 116px; }
         <p class="section-desc">六大赛道覆盖科学与算力前沿，配套官方数据集、开发平台与国产算力支持。同一参赛选手可参加多个赛道，鼓励多赛道参赛。</p>
       </div>
 
-      <div class="grid-3" id="trackGrid"><!-- 赛道卡片由 JS 注入，保证学科辅助色映射一致 --></div>
+      <div class="ta-wrap"><div class="track-accordion" id="trackGrid"><!-- 赛道卡片由 JS 注入 --></div></div>
     </div>
   </section>
 
@@ -1417,21 +1448,23 @@ function renderTracks(){
   grid.innerHTML = TRACKS.map((t,i) => {
     const v = TRACK_VIS[i] || TRACK_VIS[0];
     const tags = t.metas.map(m=>`<span class="tcd-mtag">${m}</span>`).join('');
-    return `<div class="track-card-dark" onclick="location.hash='#/track/${i}'">
+    return `<div class="ta-card" onclick="location.hash='#/track/${i}'">
       <div class="tcd-bg" style="background:${v.bg};"></div>
       <canvas class="tcd-cv" data-motif="${v.motif}" data-pal="${v.pal}" data-scale="${v.scale||1}"></canvas>
-      <div class="tcd-scrim"></div>
-      <div class="tcd-top">
-        <span class="tcd-no">${t.no}</span>
-        <span class="tcd-tag">${t.tag}</span>
-      </div>
-      <div class="tcd-body">
-        <h3 class="tcd-title">${t.title}</h3>
-        <div class="tcd-tags">${tags}</div>
-        <p class="tcd-desc">${t.desc}</p>
-        <div class="tcd-actions">
-          <a class="btn tcd-ghost" href="#/track/${i}" onclick="event.stopPropagation()">详情</a>
-          <a class="btn btn-primary" href="#/apply" onclick="event.stopPropagation();setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
+      <div class="ta-scrim"></div>
+      <div class="ta-content">
+        <span class="ta-no">${t.no}</span>
+        <div>
+          <span class="ta-tag">${t.tag}</span>
+          <h3 class="ta-title">${t.title}</h3>
+          <div class="ta-extra">
+            <div class="ta-tags">${tags}</div>
+            <p class="ta-desc">${t.desc}</p>
+            <div class="ta-actions">
+              <a class="btn btn-primary" href="#/apply" onclick="event.stopPropagation();setTimeout(()=>window.__selectApplyTrack&&window.__selectApplyTrack(${i}),60)">报名</a>
+              <a class="btn tcd-ghost" href="#/track/${i}" onclick="event.stopPropagation()">详情</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>`;
@@ -2040,7 +2073,7 @@ function initReveal(){
   const groups = [
     ['.media-cols > *', 90],
     ['.stack-layer', 80],
-    ['#trackGrid > .track-card-dark', 75],
+    ['#trackGrid > .ta-card', 70],
     ['.res-split > .engine-card, .res-split .plat-col > .plat-card', 90],
     ['#homeResPack .res-card', 110],
     ['#timeline > *', 70],
